@@ -204,6 +204,39 @@ num = num_list.index(31)
 print(f"元素31在{num_list}的下标为{num}")
 
 """
+列表的sort方法
+语法：sort(Key=选择排序依据的函数,reverse=True|False)
+    参数Key,是要求传入一个函数,表示将列表的每一个元素都传入函数中,返回排序的依据
+    参数reverse,是否反转排序结果,True表示降序,False表示升序
+"""
+
+ts_list = [['a', 33], ['b', 55], ['c', 11]]
+
+
+# 定义排序方法
+def choose_sort_key(element):
+    return element[0]
+
+
+ts_list.sort(key=choose_sort_key, reverse=False)
+print('!!!', ts_list)
+
+# 匿名函数lambda形式
+ts_list.sort(key=lambda element: element[1], reverse=True)
+
+print('!!!!', ts_list)
+
+"""
+反转列表
+语法：列表.reverse()
+
+"""
+
+my_list = [1, 2, 3, 4, 5]
+my_list.reverse()
+print("!!!!!", my_list)
+
+"""
 列表的遍历-while循环
 语法：
 index = 0

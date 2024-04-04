@@ -30,6 +30,7 @@ class TextFileReader(FileReader):
                             line_list.split(',')[2], line_list.split(',')[3])
             record_list.append(record)
         file_r.close()
+        # print(type(record_list))
         return record_list
 
 

@@ -66,3 +66,8 @@ phone = Phone_HUAWEI(114514, "Meat_60Pro")
 
 print(f"IMEI={phone.IMEI}\nName={phone.Name}")
 phone.call_by_5G()
+
+
+
+
+

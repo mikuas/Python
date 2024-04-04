@@ -71,5 +71,66 @@
 * 基础数据查询-过滤:
     select 字段列表 | * from 表 where 条件判断
 
-##### 分组聚合
-*
+##### 分组聚合-group by
+    分组聚合应用场景非常多，如：统计班级中，男生和女生的人数。
+    这种需求就要：
+    1.按性别分组
+    2.统计每个组的人数
+    这就称之为：分组聚合
+* 基础语法：
+    select 字段 | 聚合函数 from 表 [where 条件] group by 列
+* 聚合函数有：
+1. SUM(列) 求和
+2. AVG(列) 求平均值
+3. MIN(列) 求最小值
+4. MAX(列) 求最大值
+5. COUNT(列 | *) 求数量 
+
+###### GROUP BY中出现了哪个列哪个列才能出现在SELECT中的非聚合中,一个SQL中是可以写多个聚合的
+
+##### 排序分页-order by
+
+* 基础语法：
+
+    select 列 | 聚合函数 | * from 表
+
+    where ...
+
+    group by ...
+
+    order by ... [ASC(升) | DESC(降)]
+
+##### 结果分页限制-limit n[, m]
+* 基础语法：
+
+    select 列 | 聚合函数 | * from 表
+
+    where ...
+
+    group by ...
+
+    order by ... [ASC(升) | DESC(降)]
+
+    limit n[, m] (不加m表示取n条数据，加m表示从n之后开始取，取m行)
+
+###### _执行顺序:    FROM -> WHERE -> GROUP BY 和聚合函数 -> SELECT -> ORDER BY -> LIMIT_
+
+### python操纵mysql-pymysql
+[python&mysql](python&mysql.py)
+##### 获取链接对象
+1. connection(主机,端口,账号,密码)即可得到链接对象
+2. 链接对象.close()关闭和MySQL数据库的连接
+##### 执行SQL查询
+###### 通过连接对象调用cursor()方法,得到游标对象
+1. 游标对象.execute()执行SQL语句
+2. 游标对象.fetchall()得到全部的查询结果封装到元组内
+
+#### 通过commit提交
+自动提交：
+    构建链接时传入(autocommit=True)
+
+
+
+
+
+

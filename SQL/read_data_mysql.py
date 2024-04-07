@@ -1,4 +1,6 @@
-
+"""
+通过
+"""
 
 from pymysql import *
 
@@ -21,17 +23,12 @@ cursor.execute('select * from object')
 
 result: tuple = cursor.fetchall()
 
-n = 0
-data_list = []
-while n < 3:
-    for line in result[n]:
-        if n == 4:
-            break
-        n += 1
-        # data_list.append(line)
-        print(type(line))
-        print(line)
+mysql_commodity = []
+
+for line in result:
+
+    mysql_commodity.append([line[0], line[1], line[2], line[3]])
 
 
-print(data_list)
+print(mysql_commodity)
 

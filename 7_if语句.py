@@ -56,6 +56,8 @@ import random
 #     print(f"Sorry，全猜错了，我想的是{num}")
 
 # 定义随机数范围
+
+"""
 num = random.randint(1, 10)
 nu = int(input("您有三次机会，请输入您猜的数："))
 if nu == num:
@@ -78,3 +80,50 @@ else:
             print("恭喜你最后一次猜对了")
         else:
             print(f"Sorry，全部猜错了，我想的是{num}")
+"""
+# if 拓展
+
+# 逻辑运算符：用于连接多个条件，构建复杂的条件表达式。
+"""
+# and（与）
+# or（或）
+# not（非）
+"""
+# 成员运算符：用于检查一个值是否存在于另一个集合中。
+"""
+# in（存在于）
+# not in（不存在于
+"""
+
+# 身份运算符：用于比较两个对象的内存地址。
+"""
+# is（是同一对象）
+# is not（不是同一对象）
+"""
+# 其他可调用的布尔函数：用于检查给定条件的真假。
+"""
+# all()：如果可迭代对象中的所有元素都为真，则返回 True。
+# any()：如果可迭代对象中的任何元素都为真，则返回 True。
+"""
+a = 5
+b = 4
+c = [a, b]
+
+if a < 5 or b > 3:
+    print("Hello World1")
+
+if a > 2 and b > 4:
+    print("Hello World2")
+
+if not a > 2:
+    print("Hello World3")
+
+if any([a > 10, b > 20]):
+    print("a 大于 10 或者 b 小于 20")
+
+if a is not None:
+    print("Hello World4")
+
+if a in c:
+    print("Hello World5")
+

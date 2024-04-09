@@ -80,7 +80,7 @@ def list_for(list_data):
             my_dict[year].append((name, gdp))
         except KeyError:
             my_dict[year] = []
-            my_dict[year].append((name, gdp))\
+            my_dict[year].append((name, gdp))
 
     return my_dict
 

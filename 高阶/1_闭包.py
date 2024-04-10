@@ -19,20 +19,31 @@ def account_create(initial_amount=0):
     return atm
 
 
-ATM = account_create()
-
-ATM(500)
-ATM(500, deposit=False)
-
-account_create()(500)
-
-
-
+# ATM = account_create()
+#
+# ATM(500)
+# ATM(500, deposit=False)
+#
+# account_create()(500)
+# account_create()(200)
 
 
+def idName(name: str = 'miku'):
+
+    def result(age: int):
+
+        print(f'<{name}>, {age}, <{name}>')
+
+    return result
 
 
+idName()(24)
 
+fn = idName('hanser')
+
+fn(18)
+
+print(type(fn))
 
 
 

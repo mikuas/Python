@@ -12,7 +12,7 @@
 
 
 * 查看当前使用的数据库 --> select database();
-
+---
 ### DDL-表管理
 * 查看有哪些表 --> show tables; (需要先选择数据库)
 
@@ -26,6 +26,7 @@
 
 )
 
+---
 #### 列表类型有
 
 1. _int --> 整数_
@@ -42,7 +43,7 @@
 
        drop table  表名称;
        drop table if exists 表名称;
-
+---
 ### DML(Data Manipulation Language)
 1. 插入 --> INSERT
    * 基础语法：
@@ -61,7 +62,7 @@
         条件判断：列 操作符 值
 
         操作符：= < > <= >= != 等等
-
+---
 ### DQL(Data Query Language)
 
 ##### 基础查询
@@ -70,7 +71,7 @@
 
 * 基础数据查询-过滤:
     select 字段列表 | * from 表 where 条件判断
-
+---
 ##### 分组聚合-group by
     分组聚合应用场景非常多，如：统计班级中，男生和女生的人数。
     这种需求就要：
@@ -88,6 +89,7 @@
 
 ###### GROUP BY中出现了哪个列哪个列才能出现在SELECT中的非聚合中,一个SQL中是可以写多个聚合的
 
+---
 ##### 排序分页-order by
 
 * 基础语法：
@@ -99,6 +101,7 @@
     group by ...
 
     order by ... [ASC(升) | DESC(降)]
+---
 
 ##### 结果分页限制-limit n[, m]
 * 基础语法：
@@ -115,6 +118,7 @@
 
 ###### _执行顺序:    FROM -> WHERE -> GROUP BY 和聚合函数 -> SELECT -> ORDER BY -> LIMIT_
 
+---
 ### python操纵mysql-pymysql
 [python&mysql](python&mysql.py)
 ##### 获取链接对象

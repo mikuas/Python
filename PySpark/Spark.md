@@ -26,19 +26,56 @@
 
 #### 如果要查看RDD里面有什么内容,需要用collect()方法
 ### 读取文件转RDD对象,textFile(文件路径)
-### map方法(算子)
+### [map方法(算子)](1_数据计算_map.py)
 * map算子(功能:map算子,是将RDD的数据一条条处理(处理逻辑 基于map算子中接收的处理函数),返回新的RDD)
 * 接受一个处理函数,可以用lambda表达式快速编写
 * 对RDD内的元素逐个处理,并返回一个新的RDD
 ### 链式调用
 * 对于返回值是新的RDD的算子,可以通过链式调用的方式多次调用算子
-### flatMap算子
+### [flatMap算子](2_数据计算_flatMap.py)
 * 功能: 对RDD执行map操作,然后进行解除嵌套操作(计算逻辑和map一样,可以比map多出解除一层嵌套的功能)
+### [reduceByKey算子](3_数据计算_reduceByKey.py)
+* 功能: 针对KV型RDD(二元元组[元组里面的数据只有两个]),自动按照Key分组,然后根据你提供的聚合逻辑,完成组内数据(Value)的聚合操作
+* 用法:
+  rdd.reduceByKey(func)
 
+  func: (V, V) -> V
 
+  接受两个传入参数(类型要一致),返回一个返回值,类型和传入要求一致
 
+  接受一个处理逻辑,对数据进行两两计算
+### [filter算子](4_数据计算_filter.py)
+* 功能: 过滤想要的数据进行保留
+* 语法:
+  rdd.filter(func)
 
+    func: (T) -> bool     传入一个参数进来随意类型,返回值必须是True or False
 
+    返回是True的数据被保留,False的数据被丢弃
+### [distinct算子](5_数据计算_distinct.py)
+* 功能: 对RDD数据进行去重,返回新的RDD
+* 语法: rdd.distinct()  无需传参
+### [sortBy算子](6_数据计算_sortBy.py)
+* 功能: 对RDD数据进行排序,基于你指定的排序依据
+* 语法: rdd.sortBy(func, ascending=False, numPartitions=1
 
+  func: (T) -> U: 告知按照rdd中哪个数据进行排序,比如 lambda x: x[1] 表示按照rdd中的第二列元素进行排序
 
+  ascending True升序 False 降序
 
+  numPartitions: 用多少分区排序(全局排序需要设置分区为1)
+### [数据输出](7_数据输出.py)
+#### collect算子
+* 功能: 将RDD各个分区的数据,统一收集到Driver中,形成一个List对象
+* 用法: rdd.collect()   返回值是一个list
+#### reduce算子
+* 功能: 对RDD数据收集按照你传入的逻辑进行[聚合]
+* 语法: rdd.reduce(func)
+
+  func: (T, T) -> T
+
+   2参数传入 1个返回值,返回值和参数要求类型一致
+#### take算子
+* 功能: 取RDD的前N个元素,组合成list返回
+#### count算子
+* 功能: 计算RDD有多少条数据,返回值是一个数字

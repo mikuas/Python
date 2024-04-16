@@ -1,3 +1,3 @@
 import socket
-ip = socket.gethostbyname('jishui.gov.cn')
+ip = socket.gethostbyname('bilibili.com')
 print(ip)

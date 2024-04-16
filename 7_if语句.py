@@ -118,7 +118,7 @@ if a > 2 and b > 4:
 if not a > 2:
     print("Hello World3")
 
-if any([a > 10, b > 20]):
+if any([a > 10, b < 20]):
     print("a 大于 10 或者 b 小于 20")
 
 if a is not None:

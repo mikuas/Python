@@ -26,7 +26,7 @@ class RepeatDataClear:
             print(f'文件不存在:{a}')
 
     @staticmethod
-    def clear_repeat(data) -> set:
+    def clear_repeat(data) -> list:
 
         try:
             data = set(data)

@@ -30,12 +30,14 @@ class RepeatDataClear:
 
         try:
             data = set(data)
+            data.remove('\n')
             data = list(data)
 
-            for line in data:
-                if line == '\n':
-                    del data[data.index(line)]
-            return set(data)
+            return data
+            # for line in data:
+            #     if line == '\n':
+            #         del data[data.index(line)]
+            # return set(data)
         except Exception as a:
             print(f'传入的文件为空:{a}')
 

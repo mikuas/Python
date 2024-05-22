@@ -32,7 +32,7 @@ conn.select_db('ikun')
 # cursor.execute("select * from object")
 
 # 获取查询结果
-# result: tuple = cursor.fetchall()
+result: tuple = cursor.fetchall()
 # for i in result:
 #     print(i)
 #     for line in i:

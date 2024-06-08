@@ -26,8 +26,6 @@ my_dict = {
     }
 }
 
-echarts = Echarts()
-
 x_data = [
     '北京',
     '上海',
@@ -41,12 +39,23 @@ x_data = [
     '河北'
 ]
 
+title = []
+
+date = 1154
+
+for i in range(len(x_data)):
+    title.append(date)
+    date -= 1
+
+
+print(title)
+
+echarts = Echarts()
 file = open('C:\data.txt', 'r', encoding='utf-8')
 data = file.readlines()
 timeline = Timeline()
 
 echarts.readFileTimeBar(
-    reverse=True,
     dicts=my_dict,
     line=10,
     data=data,
@@ -55,7 +64,7 @@ echarts.readFileTimeBar(
     x_data=x_data,
     timeline=timeline,
     time=1000,
-    title='GDP',
+    title=title,
     HTML_Name='Title.html',
     position='top',
     play=True,

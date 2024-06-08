@@ -162,7 +162,7 @@ class Echarts:
                 dicts=kwargs['dicts'],
                 x_data=kwargs['x_data'],
                 y_data=y_data,
-                title=kwargs['title'],
+                title=kwargs['title'][len(kwargs['x_data']) - (i + 1)],
                 HTML_Name=kwargs['HTML_Name'],
                 position=kwargs['position'])
             if i == kwargs['line'] - 1:
@@ -176,7 +176,7 @@ class Echarts:
                 reverse=reverse,
                 Timeline=kwargs['timeline'],
                 bars=[result],
-                title=kwargs['title'],
+                title=kwargs['title'][len(kwargs['x_data']) - (i + 1)],
                 HTML_Name=[False, kwargs['HTML_Name']],
                 time=kwargs['time'],
                 play=kwargs['play'],

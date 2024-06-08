@@ -81,9 +81,9 @@ bar.reversal_axis()
 bar.render("基础柱状图.html")
 
 ### 时间线柱状图
-Timeline()
+timeline = Timeline()
 ### 通过时间线绘图
-# timeline.render(name)
+timeline.render(BarName)
 ~~~
 
 

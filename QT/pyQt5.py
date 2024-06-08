@@ -1,4 +1,6 @@
 from PySide6.QtWidgets import *
+import tkinter as tk
+from tkinter import filedialog
 
 
 class RepeatDataClear:
@@ -7,6 +9,29 @@ class RepeatDataClear:
         # reception file incoming path | save path
         self.file_path = file_path
         self.save_path = save_path
+
+    def open_file(self):
+        root = tk.Tk()
+        root.withdraw()  # 隐藏主窗口
+
+        # 让用户选择文件
+        self.file_path = filedialog.askopenfilename(
+            title="打开文件",
+            filetypes=[("Text files", "*.txt"), ("All files", "*.*")]  # 文件类型过滤器
+        )
+        root.destroy()  # 销毁主窗口
+
+    def save_file(self):
+        root = tk.Tk()
+        root.withdraw()  # 隐藏主窗口
+
+        # 让用户选择保存文件的路径
+        self.file_path = filedialog.asksaveasfilename(
+            title="保存文件",
+            defaultextension=".txt",  # 默认扩展名
+            filetypes=[("Text files", "*.txt"), ("All files", "*.*")]  # 文件类型过滤器
+        )
+        root.destroy()  # 销毁主窗口
 
     def file_read(self) -> list:
 
@@ -27,16 +52,12 @@ class RepeatDataClear:
             print(f'文件不存在:{a}')
 
     @staticmethod
-    def clear_repeat(data) -> set:
+    def clear_repeat(data) -> list:
 
         try:
             data = set(data)
-            data = list(data)
-
-            for line in data:
-                if line == '\n':
-                    del data[data.index(line)]
-            return set(data)
+            data.remove('\n')
+            return list(data)
         except Exception as a:
             print(f'传入的文件为空:{a}')
 
@@ -55,60 +76,114 @@ class RepeatDataClear:
 
 class Stats:
 
-    def __init__(self, win_width, win_height, apptitle, text_width, text_height):
+    def __init__(self, apptitle='RepeatDataClear', win_width=500, win_height=200):
         # 创建主窗口对象
         self.window = QMainWindow()
-        self.window_two = QMainWindow()
         # 设置窗口的大小
         self.window.resize(win_width, win_height)
         # 设置窗口显示的位置
-        self.window.move(300, 300)
+        self.window.move(600, 400)
         # 设置窗口的标题
         self.window.setWindowTitle(apptitle)
 
-        # 设置文本控件
-        self.file_path = QPlainTextEdit(self.window)
-        # 设置提示内容
-        self.file_path.setPlaceholderText('请输入要处理的文件路径')
-        # 设置文本控件位置
-        self.file_path.move(10, 10)
-        # 处理文件文本控件大小
-        self.file_path.resize(text_width, text_height)
+        self.win_width = win_width
+        self.win_height = win_height
+        self.rError = QMessageBox(self.window)
+        self.wError = QMessageBox(self.window)
 
-        self.text = QPlainTextEdit(self.window_two)
-        self.text.resize(100, 100)
+        self.file_path = None
+        self.save_path = None
 
-        # 保存文件文本控件大小
-        self.save_path = QPlainTextEdit(self.window)
-        self.save_path.setPlaceholderText('请输入保存路径')
-        self.save_path.move(10, 110)
-        self.save_path.resize(text_width, text_height)
+        self.box = QMessageBox(self.window)
+        self.info = QMessageBox(self.window)
 
         # 设置按钮
         self.button = QPushButton('执行', self.window)
-        self.button.move(text_width + 20, text_height / 3 + text_height)
+        self.button.move(win_width * 0.6, win_height * 0.3)
+        # set button size
+        self.button.setFixedSize(100, 50)
 
+        self.file_read_button = QPushButton('选择读取的文件', self.window)
+        self.file_read_button.move(20, 20)
+        self.file_read_button.setFixedSize(150, 50)
+
+        self.file_save_button = QPushButton('选择保存路径', self.window)
+        self.file_save_button.move(20, 100)
+        self.file_save_button.setFixedSize(150, 50)
         # 按钮点击事件
         self.button.clicked.connect(self.handeCale)
 
+        self.file_read_button.clicked.connect(self.open_file)
+        self.file_save_button.clicked.connect(self.save_file)
+
     def handeCale(self):
 
-        # 获取文本控件内容
-        files_path = self.file_path.toPlainText()
-        saves_path = self.save_path.toPlainText()
         try:
-            repeat = RepeatDataClear(files_path, saves_path)
+            repeat = RepeatDataClear(self.file_path, self.save_path)
             repeat.file_write(repeat.clear_repeat(repeat.file_read()))
+            self.info.show()
+            self.info.setInformativeText('执行完毕!')
+            self.info.move(self.win_width + 300, self.win_height + 250)
+
+            if self.file_path is None:
+                self.rError.resize(100, 100)
+                self.rError.setInformativeText('文件不存在！')
+                self.rError.move(350, 350)
+                # self.window_two.resize(100, 100)
+                # self.text.setPlainText('文件不存在')
+                # self.window_two.move(350, 350)
+
+            if self.save_path is None:
+                self.wError.resize(100, 100)
+                self.wError.setInformativeText('文件不存在！')
+                self.wError.move(350, 350)
         except Exception:
-            self.window_two.show()
-            self.window_two.resize(100, 100)
-            self.window_two.move(350, 350)
-            self.text.setPlainText('文件不存在')
+            if not self.file_path:
+                self.rError.show()
+                self.rError.resize(self.win_width * 0.5, self.win_height * 0.5)
+                self.rError.move(self.win_width + 200, self.win_height + 200)
+                self.rError.setInformativeText('请选择文件!')
+            elif not self.save_path:
+                self.wError.show()
+                self.wError.resize(self.win_width * 0.5, self.win_height * 0.5)
+                self.wError.move(self.win_width + 200, self.win_height + 200)
+                self.wError.setInformativeText('请选择保存路径!')
             pass
+
+    def open_file(self):
+        root = tk.Tk()
+        root.withdraw()  # 隐藏主窗口
+        # 让用户选择文件
+        self.file_path = filedialog.askopenfilename(
+            title="打开文件",
+            filetypes=[("Text files", "*.txt"), ("All files", "*.*")]  # 文件类型过滤器
+        )
+        root.destroy()  # 销毁主窗口
+
+    def save_file(self):
+        root = tk.Tk()
+        root.withdraw()  # 隐藏主窗口
+
+        # 让用户选择保存文件的路径
+        self.save_path = filedialog.asksaveasfilename(
+            title="保存文件",
+            defaultextension=".txt",  # 默认扩展名
+            filetypes=[("Text files", "*.txt"), ("All files", "*.*")]  # 文件类型过滤器
+        )
+        root.destroy()  # 销毁主窗口
+
+    def information(self):
+        self.box.show()
+        self.box.setInformativeText('这是一个可以清理重复元素的软件,接收一个传入文件,清除每一行相同的元素')
+        self.box.setWindowTitle('Information')
+        self.box.move(self.win_width + 200, self.win_height + 250)
 
 
 if __name__ == '__main__':
     app = QApplication([])
-    stats = Stats(500, 500, 'RepeatDataClear', 200, 50)
+    stats = Stats()
+    stats.information()
     stats.window.show()
     app.exec()
+
+

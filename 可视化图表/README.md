@@ -15,6 +15,15 @@ line.add_xaxis(["中国", "美国", "英国"])
 # 添加y轴数据line.add_yaxis
 line.add_yaxis("GDP", [100, 20, 10])
 
+
+line = (
+    Line()
+    .add_xaxis(['element'])
+    .add_yaxis('Name', ['element'])
+    .set_global_opts(
+        'Set'
+    )
+).render('Name')
 '''
 全局配置: set_global_opts
 title_opts = TitleOpts(title="标题名称", pos_left="位置", pos_bottom="上下")
@@ -55,9 +64,26 @@ map.set_global_opts(
             {'min': 201, "max": 300, "label": "201-300人", "color": "#FFFF00"},
             {'min': 301, "label": "301+人", "color": "#FFC1C1"}
         ]
-    )
+    ),
 )
 map.render('map.html')
+
+map = (
+    Map()
+    .add('Title', data, 'China...')
+    .set_global_opts(
+        visualmap_opts=VisualMapOpts(
+        is_show=True,
+        is_piecewise=True,
+        pieces=[
+            {'min': 1, "max": 100, "label": "1-100人", "color": "#00F5FF"},
+            {'min': 101, "max": 200, "label": "101-200人", "color": "#00EE76"},
+            {'min': 201, "max": 300, "label": "201-300人", "color": "#FFFF00"},
+            {'min': 301, "label": "301+人", "color": "#FFC1C1"}
+        ]
+        ),
+    )
+).render('Name')
 ~~~
 
 ### 动态柱状图
@@ -74,6 +100,22 @@ bar.add_xaxis(['中国', '美国', '英国'])
 bar.add_yaxis('GDP', [100, 20, 10], label_opts=LabelOpts(
     position='right'    # 设置数值标签在右侧
 ))
+
+bar.set_global_opts(
+    title_opts=TitleOpts(
+        # set Title
+        title='title'
+    ),
+    xaxis_opts=AxisOpts(
+        axislabel_opts=LabelOpts(rotate=45) # 旋转标签
+    ),
+    datazoom_opts=DataZoomOpts(
+        is_show=True,
+        type_="slider",
+        orient="horizontal",
+        pos_top='90%' # 滚动条位置
+    ) # 滚动条
+)
 # 反转xy轴
 bar.reversal_axis()
 
@@ -83,31 +125,55 @@ bar.render("基础柱状图.html")
 ### 时间线柱状图
 timeline = Timeline()
 ### 通过时间线绘图
-timeline.render(BarName)
+timeline.render('BarName')
+
+bar = (
+    Bar()
+    .add_xaxis(['element'])
+    .add_yaxis('Title', ['element'], label_opts=LabelOpts(
+        position='right'
+    ))
+    .set_global_opts(
+        title_opts=TitleOpts(
+        # set Title
+        title='title'
+        ),
+        xaxis_opts=AxisOpts(
+            axislabel_opts=LabelOpts(rotate=45) # 旋转标签
+        ),
+        datazoom_opts=DataZoomOpts(
+            is_show=True,
+            type_="slider",
+            orient="horizontal",
+            pos_top='90%' # 滚动条位置
+        ) # 滚动条
+    )
+).render('Name')
+
+timeline = Timeline()
+for i in range(10):
+    bar = (
+        Bar()
+        .add_xaxis(['element'])
+        .add_yaxis('Title_A', ['element'])
+        .add_yaxis('Title_B', ['element'])
+        .set_global_opts(
+            title_opts=TitleOpts(
+                # set Title
+                title='title'
+                ),
+                xaxis_opts=AxisOpts(
+                    axislabel_opts=LabelOpts(rotate=45) # 旋转标签
+                ),
+                datazoom_opts=DataZoomOpts(
+                    is_show=True,
+                    type_="slider",
+                    orient="horizontal",
+                    pos_top='90%' # 滚动条位置
+                ) # 滚动条
+            )
+        )
+    timeline.add(bar, 'Title')
+timeline.render('Name')
 ~~~
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

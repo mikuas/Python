@@ -3,6 +3,7 @@ import pyautogui
 import pyperclip
 from pyecharts.charts import *
 from pyecharts.options import *
+from pyecharts.faker import Faker
 
 
 class Keyboard:
@@ -27,31 +28,40 @@ class Echarts:
     def getLineChart(bools=True, **kwargs):
         """
         :param bools: T | F
-        :param kwargs: x_data, y_data, title, HTML_Name
+        :param kwargs:
+        x_data: list
+        y_data: list
+        title: str
+        HTML_Name: Name
         :return:
         """
-        line = Line()
-        line.add_xaxis(kwargs['x_data'])
-        line.add_yaxis(kwargs['title'], kwargs['y_data'])
-        line.set_global_opts(
-            title_opts=TitleOpts(title=kwargs['title']),
-            legend_opts=LegendOpts(is_show=bools),
-            tooltip_opts=TooltipOpts(is_show=bools),
-            visualmap_opts=VisualMapOpts(is_show=bools)
-        )
-
-        line.render(kwargs['HTML_Name'])
+        line = (
+            Line()
+            .add_xaxis(kwargs['x_data'])
+            .add_yaxis(kwargs['y_data'], kwargs['title'])
+            .set_global_opts(
+                title_opts=TitleOpts(title=kwargs['title']),
+                legend_opts=LegendOpts(is_show=bools),
+                tooltip_opts=TooltipOpts(is_show=bools),
+                visualmap_opts=VisualMapOpts(is_show=bools)
+            )
+        ).render(kwargs['HTML_Name'])
 
     @staticmethod
     def getMap(**kwargs):
         """
-        :param kwargs: data, title HTML_Name, Name dicts
+        :param kwargs:
+        data: [(), (), ...]
+        title: str
+        HTML_Name: str
+        Name: China ...
+        dicts: dist
         :return:
         """
-        map = Map()
-        map.add(kwargs['data'], kwargs['title'], kwargs['Name'])
-        if kwargs['set']:
-            map.set_global_opts(
+        map = (
+            Map()
+            .add(kwargs['data'], kwargs['title'], kwargs['Name'])
+            .set_global_opts(
                 visualmap_opts=VisualMapOpts(
                     is_show=True,
                     is_piecewise=True,
@@ -59,63 +69,92 @@ class Echarts:
                         {'min': kwargs['dicts'][0]['min'],
                          'max': kwargs['dicts'][0]['max'],
                          'label': kwargs['dicts'][0]['label'],
-                         'color': kwargs['dicts'][0]['color']},
+                         'color': kwargs['dicts'][0]['color']
+                         },
 
                         {'min': kwargs['dicts'][1]['min'],
                          'max': kwargs['dicts'][1]['max'],
                          'label': kwargs['dicts'][1]['label'],
-                         'color': kwargs['dicts'][1]['color']},
+                         'color': kwargs['dicts'][1]['color']
+                         },
 
                         {'min': kwargs['dicts'][2]['min'],
                          'max': kwargs['dicts'][2]['max'],
                          'label': kwargs['dicts'][2]['label'],
-                         'color': kwargs['dicts'][2]['color']},
+                         'color': kwargs['dicts'][2]['color']
+                         },
 
                         {'min': kwargs['dicts'][3]['min'],
                          'label': kwargs['dicts'][3]['label'],
-                         'color': kwargs['dicts'][3]['color']},
+                         'color': kwargs['dicts'][3]['color']
+                         },
                     ]
                 )
             )
-        map.render(kwargs['HTML_Name'])
+        ).render(kwargs['HTML_Name'])
 
     @staticmethod
     def getBar(reverse=False, **kwargs):
         """
-        :param reverse: T | F
-        :param kwargs: x_data, y_data, title, dicts, position, HTML_Name
+        :param reverse: Bool
+        :param kwargs:
+        x_data: list
+        y_data: list
+        title: str
+        dicts: dict
+        position: position
+        HTML_Name: str
+        PT: *%
+        angle: angle
         :return: bar
         """
-        bar = Bar()
-        bar.add_xaxis(kwargs['x_data'])
-        bar.add_yaxis(kwargs['title'], kwargs['y_data'], label_opts=LabelOpts(
-            position=kwargs['position'] or 'right'
-        ))
-
-        bar.set_global_opts(
-            visualmap_opts=VisualMapOpts(
-                is_show=True,
-                is_piecewise=True,
-                pieces=[
+        bar = (
+            Bar()
+            .add_xaxis(kwargs['x_data'])
+            .add_yaxis(kwargs['title'], kwargs['y_data'], label_opts=LabelOpts(
+                position=kwargs['position'],
+            ))
+            .set_global_opts(
+                title_opts=TitleOpts(
+                    title=kwargs['title'],
+                ),
+                xaxis_opts=AxisOpts(
+                    axislabel_opts=LabelOpts(rotate=kwargs['angle'])
+                ),
+                datazoom_opts=DataZoomOpts(
+                    is_show=True,
+                    type_="slider",
+                    orient="horizontal",
+                    pos_top=kwargs['PT']
+                ),
+                visualmap_opts=VisualMapOpts(
+                    is_show=True,
+                    is_piecewise=True,
+                    pieces=[
                         {'min': kwargs['dicts'][0]['min'],
                          'max': kwargs['dicts'][0]['max'],
                          'label': kwargs['dicts'][0]['label'],
-                         'color': kwargs['dicts'][0]['color']},
+                         'color': kwargs['dicts'][0]['color']
+                         },
 
                         {'min': kwargs['dicts'][1]['min'],
                          'max': kwargs['dicts'][1]['max'],
                          'label': kwargs['dicts'][1]['label'],
-                         'color': kwargs['dicts'][1]['color']},
+                         'color': kwargs['dicts'][1]['color']
+                         },
 
                         {'min': kwargs['dicts'][2]['min'],
                          'max': kwargs['dicts'][2]['max'],
                          'label': kwargs['dicts'][2]['label'],
-                         'color': kwargs['dicts'][2]['color']},
+                         'color': kwargs['dicts'][2]['color']
+                         },
 
                         {'min': kwargs['dicts'][3]['min'],
                          'label': kwargs['dicts'][3]['label'],
-                         'color': kwargs['dicts'][3]['color']},
-                ]
+                         'color': kwargs['dicts'][3]['color']
+                         },
+                    ]
+                )
             )
         )
         if reverse:
@@ -126,25 +165,45 @@ class Echarts:
     @staticmethod
     def getTimeBar(**kwargs):
         """
-        :param kwargs: Timeline, bar, bars, title, HTML_Name, time, play, For,
+        :param kwargs:
+        timeline: -> Timeline()
+        bars: list
+        title: str
+        HTML_Name: list: [Bool, Name]
+        time: Number
+        play, For: Bool
         :return: None
         """
         for i in range(len(kwargs['bars'])):
-            kwargs['Timeline'].add(kwargs['bars'][i], kwargs['title'])
-        kwargs['Timeline'].add_schema(
+            kwargs['timeline'].add(kwargs['bars'][i], kwargs['title'])
+        kwargs['timeline'].add_schema(
             play_interval=kwargs['time'],
             is_timeline_show=True,
             is_auto_play=kwargs['play'],
-            is_loop_play=kwargs['For']
+            is_loop_play=kwargs['For'],
         )
         if kwargs['HTML_Name'][0]:
-            kwargs['Timeline'].render(kwargs['HTML_Name'][1])
+            kwargs['timeline'].render(kwargs['HTML_Name'][1])
 
     @staticmethod
     def readFileTimeBar(reverse=False, **kwargs):
         """
-        :param reverse: T | F
-        :param kwargs: line, data, num, time, dicts, echarts, x_data, timeline, play, For, title, HTML_Name, position
+        :param reverse: Bool
+        :param kwargs:
+        x_data: list
+        dicts: dict
+        line: int
+        data: fileReadLines
+        num: int
+        echarts: -> Echarts()
+        timeline: -> Timeline()
+        time: int
+        title: list
+        position: str
+        HTML_Name: str
+        PT: *%
+        angle: Number
+        play, For: Bool
         :return:
         """
         for i in range(kwargs['line']):
@@ -158,23 +217,28 @@ class Echarts:
             kwargs['num'] += 10
             print(y_data)
             result = kwargs['echarts'].getBar(
+                angle=kwargs['angle'],
+                PT=kwargs['PT'],
                 reverse=reverse,
                 dicts=kwargs['dicts'],
                 x_data=kwargs['x_data'],
                 y_data=y_data,
-                title=kwargs['title'][len(kwargs['x_data']) - (i + 1)],
+                title=str(kwargs['title'][len(kwargs['x_data']) - (i + 1)]) + 'GDP',
                 HTML_Name=kwargs['HTML_Name'],
                 position=kwargs['position'])
             if i == kwargs['line'] - 1:
                 kwargs['echarts'].getTimeBar(
-                    Timeline=kwargs['timeline'],
-                    bars=[result], title=kwargs['title'],
+                    timeline=kwargs['timeline'],
+                    bars=[result],
+                    title=str(kwargs['title'][len(kwargs['x_data']) - (i + 1)]) + 'GDP',
                     HTML_Name=[True, kwargs['HTML_Name']],
-                    time=kwargs['time'], play=kwargs['play'], For=kwargs['For']
+                    time=kwargs['time'],
+                    play=kwargs['play'],
+                    For=kwargs['For']
                 )
             kwargs['echarts'].getTimeBar(
                 reverse=reverse,
-                Timeline=kwargs['timeline'],
+                timeline=kwargs['timeline'],
                 bars=[result],
                 title=kwargs['title'][len(kwargs['x_data']) - (i + 1)],
                 HTML_Name=[False, kwargs['HTML_Name']],
@@ -184,14 +248,14 @@ class Echarts:
             )
 
 
-class Random:
+class Tools:
 
     @staticmethod
     def getRandom(start, end=None):
         if end is None:
             end = start
             start = 0
-        return random.randint(start, end + 1)
+        return random.randint(start, end)
 
     @staticmethod
     def count(data: list, element):
@@ -201,18 +265,24 @@ class Random:
                 num += 1
         return num
 
-
-class FileIO:
-
-    def __init__(self):
-        self.fc = Random()
-
     def writeNumber(self, path, lines, start, end=None, mode='a', coding='utf-8'):
         file = open(path, mode, encoding=coding)
 
         for i in range(lines):
             if i == lines - 1:
-                file.write(str(self.fc.getRandom(start, end)))
+                file.write(str(self.getRandom(start, end)))
             else:
-                file.write(f"{str(self.fc.getRandom(start, end)) + '\n'}")
+                file.write(f"{str(self.getRandom(start, end)) + '\n'}")
 
+    def getRandomColor(self, types=False):
+        data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f']
+        color = '#'
+        rgb = 'rgb('
+        if types:
+            for i in range(6):
+                color += str(random.choice(data))
+            return color
+        else:
+            return f"{
+                rgb + str(self.getRandom(255)) + ',' + str(self.getRandom(255)) + ',' + str(self.getRandom(255)) + ')'
+            }"

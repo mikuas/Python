@@ -1,4 +1,4 @@
-from index.function import *
+from function import *
 
 my_dict = {
     0: {
@@ -27,18 +27,34 @@ my_dict = {
 }
 
 x_data = [
-    '北京',
-    '上海',
-    '南昌',
-    '深圳',
-    '广东',
-    '内蒙古',
-    '新疆',
-    '武汉',
-    '河南',
-    '河北'
+    "北京市",
+    "天津市",
+    "上海市",
+    "重庆市",
+    "河北省",
+    "山西省",
+    "辽宁省",
+    "吉林省",
+    "黑龙江省",
+    "江苏省",
+    "浙江省",
+    "安徽省",
+    "福建省",
+    "江西省",
+    "山东省",
+    "河南省",
+    "湖北省",
+    "湖南省",
+    "广东省",
+    "海南省",
+    "四川省",
+    "贵州省",
+    "云南省",
+    "陕西省",
+    "甘肃省",
+    "青海省",
+    "台湾省",
 ]
-
 title = []
 
 date = 1154
@@ -51,22 +67,26 @@ for i in range(len(x_data)):
 print(title)
 
 echarts = Echarts()
-file = open('C:\data.txt', 'r', encoding='utf-8')
+file = open('C:/data.txt', 'r', encoding='utf-8')
 data = file.readlines()
 timeline = Timeline()
+timeline.width = '1200px'
+timeline.height = '600px'
 
 echarts.readFileTimeBar(
+    x_data=x_data,
     dicts=my_dict,
-    line=10,
+    line=len(x_data),
     data=data,
     num=len(x_data),
     echarts=echarts,
-    x_data=x_data,
+    title=title,
     timeline=timeline,
     time=1000,
-    title=title,
-    HTML_Name='Title.html',
     position='top',
+    HTML_Name='Bar.html',
+    PT='1%',
+    angle=45,
     play=True,
     For=True
 )

@@ -18,9 +18,9 @@ class Windows:
         self.textEdit.resize(w * 0.5, 30)
 
         self.textCommand = QPlainTextEdit(self.window)
-        self.textCommand.setPlaceholderText('请输入要执行的命令')
+        self.textCommand.setPlaceholderText('请输入要执行的命令  taskkill /F /T /IM')
         self.textCommand.move(w * 0.1, h * 0.3)
-        self.textCommand.resize(w * 0.8, 30)
+        self.textCommand.resize(w * 0.8, 50)
 
         self.button = QPushButton('开始执行', self.window)
         self.button.move(w * 0.4, h * 0.5)

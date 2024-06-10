@@ -286,3 +286,32 @@ class Tools:
             return f"{
                 rgb + str(self.getRandom(255)) + ',' + str(self.getRandom(255)) + ',' + str(self.getRandom(255)) + ')'
             }"
+
+    def getDict(self, lens, start, end=None):
+        if end is None:
+            end = start
+            start = 0
+        my_dict = {}
+        add = None
+        for i in range(lens):
+            if i == lens - 1:
+                my_dict[i] = {}
+                my_dict[i]['min'] = start
+                my_dict[i]['label'] = f'{start}-{end}'
+                my_dict[i]['color'] = self.getRandomColor(True)
+            else:
+                my_dict[i] = {}
+                my_dict[i]['min'] = start
+                my_dict[i]['max'] = end
+                my_dict[i]['label'] = f'{start}-{end}'
+                my_dict[i]['color'] = self.getRandomColor(True)
+            if start == 0:
+                start += end + 1
+                add = end
+            else:
+                start += add
+            end += add
+        return my_dict
+
+
+

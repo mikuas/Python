@@ -27,7 +27,7 @@ line = (
 ).render('Name')
 '''
 全局配置: set_global_opts
-title_opts = TitleOpts(title="标题名称", pos_left="位置", pos_bottom="上下")
+title_opts = TitleOpts(title="主标题", subtitle="副标题", pos_left="位置", pos_bottom="上下")
 legend_opts = LegendOpts(is_show=True/False) 图例
 tooltip_opts = LegendOpts(is_show=True/False) 工具箱
 visualmap_opts = VisualMapOpts(is_show=True/False) 视觉映射
@@ -109,7 +109,7 @@ bar.height = 'height'
 bar.set_global_opts(
     title_opts=TitleOpts(
         # set Title
-        title='title'
+        title="主标题", subtitle="副标题"
     ),
     xaxis_opts=AxisOpts(
         axislabel_opts=LabelOpts(rotate=45) # 旋转标签
@@ -147,7 +147,7 @@ bar = (
     .set_global_opts(
         title_opts=TitleOpts(
         # set Title
-        title='title'
+        title="主标题", subtitle="副标题"
         ),
         xaxis_opts=AxisOpts(
             axislabel_opts=LabelOpts(rotate=45) # 旋转标签
@@ -171,7 +171,7 @@ for i in range(10):
         .set_global_opts(
             title_opts=TitleOpts(
                 # set Title
-                title='title'
+                title="主标题", subtitle="副标题"
                 ),
                 xaxis_opts=AxisOpts(
                     axislabel_opts=LabelOpts(rotate=45) # 旋转标签

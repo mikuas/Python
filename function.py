@@ -28,8 +28,12 @@ class Keyboard:
 class Echarts:
 
     @staticmethod
-    def getLineChart(bools=True, **kwargs):
+    def getLineChart(text_color=None, center='center', width=None, height=None, bools=True, **kwargs):
         """
+        :param text_color: text color
+        :param center: align
+        :param width: lineWidth
+        :param height: lineHeight
         :param bools: Bool
         :param kwargs:
         x_data: list
@@ -39,9 +43,14 @@ class Echarts:
         :return:
         """
         line = (
-            Line(init_opts=InitOpts(theme=ThemeType.LIGHT))
+            Line(init_opts=InitOpts(
+                theme=ThemeType.LIGHT,
+                width=width or '1200px',
+                height=height or '600px',
+                is_horizontal_center=center
+            ))
             .add_xaxis(kwargs['x_data'])
-            .add_yaxis(kwargs['y_data'], kwargs['title'])
+            .add_yaxis(kwargs['y_data'], kwargs['title'], color=text_color or 'black')
             .set_global_opts(
                 title_opts=TitleOpts(title=kwargs['title']),
                 legend_opts=LegendOpts(is_show=bools),
@@ -51,8 +60,9 @@ class Echarts:
         ).render(kwargs['HTML_Name'])
 
     @staticmethod
-    def getMap(width=None, height=None,**kwargs):
+    def getMap(width=None, height=None, center='center', **kwargs):
         """
+        :param center: align
         :param width: mapWidth
         :param height: mapHeight
         :param kwargs:
@@ -64,7 +74,12 @@ class Echarts:
         :return:
         """
         map = (
-            Map(init_opts=InitOpts(theme=ThemeType.LIGHT, width=width or '1200px', height=height or '600px'))
+            Map(init_opts=InitOpts(
+                theme=ThemeType.LIGHT,
+                width=width or '1200px',
+                height=height or '600px',
+                is_horizontal_center=center
+            ))
             .add(kwargs['data'], kwargs['title'], kwargs['Name'])
             .set_global_opts(
                 visualmap_opts=VisualMapOpts(
@@ -99,8 +114,10 @@ class Echarts:
         ).render(kwargs['HTML_Name'])
 
     @staticmethod
-    def getBars(y_data: list, width=None, height=None, reverse=False, **kwargs):
+    def getBars(y_data: list, width=None, height=None, text_color=None, center='center', reverse=False, **kwargs):
         """
+        :param text_color: text color
+        :param center: align
         :param width: barWidth
         :param height: barHeight
         :param y_data: [[], [], ...]
@@ -116,13 +133,17 @@ class Echarts:
         HTML_Name: str
         :return:
         """
-        bar = Bar(init_opts=InitOpts(theme=ThemeType.LIGHT))
+        bar = Bar(init_opts=InitOpts(
+            theme=ThemeType.WHITE,
+            width=width or '1200px',
+            height=height or '600px',
+            is_horizontal_center=center
+        ))
         bar.add_xaxis(kwargs['x_data'])
-        bar.width = width or '1200px'
-        bar.height = height or '600px'
         for i in range(len(y_data)):
             bar.add_yaxis(kwargs['title'][i], y_data[i], label_opts=LabelOpts(
-                position=kwargs['position']
+                position=kwargs['position'],
+                color=text_color or 'black'
             ))
         bar.set_global_opts(
             title_opts=TitleOpts(
@@ -144,8 +165,10 @@ class Echarts:
         return bar
 
     @staticmethod
-    def getBar(width=None, height=None, reverse=False, **kwargs):
+    def getBarChart(center='center', text_color=None, width=None, height=None, reverse=False, **kwargs):
         """
+        :param text_color: text color
+        :param center: align
         :param width: barWidth
         :param height: barHeight
         :param reverse: Bool
@@ -161,10 +184,16 @@ class Echarts:
         :return: bar
         """
         bar = (
-            Bar(init_opts=InitOpts(theme=ThemeType.LIGHT, height=width or '1200px', width=width or '600px'))
+            Bar(init_opts=InitOpts(
+                theme=ThemeType.LIGHT,
+                is_horizontal_center=center,
+                width=width or '1200px',
+                height=height or '600px'
+            ))
             .add_xaxis(kwargs['x_data'])
             .add_yaxis(kwargs['title'], kwargs['y_data'], label_opts=LabelOpts(
                 position=kwargs['position'],
+                color=text_color or 'black'
             ))
             .set_global_opts(
                 title_opts=TitleOpts(
@@ -215,7 +244,7 @@ class Echarts:
         return bar
 
     @staticmethod
-    def getTimeBar(width=None, height=None, **kwargs):
+    def getTimeBarChart(width=None, height=None, **kwargs):
         """
         :param kwargs:
         :param width: Timeline_width
@@ -242,8 +271,10 @@ class Echarts:
             kwargs['timeline'].render(kwargs['HTML_Name'][1])
 
     @staticmethod
-    def readFileTimeBar(width=None, height=None, pt=False, reverse=False, **kwargs):
+    def readFileTimeBarCharts(text_color=None, center='center', width=None, height=None, pt=False, reverse=False, **kwargs):
         """
+        :param text_color: text color
+        :param center: align
         :param width: Timeline_width
         :param height: Timeline_height
         :param pt: Bool
@@ -276,7 +307,9 @@ class Echarts:
             num += 10
             if pt:
                 print(y_data)
-            results = kwargs['echarts'].getBar(
+            results = kwargs['echarts'].getBarChart(
+                text_color=text_color,
+                center=center,
                 angle=kwargs['angle'],
                 PT=kwargs['PT'],
                 reverse=reverse,
@@ -287,7 +320,7 @@ class Echarts:
                 HTML_Name=kwargs['HTML_Name'],
                 position=kwargs['position'])
             if i == len(kwargs['x_data']) - 1:
-                kwargs['echarts'].getTimeBar(
+                kwargs['echarts'].getTimeBarChart(
                     width=width,
                     height=height,
                     timeline=kwargs['timeline'],
@@ -298,7 +331,7 @@ class Echarts:
                     play=kwargs['play'],
                     For=kwargs['For']
                 )
-            kwargs['echarts'].getTimeBar(
+            kwargs['echarts'].getTimeBarChart(
                 width=width,
                 height=height,
                 reverse=reverse,
@@ -376,7 +409,7 @@ class Tools:
                 color += str(random.choice(data))
             return color
 
-    def getEchartsDict(self, line: int, interval: int):
+    def getEchartsDict(self, line: int, interval: int) -> dict:
         """
         default start Number is 0
         :param line: line
@@ -403,7 +436,7 @@ class Tools:
         return my_dict
 
     @staticmethod
-    def getYear(start, end, lens=None, bools=False):
+    def getYear(start, end, lens=None, bools=False) -> list:
         """
         :param start: start year
         :param end: end year
@@ -422,7 +455,7 @@ class Tools:
                 years.append(start + i)
         return years
 
-    def getNumberList(self, lines, start, end=None, bools=False):
+    def getRandomNumberList(self, lines, start, end=None, bools=False) -> list:
         """
         :param bools: Bool
         :param lines: lines Number
@@ -442,7 +475,7 @@ class Tools:
         return num
 
     @staticmethod
-    def getProvince(province_name):
+    def getProvince(province_name) -> list:
         """
         provinceKeys: 江西省 海南省 安徽省 浙江省 澳门特别行政区 黑龙江省
                    江苏省 台湾省 青海省 贵州省 云南省 宁夏回族自治区

@@ -3,7 +3,7 @@ import pyautogui
 import pyperclip
 from pyecharts.charts import *
 from pyecharts.options import *
-from pyecharts.faker import Faker
+# from pyecharts.faker import Faker
 
 
 class Keyboard:
@@ -27,7 +27,7 @@ class Echarts:
     @staticmethod
     def getLineChart(bools=True, **kwargs):
         """
-        :param bools: T | F
+        :param bools: Bool
         :param kwargs:
         x_data: list
         y_data: list
@@ -166,7 +166,7 @@ class Echarts:
     def getTimeBar(**kwargs):
         """
         :param kwargs:
-        timeline: -> Timeline()
+        timeline: Object -> Timeline()
         bars: list
         title: str
         HTML_Name: list: [Bool, Name]
@@ -186,17 +186,16 @@ class Echarts:
             kwargs['timeline'].render(kwargs['HTML_Name'][1])
 
     @staticmethod
-    def readFileTimeBar(reverse=False, **kwargs):
+    def readFileTimeBar(pt=False, reverse=False, **kwargs):
         """
+        :param pt Bool
         :param reverse: Bool
         :param kwargs:
         x_data: list
         dicts: dict
-        line: int
-        data: fileReadLines
-        num: int
-        echarts: -> Echarts()
-        timeline: -> Timeline()
+        data: list -> int + '\n'
+        echarts: Object -> Echarts()
+        timeline: Object -> Timeline()
         time: int
         title: list
         position: str
@@ -206,17 +205,20 @@ class Echarts:
         play, For: Bool
         :return:
         """
-        for i in range(kwargs['line']):
+        num = len(kwargs['x_data'])
+        kwargs['title'].reverse()
+        for i in range(len(kwargs['x_data'])):
             y_data = []
             for j in range(len(kwargs['data'])):
                 y_data.append(int(kwargs['data'][j].split()[0]))
             if i == 0:
-                y_data = y_data[:kwargs['num']:]
+                y_data = y_data[:num:]
             else:
-                y_data = y_data[kwargs['num'] - len(kwargs['x_data']):kwargs['num']]
-            kwargs['num'] += 10
-            print(y_data)
-            result = kwargs['echarts'].getBar(
+                y_data = y_data[num - len(kwargs['x_data']):num]
+            num += 10
+            if pt:
+                print(y_data)
+            results = kwargs['echarts'].getBar(
                 angle=kwargs['angle'],
                 PT=kwargs['PT'],
                 reverse=reverse,
@@ -226,10 +228,10 @@ class Echarts:
                 title=str(kwargs['title'][len(kwargs['x_data']) - (i + 1)]) + 'GDP',
                 HTML_Name=kwargs['HTML_Name'],
                 position=kwargs['position'])
-            if i == kwargs['line'] - 1:
+            if i == len(kwargs['x_data']) - 1:
                 kwargs['echarts'].getTimeBar(
                     timeline=kwargs['timeline'],
-                    bars=[result],
+                    bars=[results],
                     title=str(kwargs['title'][len(kwargs['x_data']) - (i + 1)]) + 'GDP',
                     HTML_Name=[True, kwargs['HTML_Name']],
                     time=kwargs['time'],
@@ -239,7 +241,7 @@ class Echarts:
             kwargs['echarts'].getTimeBar(
                 reverse=reverse,
                 timeline=kwargs['timeline'],
-                bars=[result],
+                bars=[results],
                 title=kwargs['title'][len(kwargs['x_data']) - (i + 1)],
                 HTML_Name=[False, kwargs['HTML_Name']],
                 time=kwargs['time'],
@@ -252,20 +254,40 @@ class Tools:
 
     @staticmethod
     def getRandom(start, end=None):
+        """
+        get Random Number Between start And end
+        :param start: start Number
+        :param end: end Number
+        :return: int
+        """
         if end is None:
             end = start
             start = 0
         return random.randint(start, end)
 
     @staticmethod
-    def count(data: list, element):
+    def count(data: [list, tuple], element):
+        """
+        :param data: list OR tuple
+        :param element:
+        :return: count: int
+        """
         num = 0
         for i in range(len(data)):
             if element == data[i]:
                 num += 1
         return num
 
-    def writeNumber(self, path, lines, start, end=None, mode='a', coding='utf-8'):
+    def writeNumberToLine(self, path, lines, start, end=None, mode='a', coding='utf-8'):
+        """
+        :param path: filePath
+        :param lines: line count
+        :param start: start Number, end is None, default start Number is 0
+        :param end: end Number
+        :param mode: file open mode, default file open mode is 'a'
+        :param coding: coding
+        :return: None
+        """
         file = open(path, mode, encoding=coding)
 
         for i in range(lines):
@@ -275,43 +297,92 @@ class Tools:
                 file.write(f"{str(self.getRandom(start, end)) + '\n'}")
 
     def getRandomColor(self, types=False):
+        """
+        get random color, types = False return 16, types = True return RGB
+        :param types: Bool
+        :return: 16 OR RGB
+        """
         data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f']
         color = '#'
         rgb = 'rgb('
         if types:
-            for i in range(6):
-                color += str(random.choice(data))
-            return color
-        else:
             return f"{
                 rgb + str(self.getRandom(255)) + ',' + str(self.getRandom(255)) + ',' + str(self.getRandom(255)) + ')'
             }"
+        else:
+            for i in range(6):
+                color += str(random.choice(data))
+            return color
 
-    def getDict(self, lens, start, end=None):
+    def getEchartsDict(self, line: int, interval: int):
+        """
+        default start Number is 0
+        :param line: line
+        :param interval: start to end
+        :return: dict
+        """
+        start = 0
+        my_dict = {}
+        for i in range(line):
+            my_dict[i] = {}
+            if i == line - 1:
+                my_dict[i]['min'] = start
+                my_dict[i]['label'] = f'{start}+'
+                my_dict[i]['color'] = self.getRandomColor(True)
+            else:
+                my_dict[i]['min'] = start
+                my_dict[i]['max'] = start + interval
+                my_dict[i]['label'] = f'{start}-{start + interval}'
+                my_dict[i]['color'] = self.getRandomColor(True)
+            if i >= 0:
+                start += interval + 1
+            else:
+                start += interval
+        return my_dict
+
+    @staticmethod
+    def getYear(start, end, lens=None, bools=False):
+        """
+        :param start: start year
+        :param end: end year
+        :param lens: display length
+        :param bools: Bool: whether display Year
+        :return: bools = True return list -> str, return list -> int
+        """
+        length = lens or end - start + 1
+        if length > end - start:
+            length = end - start + 1
+        years = []
+        for i in range(length):
+            if bools:
+                years.append(str(start + i) + '年')
+            else:
+                years.append(start + i)
+        return years
+
+    def getNumberList(self, lines, start, end=None, bools=False):
+        """
+        :param lines: lines Number
+        :param start: start Number
+        :param end: end Number, if None start = 0, end = start
+        :return:
+        """
         if end is None:
             end = start
             start = 0
-        my_dict = {}
-        add = None
-        for i in range(lens):
-            if i == lens - 1:
-                my_dict[i] = {}
-                my_dict[i]['min'] = start
-                my_dict[i]['label'] = f'{start}-{end}'
-                my_dict[i]['color'] = self.getRandomColor(True)
+        num = []
+        for i in range(lines):
+            if bools:
+                num.append(str(self.getRandom(start, end)) + '\n')
             else:
-                my_dict[i] = {}
-                my_dict[i]['min'] = start
-                my_dict[i]['max'] = end
-                my_dict[i]['label'] = f'{start}-{end}'
-                my_dict[i]['color'] = self.getRandomColor(True)
-            if start == 0:
-                start += end + 1
-                add = end
-            else:
-                start += add
-            end += add
-        return my_dict
+                num.append(self.getRandom(start, end))
+        return num
+
+
+if __name__ == '__main__':
+    fc = Tools()
+    result = fc.getNumberList(1000, 100, 200)
+    print(result, '\n', len(result))
 
 
 

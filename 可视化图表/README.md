@@ -6,6 +6,7 @@
 import json
 from pyecharts.charts import Line
 from pyecharts.options import TitleOpts, LegendOpts, VisualMapOpts, TooltipOpts, LabelOpts
+from pyecharts.globals import ThemeType
 
 # 得到折线图对象 line = Line()
 line = Line()
@@ -69,7 +70,7 @@ map.set_global_opts(
 map.render('map.html')
 
 map = (
-    Map()
+    Map(init_opts=)
     .add('Title', data, 'China...')
     .set_global_opts(
         visualmap_opts=VisualMapOpts(
@@ -101,6 +102,10 @@ bar.add_yaxis('GDP', [100, 20, 10], label_opts=LabelOpts(
     position='right'    # 设置数值标签在右侧
 ))
 
+# set width and height
+bar.width = 'width'
+bar.height = 'height'
+
 bar.set_global_opts(
     title_opts=TitleOpts(
         # set Title
@@ -128,7 +133,13 @@ timeline = Timeline()
 timeline.render('BarName')
 
 bar = (
-    Bar()
+    Bar(init_opts=InitOpts(
+        theme=ThemeType.LIGHT # set theme
+        ,
+        # set width and height
+        width='width',
+        height='height'
+    ))
     .add_xaxis(['element'])
     .add_yaxis('Title', ['element'], label_opts=LabelOpts(
         position='right'
@@ -176,4 +187,3 @@ for i in range(10):
     timeline.add(bar, 'Title')
 timeline.render('Name')
 ~~~
-

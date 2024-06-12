@@ -141,6 +141,7 @@ class Echarts:
         ))
         bar.add_xaxis(kwargs['x_data'])
         for i in range(len(y_data)):
+            print(y_data)
             bar.add_yaxis(kwargs['title'][i], y_data[i], label_opts=LabelOpts(
                 position=kwargs['position'],
                 color=text_color or 'black'
@@ -175,10 +176,14 @@ class Echarts:
         :param kwargs:
         x_data: list
         y_data: list
-        title: str
+        line_title: str
+        dataZoom:
         dicts: dict
         position: position
         HTML_Name: str
+        dataZoom: Bool, display Zoom
+        mainTitle: List
+        title: barTitle
         PT: *%
         angle: angle
         :return: bar
@@ -197,13 +202,13 @@ class Echarts:
             ))
             .set_global_opts(
                 title_opts=TitleOpts(
-                    title=kwargs['title'],
+                    title=kwargs['mainTitle'],
                 ),
                 xaxis_opts=AxisOpts(
                     axislabel_opts=LabelOpts(rotate=kwargs['angle'])
                 ),
                 datazoom_opts=DataZoomOpts(
-                    is_show=True,
+                    is_show=kwargs['dataZoom'],
                     type_="slider",
                     orient="horizontal",
                     pos_top=kwargs['PT']
@@ -244,11 +249,56 @@ class Echarts:
         return bar
 
     @staticmethod
+    def getTimeBars(text_color=None, **kwargs):
+        """
+        :param text_color: text color
+        :param kwargs:
+        timeline: Object -> Timeline()
+        TimeLineNumber: int
+        x_data: list
+        y_data: [[], [], ...]
+        lineTitle = list
+        title: list -> barOneTitle, barTwoTitle
+        position: position
+        main_title: str
+        time: interval time
+        play, For: Bool
+        HTML_Name: str
+        PT: 1%-100%
+        angle: angle: int
+        :return:
+        """
+        for i in range(kwargs['TimeLineNumber']):
+            result = Echarts().getBars(
+                x_data=kwargs['x_data'],
+                # y_data=[
+                #     Tools().getRandomNumberList(len(kwargs['x_data']), 2000),
+                #     Tools().getRandomNumberList(len(kwargs['x_data']), 2000)
+                # ],
+                y_data=kwargs['y_data'],
+                title=kwargs['title'],
+                position=kwargs['position'],
+                main_title=kwargs['main_title'],
+                HTML_Name=kwargs['HTML_Name'],
+                PT=kwargs['PT'],
+                angle=kwargs['angle'],
+                text_color=text_color
+            )
+            kwargs['timeline'].add(result, kwargs['lineTitle'][i])
+            kwargs['timeline'].add_schema(
+                play_interval=kwargs['time'],
+                is_timeline_show=True,
+                is_auto_play=kwargs['play'],
+                is_loop_play=kwargs['For'],
+            )
+        kwargs['timeline'].render(kwargs['HTML_Name'])
+
+    @staticmethod
     def getTimeBarChart(width=None, height=None, **kwargs):
         """
-        :param kwargs:
         :param width: Timeline_width
         :param height: Timeline_height
+        :param kwargs:
         timeline: Object -> Timeline()
         bars: list
         title: str
@@ -273,29 +323,32 @@ class Echarts:
     @staticmethod
     def readFileTimeBarCharts(text_color=None, center='center', width=None, height=None, pt=False, reverse=False, **kwargs):
         """
-        :param text_color: text color
+        :param text_color: text Color
         :param center: align
         :param width: Timeline_width
         :param height: Timeline_height
-        :param pt: Bool
+        :param pt: Bool print y_data
         :param reverse: Bool
         :param kwargs:
         x_data: list
         dicts: dict
-        data: list -> int + '\n'
+        data: list
         echarts: Object -> Echarts()
         timeline: Object -> Timeline()
-        time: int
-        title: list
+        time: interval time
+        lineTitle: list
         position: str
         HTML_Name: str
+        dataZoom: Bool, display Zoom
+        mainTitle: List
+        title: barTitle
         PT: *%
         angle: Number
         play, For: Bool
         :return:
         """
         num = len(kwargs['x_data'])
-        kwargs['title'].reverse()
+        kwargs['lineTitle'].reverse()
         for i in range(len(kwargs['x_data'])):
             y_data = []
             for j in range(len(kwargs['data'])):
@@ -308,6 +361,8 @@ class Echarts:
             if pt:
                 print(y_data)
             results = kwargs['echarts'].getBarChart(
+                dataZoom=kwargs['dataZoom'],
+                mainTitle=kwargs['mainTitle'][i],
                 text_color=text_color,
                 center=center,
                 angle=kwargs['angle'],
@@ -316,33 +371,35 @@ class Echarts:
                 dicts=kwargs['dicts'],
                 x_data=kwargs['x_data'],
                 y_data=y_data,
-                title=str(kwargs['title'][len(kwargs['x_data']) - (i + 1)]) + 'GDP',
+                title=kwargs['title'],
                 HTML_Name=kwargs['HTML_Name'],
                 position=kwargs['position'])
+
             if i == len(kwargs['x_data']) - 1:
                 kwargs['echarts'].getTimeBarChart(
                     width=width,
                     height=height,
                     timeline=kwargs['timeline'],
                     bars=[results],
-                    title=str(kwargs['title'][len(kwargs['x_data']) - (i + 1)]) + 'GDP',
+                    title=str(kwargs['lineTitle'][len(kwargs['x_data']) - (i + 1)]) + 'GDP',
                     HTML_Name=[True, kwargs['HTML_Name']],
                     time=kwargs['time'],
                     play=kwargs['play'],
                     For=kwargs['For']
                 )
-            kwargs['echarts'].getTimeBarChart(
-                width=width,
-                height=height,
-                reverse=reverse,
-                timeline=kwargs['timeline'],
-                bars=[results],
-                title=kwargs['title'][len(kwargs['x_data']) - (i + 1)],
-                HTML_Name=[False, kwargs['HTML_Name']],
-                time=kwargs['time'],
-                play=kwargs['play'],
-                For=kwargs['For']
-            )
+            else:
+                kwargs['echarts'].getTimeBarChart(
+                    width=width,
+                    height=height,
+                    reverse=reverse,
+                    timeline=kwargs['timeline'],
+                    bars=[results],
+                    title=str(kwargs['lineTitle'][len(kwargs['x_data']) - (i + 1)]) + 'GDP',
+                    HTML_Name=[False, kwargs['HTML_Name']],
+                    time=kwargs['time'],
+                    play=kwargs['play'],
+                    For=kwargs['For']
+                )
 
 
 class Tools:
@@ -395,7 +452,7 @@ class Tools:
         """
         get random color, types = False return 16, types = True return RGB
         :param types: Bool
-        :return: 16 OR RGB
+        :return: randomColor
         """
         data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f']
         color = '#'
@@ -411,7 +468,7 @@ class Tools:
 
     def getEchartsDict(self, line: int, interval: int) -> dict:
         """
-        default start Number is 0
+        if end = None, start default start Number is 0 end = start
         :param line: line
         :param interval: start to end
         :return: dict
@@ -436,13 +493,13 @@ class Tools:
         return my_dict
 
     @staticmethod
-    def getYear(start, end, lens=None, bools=False) -> list:
+    def getYear(start, end, lens=None, bools=False) -> list[str]:
         """
         :param start: start year
         :param end: end year
         :param lens: display length
         :param bools: Bool: whether display Year
-        :return: bools = True return list -> str, return list -> int
+        :return: yearList
         """
         length = lens or end - start + 1
         if length > end - start:
@@ -452,16 +509,16 @@ class Tools:
             if bools:
                 years.append(str(start + i) + '年')
             else:
-                years.append(start + i)
+                years.append(str(start + i))
         return years
 
-    def getRandomNumberList(self, lines, start, end=None, bools=False) -> list:
+    def getRandomNumberList(self, lines, start, end=None, bools=False) -> list[str]:
         """
         :param bools: Bool
         :param lines: lines Number
         :param start: start Number
         :param end: end Number, if None start = 0, end = start
-        :return:
+        :return: NumberList[Str]
         """
         if end is None:
             end = start
@@ -469,21 +526,22 @@ class Tools:
         num = []
         for i in range(lines):
             if bools:
-                num.append(str(self.getRandom(start, end)) + '\n')
+                num.append(str(self.getRandom(start, end)))
             else:
                 num.append(self.getRandom(start, end))
         return num
 
     @staticmethod
-    def getProvince(province_name) -> list:
+    def getProvince(province_names: list) -> list:
         """
-        provinceKeys: 江西省 海南省 安徽省 浙江省 澳门特别行政区 黑龙江省
-                   江苏省 台湾省 青海省 贵州省 云南省 宁夏回族自治区
-                   山西省 辽宁省 吉林省 广西壮族自治区 湖南省 天津市
-                   河北省 北京市 上海市 重庆市 福建省 河南省 广东省
-                   山东省 甘肃省 香港特别行政区 新疆维吾尔自治区 西藏自治区
-                   陕西省 四川省 湖北省
-        :param province_name: province
+        provinceKeys:
+        江西省 海南省 安徽省 浙江省 澳门特别行政区 黑龙江省
+        江苏省 台湾省 青海省 贵州省 云南省 宁夏回族自治区
+        山西省 辽宁省 吉林省 广西壮族自治区 湖南省 天津市
+        河北省 北京市 上海市 重庆市 福建省 河南省 广东省
+        山东省 甘肃省 香港特别行政区 新疆维吾尔自治区
+        西藏自治区 陕西省 四川省 湖北省
+        :param province_names: province Name List
         :return: city inside province
         """
         china_cities = {
@@ -911,9 +969,11 @@ class Tools:
             ]
         }
 
-        return china_cities[province_name]
+        city = []
+        for i in range(len(province_names)):
+            city += china_cities[province_names[i]]
+        return city
 
 
 if __name__ == '__main__':
-    fc = Tools()
-    print(fc.getProvince('江西省') + fc.getProvince('广东省'))
+    pass

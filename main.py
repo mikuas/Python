@@ -1,4 +1,4 @@
-from function import *
+from EchartsFc import *
 
 x_data = [
     "北京市",

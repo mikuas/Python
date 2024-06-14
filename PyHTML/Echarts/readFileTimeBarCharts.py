@@ -1,10 +1,10 @@
-from PyHTML.Tools import *
+from EchartsFc import *
 
 main_title = []
 year = Tools().getYear(2024 - len(Tools().getProvince(['江西省'])) + 1, 2024, bools=True)
 
 for i in range(len(Tools().getProvince(['江西省']))):
-    main_title.append('江西省' + year[i])
+    main_title.append('江西省' + year[i] + 'GDP')
 
 
 Echarts().readFileTimeBarCharts(

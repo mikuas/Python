@@ -646,7 +646,7 @@ class Echarts:
                         height=height,
                         timeline=timeline,
                         bars=[results],
-                        title=str(line_title[len(x_data) - (i + 1)]) + 'GDP',
+                        title=str(line_title[len(x_data) - (i + 1)]),
                         html_name=[True, html_name],
                         time=time,
                         play=play,
@@ -658,7 +658,7 @@ class Echarts:
                         height=height,
                         timeline=timeline,
                         bars=[results],
-                        title=str(line_title[len(x_data) - (i + 1)]) + 'GDP',
+                        title=str(line_title[len(x_data) - (i + 1)]),
                         html_name=[False, html_name],
                         time=time,
                         play=play,
@@ -958,10 +958,13 @@ class Tools:
             ]
         }
 
-        city = []
-        for i in range(len(province_names)):
-            city += china_cities[province_names[i]]
-        return city
+        if province_names == 'keys':
+            return list(china_cities.keys())
+        else:
+            city = []
+            for i in range(len(province_names)):
+                city += china_cities[province_names[i]]
+            return city
 
 
 if __name__ == '__main__':

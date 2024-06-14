@@ -1,30 +1,50 @@
-from Tools import *
+from Echarts.EchartsFc import *
 
-mainTitle = Tools().getYear(2024 - len(Tools().getProvince(['江西省', '江苏省'])) + 1, 2024, bools=True)
+x_data = [
+    "北京市",
+    "天津市",
+    "上海市",
+    "重庆市",
+    "河北省",
+    "山西省",
+    "辽宁省",
+    "吉林省",
+    "黑龙江省",
+    "江苏省",
+    "浙江省",
+    "安徽省",
+    "福建省",
+    "江西省",
+    "山东省",
+    "河南省",
+    "湖北省",
+    "湖南省",
+    "广东省",
+    "海南省",
+    "四川省",
+    "贵州省",
+    "云南省",
+    "陕西省",
+    "甘肃省",
+    "青海省",
+    "台湾省",
+]
 
-for i in range(len(mainTitle)):
-    mainTitle[i] += '江西省GDP'
+main_title = []
 
-print(mainTitle)
-print(Tools().getProvince(['江苏省', '江西省']))
+for i in range(len(x_data)):
+    main_title.append(f'全国各省{Tools().getYear(2024 - len(x_data) + 1, 2024, bools=True)[i]}GDP')
 
 Echarts().readFileTimeBarCharts(
-    mainTitle=mainTitle,
-    x_data=Tools().getProvince(['江苏省', '江西省']),
-    dicts=Tools().getEchartsDict(4, 3000),
-    data=Tools().getRandomNumberList(1000, 2000, 15000, True),
-    echarts=Echarts(),
-    title='江西省GDP',
-    lineTitle=Tools().getYear(2024 - len(Tools().getProvince(['江西省', '江苏省'])), 2024, bools=True),
-    timeline=Timeline(),
-    time=1000,
-    text_color='blue',
-    position='top',
-    HTML_Name='index.html',
-    dataZoom=True,
-    PT='5%',
-    angle=45,
-    play=True,
-    For=True
+    x_data,
+    Tools().getRandomNumberList(1000, 1000, 10000, True),
+    Tools().getEchartsDict(4, 2000),
+    Echarts(),
+    Timeline(),
+    Tools().getYear(2024 - len(x_data) + 1, 2024),
+    main_title,
+    '全国GDP',
+    True,
+    True,
 )
 

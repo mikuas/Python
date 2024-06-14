@@ -1,4 +1,4 @@
-from PyHTML.Tools import *
+from EchartsFc import *
 
 Echarts().getLineChart(
     Tools().getProvince(['江西省']),

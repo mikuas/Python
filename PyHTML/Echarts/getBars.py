@@ -17,7 +17,6 @@ Echarts().getBars(
     )],
     ['商品A', '商品B', '商品C'],
     'GDP',
-    Tools().getEchartsDict(4, 2000)
 )
 
 

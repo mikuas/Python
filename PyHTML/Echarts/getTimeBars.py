@@ -16,5 +16,5 @@ Echarts().getTimeBars(
     position='top',
     main_title='GDP',
     html_name=[True, 'index.html'],
-    angle=45
+    angle=45,
 )

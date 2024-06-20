@@ -6,5 +6,6 @@ Echarts().getLineChart(
         len(Tools().getProvince(['江西省'])),
         1000
     ),
-    '江西省GDP'
+    '江西省GDP',
+    False
 )

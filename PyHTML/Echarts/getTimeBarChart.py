@@ -13,7 +13,7 @@ for i in range(4):
         ),
         Tools().getEchartsDict(4, 2000),
         '江西省',
-        '江西省GDP'
+        '江西省GDP',
     )
     result.append(re)
 
@@ -24,6 +24,6 @@ Echarts().getTimeBarChart(
     'GDP',
     html_name=[True, 'index.html'],
     play=True,
-    auto=True
+    auto=True,
 )
 

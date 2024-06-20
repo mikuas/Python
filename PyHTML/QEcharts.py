@@ -1,9 +1,9 @@
 import random
 import pyautogui
 import pyperclip
-from pyecharts.charts import *
+from pyecharts.charts import Line, Map, Bar, Pie, Timeline
 from pyecharts.options import *
-from pyecharts.globals import *
+from pyecharts.globals import ThemeType
 # from pyecharts.faker import Faker
 
 
@@ -30,6 +30,8 @@ class Echarts:
             x_data: list = None,
             y_data: list = None,
             title: str = None,
+            display_piece: bool = True,
+            dicts: list[dict] = None,
             width: str = None,
             height: str = None,
             text_color: str = None,
@@ -37,6 +39,8 @@ class Echarts:
             html_name: str = 'index.html',
     ):
         """
+        :param display_piece: display pieces
+        :param dicts: pieces option, {0: {'min': value, 'max': value, 'label': value, 'color': value}, ...}
         :param text_color: Text Color
         :param x_data: x Data: List
         :param y_data: y Data: List
@@ -64,7 +68,11 @@ class Echarts:
                     title_opts=TitleOpts(title=title),
                     legend_opts=LegendOpts(is_show=True),
                     tooltip_opts=TooltipOpts(is_show=True),
-                    visualmap_opts=VisualMapOpts(is_show=True)
+                    visualmap_opts=VisualMapOpts(
+                        is_show=True,
+                        is_piecewise=display_piece,
+                        pieces=dicts
+                    )
                 )
             ).render(html_name)
 
@@ -76,20 +84,22 @@ class Echarts:
     def getMap(
             data: list = None,
             title: str = None,
-            dicts: dict = None,
             name: str = None,
+            dicts: list[dict] = None,
+            display_piece: bool = True,
             width: str = None,
             height: str = None,
             center: str = 'center',
             html_name: str = 'index.html'
     ):
         """
+        :param display_piece: display pieces
         :param width: Map Width
         :param height: Map Height
         :param center: align Mode, default center align
         :param data: Data, [(key, value), (key, value), ...]
         :param title: Map Title
-        :param dicts: pieces option, {0: {'min': value, 'max': value, 'label': value, 'color': value}} length = 4
+        :param dicts: pieces option, {0: {'min': value, 'max': value, 'label': value, 'color': value}, ...}
         :param name: country OR province Name
         :param html_name:
         :return: Map()
@@ -106,31 +116,8 @@ class Echarts:
                 .set_global_opts(
                     visualmap_opts=VisualMapOpts(
                         is_show=True,
-                        is_piecewise=True,
-                        pieces=[
-                            {'min': dicts[0]['min'],
-                             'max': dicts[0]['max'],
-                             'label': dicts[0]['label'],
-                             'color': dicts[0]['color']
-                             },
-
-                            {'min': dicts[1]['min'],
-                             'max': dicts[1]['max'],
-                             'label': dicts[1]['label'],
-                             'color': dicts[1]['color']
-                             },
-
-                            {'min': dicts[2]['min'],
-                             'max': dicts[2]['max'],
-                             'label': dicts[2]['label'],
-                             'color': dicts[2]['color']
-                             },
-
-                            {'min': dicts[3]['min'],
-                             'label': dicts[3]['label'],
-                             'color': dicts[3]['color']
-                             }
-                        ]
+                        is_piecewise=display_piece,
+                        pieces=dicts
                     )
                 )
             ).render(html_name)
@@ -145,17 +132,16 @@ class Echarts:
             y_data: list = None,
             title: list = None,
             main_title: str = None,
-            dicts: dict = None,
-            angle: int = 45,
+            width: str = None,
+            text_color: str = None,
+            height: str = None,
+            display_zoom: bool = False,
+            reverse: bool = False,
+            zoom_position: str = '5%',
             position: str = 'top',
             html_name: str = 'index.html',
-            display_zoom: bool = False,
-            zoom_position: str = '5%',
-            text_color: str = None,
-            width: str = None,
-            height: str = None,
             center: str = 'center',
-            reverse: bool = False,
+            angle: int = 45,
     ):
         """
         :param x_data: x Data: List
@@ -166,7 +152,6 @@ class Echarts:
         :param angle: x Data angle
         :param zoom_position: Zoom Position
         :param display_zoom: None
-        :param dicts: pieces option, {0: {'min': value, 'max': value, 'label': value, 'color': value}} length = 4
         :param html_name: Name, defaults to 'index.html'
         :param width: Bar Width
         :param height: Bar Height
@@ -184,18 +169,17 @@ class Echarts:
             ))
             bar.add_xaxis(x_data)
             for i in range(len(y_data)):
-                bar.add_yaxis(title[i], y_data[i], label_opts=LabelOpts(
-                    position=position,
-                    color=text_color or 'black'
-                ))
+                bar.add_yaxis(
+                    title[i], y_data[i],
+                    label_opts=LabelOpts(
+                        position=position,
+                        color=text_color or 'black'
+                    )
+                )
             if display_zoom:
                 bar.set_global_opts(
-                    title_opts=TitleOpts(
-                        title=main_title,
-                    ),
-                    xaxis_opts=AxisOpts(
-                        axislabel_opts=LabelOpts(rotate=angle)
-                    ),
+                    title_opts=TitleOpts(title=main_title),
+                    xaxis_opts=AxisOpts(axislabel_opts=LabelOpts(rotate=angle)),
                     datazoom_opts=DataZoomOpts(
                         is_show=True,
                         type_="slider",
@@ -205,12 +189,8 @@ class Echarts:
                 )
             else:
                 bar.set_global_opts(
-                    title_opts=TitleOpts(
-                        title=main_title,
-                    ),
-                    xaxis_opts=AxisOpts(
-                        axislabel_opts=LabelOpts(rotate=angle)
-                    )
+                    title_opts=TitleOpts(title=main_title),
+                    xaxis_opts=AxisOpts(axislabel_opts=LabelOpts(rotate=angle))
                 )
             if reverse:
                 bar.reversal_axis()
@@ -226,11 +206,11 @@ class Echarts:
             color: list = None,
             main_title: str = None,
             render: bool = False,
-            center: str = 'center',
             width: str = None,
             height: str = None,
             html_name: str = 'index.html',
-            name="",
+            center: str = 'center',
+            name: str = "",
     ):
         """
         :param data: [[key, key, ...], [value, value, ...]]
@@ -268,25 +248,27 @@ class Echarts:
     def getBarChart(
             x_data: list = None,
             y_data: list = None,
-            dicts: dict = None,
+            dicts: list[dict] = None,
             title: str = None,
             main_title: str = None,
+            display_piece: bool = True,
+            width=None,
+            height=None,
+            text_color=None,
+            reverse=False,
+            display_zoom: bool = False,
             html_name: str = 'index.html',
             zoom_position: str = '5%',
-            display_zoom: bool = False,
             position: str = 'top',
-            width: str = None,
-            height: str = None,
+            center='center',
             angle: str = 45,
-            center: str = 'center',
-            text_color: str = None,
-            reverse: bool = False,
     ):
         """
+        :param display_piece: display pieces
         :param x_data: x Data: List
         :param y_data: y Data: List
         :param display_zoom: displayZoom
-        :param dicts: pieces option, {0: {'min': value, 'max': value, 'label': value}} length = 4
+        :param dicts: pieces option, {0: {'min': value, 'max': value, 'label': value}, ...}
         :param position: Title Position
         :param html_name: Name
         :param main_title: Main Title
@@ -316,12 +298,8 @@ class Echarts:
                 ))
             if display_zoom:
                 bar.set_global_opts(
-                    title_opts=TitleOpts(
-                        title=main_title,
-                    ),
-                    xaxis_opts=AxisOpts(
-                        axislabel_opts=LabelOpts(rotate=angle)
-                    ),
+                    title_opts=TitleOpts(title=main_title),
+                    xaxis_opts=AxisOpts(axislabel_opts=LabelOpts(rotate=angle)),
                     datazoom_opts=DataZoomOpts(
                         is_show=True,
                         type_="slider",
@@ -330,68 +308,18 @@ class Echarts:
                     ),
                     visualmap_opts=VisualMapOpts(
                         is_show=True,
-                        is_piecewise=True,
-                        pieces=[
-                            {'min': dicts[0]['min'],
-                             'max': dicts[0]['max'],
-                             'label': dicts[0]['label'],
-                             'color': dicts[0]['color']
-                             },
-
-                            {'min': dicts[1]['min'],
-                             'max': dicts[1]['max'],
-                             'label': dicts[1]['label'],
-                             'color': dicts[1]['color']
-                             },
-
-                            {'min': dicts[2]['min'],
-                             'max': dicts[2]['max'],
-                             'label': dicts[2]['label'],
-                             'color': dicts[2]['color']
-                             },
-
-                            {'min': dicts[3]['min'],
-                             'label': dicts[3]['label'],
-                             'color': dicts[3]['color']
-                             }
-                        ]
+                        is_piecewise=display_piece,
+                        pieces=dicts
                     )
                 )
             else:
                 bar.set_global_opts(
-                    title_opts=TitleOpts(
-                        title=main_title,
-                    ),
-                    xaxis_opts=AxisOpts(
-                        axislabel_opts=LabelOpts(rotate=angle)
-                    ),
+                    title_opts=TitleOpts(title=main_title),
+                    xaxis_opts=AxisOpts(axislabel_opts=LabelOpts(rotate=angle)),
                     visualmap_opts=VisualMapOpts(
                         is_show=True,
-                        is_piecewise=True,
-                        pieces=[
-                            {'min': dicts[0]['min'],
-                             'max': dicts[0]['max'],
-                             'label': dicts[0]['label'],
-                             'color': dicts[0]['color']
-                             },
-
-                            {'min': dicts[1]['min'],
-                             'max': dicts[1]['max'],
-                             'label': dicts[1]['label'],
-                             'color': dicts[1]['color']
-                             },
-
-                            {'min': dicts[2]['min'],
-                             'max': dicts[2]['max'],
-                             'label': dicts[2]['label'],
-                             'color': dicts[2]['color']
-                             },
-
-                            {'min': dicts[3]['min'],
-                             'label': dicts[3]['label'],
-                             'color': dicts[3]['color']
-                             }
-                        ]
+                        is_piecewise=display_piece,
+                        pieces=dicts
                     )
                 )
             if reverse:
@@ -418,7 +346,7 @@ class Echarts:
             zoom_position: str = '5%',
             position: str = 'top',
             angle: int = 45,
-            text_color: str = None,
+            text_color=None,
     ):
         """
         :param timeline: Object -> Timeline()
@@ -531,9 +459,9 @@ class Echarts:
             html_name: list = None,
             play: bool = False,
             auto: bool = False,
-            time: int = 1000,
             width: str = None,
             height: str = None,
+            time: int = 1000,
     ):
         """
         :param timeline: Object -> Timeline()
@@ -568,27 +496,29 @@ class Echarts:
     def readFileTimeBarCharts(
             x_data: list = None,
             all_y_data: list = None,
-            dicts: dict = None,
-            echarts: 'Echarts()' = None,
-            timeline: Timeline() = None,
+            dicts: list[dict] = None,
+            echarts: 'Echarts' = None,
+            timeline: Timeline = None,
             line_title: list = None,
             main_title: list = None,
             title: str = None,
             play: bool = False,
             auto: bool = False,
-            text_color: str = None,
-            width: str = None,
-            height: str = None,
+            display_piece: bool = True,
+            text_color=None,
+            width=None,
+            height=None,
+            display_zoom: bool = False,
+            reverse=False,
             time: int = 1000,
             position: str = 'top',
-            display_zoom: bool = False,
             zoom_position: str = '5%',
             angle: int = 45,
             html_name: str = 'index.html',
-            center='center',
-            reverse=False,
+            center: str = 'center',
     ):
         """
+        :param display_piece: display pieces
         :param x_data: List
         :param all_y_data: List
         :param dicts: pieces option, {0: {'min': value, 'max': value, 'label': value}} length = 4
@@ -626,6 +556,7 @@ class Echarts:
                 num += 10
                 results = echarts.getBarChart(
                     display_zoom=display_zoom,
+                    display_piece=display_piece,
                     main_title=main_title[i],
                     text_color=text_color,
                     center=center,
@@ -646,7 +577,7 @@ class Echarts:
                         height=height,
                         timeline=timeline,
                         bars=[results],
-                        title=str(line_title[len(x_data) - (i + 1)]) + 'GDP',
+                        title=str(line_title[len(x_data) - (i + 1)]),
                         html_name=[True, html_name],
                         time=time,
                         play=play,
@@ -658,7 +589,7 @@ class Echarts:
                         height=height,
                         timeline=timeline,
                         bars=[results],
-                        title=str(line_title[len(x_data) - (i + 1)]) + 'GDP',
+                        title=str(line_title[len(x_data) - (i + 1)]),
                         html_name=[False, html_name],
                         time=time,
                         play=play,
@@ -699,7 +630,7 @@ class Tools:
 
     def writeNumberToLine(
             self,
-            path: str = None,
+            path: str = './write.txt',
             lines: int = None,
             start: int = None,
             end: int = None,
@@ -721,7 +652,7 @@ class Tools:
             if i == lines - 1:
                 file.write(str(self.getRandom(start, end)))
             else:
-                file.write(f"{str(self.getRandom(start, end)) + '\n'}")
+                file.write(f"{str(self.getRandom(start, end))}\n")
 
     def getRandomColor(self, types=False) -> str:
         """
@@ -731,17 +662,14 @@ class Tools:
         """
         data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f']
         color = '#'
-        rgb = 'rgb('
         if types:
-            return f"{
-                rgb + str(self.getRandom(255)) + ',' + str(self.getRandom(255)) + ',' + str(self.getRandom(255)) + ')'
-            }"
+            return f"rgb({str(self.getRandom(255))},{str(self.getRandom(255))},{str(self.getRandom(255))})"
         else:
             for i in range(6):
                 color += str(random.choice(data))
             return color
 
-    def getEchartsDict(self, line: int, interval: int) -> dict:
+    def getEchartsDict(self, line: int, interval: int) -> list[dict]:
         """
         if end = None, start default start Number is 0 end = start
         :param line: line
@@ -750,22 +678,24 @@ class Tools:
         """
         start = 0
         my_dict = {}
+        data = []
         for i in range(line):
             my_dict[i] = {}
             if i == line - 1:
                 my_dict[i]['min'] = start
                 my_dict[i]['label'] = f'{start}+'
-                my_dict[i]['color'] = self.getRandomColor(True)
+                my_dict[i]['color'] = self.getRandomColor()
             else:
                 my_dict[i]['min'] = start
                 my_dict[i]['max'] = start + interval
                 my_dict[i]['label'] = f'{start}-{start + interval}'
-                my_dict[i]['color'] = self.getRandomColor(True)
+                my_dict[i]['color'] = self.getRandomColor()
+            data.append(my_dict[i])
             if i >= 0:
                 start += interval + 1
             else:
                 start += interval
-        return my_dict
+        return data
 
     @staticmethod
     def getYear(start: int, end: int, lens=None, bools=False) -> list[str]:
@@ -787,13 +717,13 @@ class Tools:
                 years.append(str(start + i))
         return years
 
-    def getRandomNumberList(self, lines, start, end=None, bools=False) -> list[str]:
+    def getRandomNumberList(self, lines, start, end=None, bools=False) -> list[str or int]:
         """
         :param bools: Bool
         :param lines: lines Number
         :param start: start Number
         :param end: end Number, if None start = 0, end = start
-        :return: NumberList[Str]
+        :return: NumberList
         """
         if end is None:
             end = start
@@ -806,7 +736,7 @@ class Tools:
                 num.append(self.getRandom(start, end))
         return num
 
-    def getTwoListNumber(self, line_count, lines, start, end=None, bools=False) -> list[str]:
+    def getTwoListNumber(self, line_count, lines, start, end=None, bools=False) -> list[list[list[int]]]:
         all_data = []
         line_data = []
         for i in range(line_count):
@@ -818,7 +748,7 @@ class Tools:
         return all_data
 
     @staticmethod
-    def getProvince(province_names: list) -> list:
+    def getProvince(province_names: list or str) -> list:
         """
         provinceKeys:
         江西省 海南省 安徽省 浙江省 澳门特别行政区 黑龙江省
@@ -958,10 +888,13 @@ class Tools:
             ]
         }
 
-        city = []
-        for i in range(len(province_names)):
-            city += china_cities[province_names[i]]
-        return city
+        if province_names == 'keys':
+            return list(china_cities.keys())
+        else:
+            city = []
+            for i in range(len(province_names)):
+                city += china_cities[province_names[i]]
+            return city
 
 
 if __name__ == '__main__':

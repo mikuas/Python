@@ -1,4 +1,5 @@
 import os
+import time
 import tkinter as tk
 from PySide6.QtWidgets import *
 
@@ -12,7 +13,7 @@ class Windows:
         self.window.move(w, h)
 
         self.textEdit = QPlainTextEdit(self.window)
-        self.textEdit.setPlaceholderText('请输入时间/min')
+        self.textEdit.setPlaceholderText('请输入时间/s')
 
         self.textEdit.move(w * 0.2, h * 0.1)
         self.textEdit.resize(w * 0.5, 30)
@@ -37,7 +38,7 @@ class Windows:
 
     def click(self):
         try:
-            self.time_min = float(self.textEdit.toPlainText()) * 1000 * 60
+            self.time_min = float(self.textEdit.toPlainText()) * 1000
             self.command = self.textCommand.toPlainText()
             if not self.command:
                 self.info.show()

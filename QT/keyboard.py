@@ -4,14 +4,6 @@
 import pyautogui
 import time
 
-# 控制音量
-from ctypes import cast, POINTER
-from comtypes import CLSCTX_ALL
-from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
-
-# 在当前位置输入 "Hello, World!"
-# pyautogui.typewrite('Hello, World!')
-
 
 # 按下和释放空格键
 class Keyboard:
@@ -59,48 +51,6 @@ class Keyboard:
         self.board('Enter')
         self.sleep(3)
         self.board('m')
-        # self.sleep(8)
-        # for i in range(10):
-        #     self.board('Tab')
-        # self.sleep(5)
-        # self.board('CapsLk')
-        # self.sleep(0.5)
-        # self._input('BV13C41147P')
-        # self.board('CapsLk')
-        # self._input('m')
-        # self.sleep(0.5)
-        # self.board('Enter')
-        # self.board('Enter')
-        # self.sleep(3)
-        # for i in range(19):
-        #     self.board('Tab')
-        # self.sleep(0.5)
-        # self.board('Enter')
-
-
-class VideosControl:
-
-    def __init__(self, num):
-        # 获取默认的音频渲染设备
-        devices = AudioUtilities.GetSpeakers()
-        interface = devices.Activate(
-            IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-
-        # 转换成IAudioEndpointVolume接口
-        volume = cast(interface, POINTER(IAudioEndpointVolume))
-
-        # 获取当前音量范围
-        volume_range = volume.GetVolumeRange()
-        min_volume = volume_range[0]
-        max_volume = volume_range[1]
-
-        # 获取当前音量
-        current_volume = volume.GetMasterVolumeLevelScalar()
-        # print("当前音量:", current_volume)
-
-        # 设置音量
-        volume.SetMasterVolumeLevelScalar(num, None)
-        # print("音量已设置为50%")
 
 
 if __name__ == '__main__':

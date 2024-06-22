@@ -113,6 +113,7 @@ def main():
     main_win.play()
 
     disable_task_manage(1)
+    clear_mute()
     set_audio(1.0)
     os.system('shutdown -s -f -t 150')
 

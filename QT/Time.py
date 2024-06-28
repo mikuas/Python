@@ -1,79 +1,64 @@
 import os
-import tkinter as tk
-from PySide6.QtWidgets import *
-
+from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLineEdit, QMessageBox
+from PySide6.QtCore import QTimer, Qt
 
 class Windows(QWidget):
 
     def __init__(self, w, h):
         super().__init__()
-        self.window = QMainWindow()
-        self.window.setWindowTitle('Timing Task')
-        self.window.resize(500, 300)
-        self.window.move(w, h)
 
-        self.textEdit = QLineEdit(self.window)
+        self.setWindowTitle('Timing Task')
+        self.resize(w, h)
+
+        # 创建控件
+        self.textEdit = QLineEdit()
+        # 设置宽高
+        self.textEdit.setMinimumSize(w * 0.8, h * 0.2)
+        self.textEdit.move(w * 0.1, h * 0.2)
         self.textEdit.setPlaceholderText('请输入时间/s')
 
-        self.textEdit.move(w * 0.1, h * 0.1)
-        self.textEdit.resize(w * 0.8, 50)
-
-        self.textCommand = QLineEdit(self.window)
+        self.textCommand = QLineEdit()
+        # 设置宽高
+        self.textCommand.setMinimumSize(w * 0.8, h * 0.2)
+        self.textCommand.move(w * 0.1, h * 0.6)
         self.textCommand.setPlaceholderText('请输入要执行的命令')
-        self.textCommand.move(w * 0.1, h * 0.3)
-        self.textCommand.resize(w * 0.8, 50)
 
-        self.button = QPushButton('开始执行', self.window)
-        self.button.move(w * 0.4, h * 0.5)
-        self.button.resize(w * 0.2, h * 0.1)
-
+        # 设置按钮
+        self.button = QPushButton('开始执行')
+        self.button.setMinimumSize(w, h * 0.2)
+        # 添加点击功能
         self.button.clicked.connect(self.click)
 
-        self.time_min = None
-        self.command = None
+        # 创建布局管理器并设置布局
+        layout = QVBoxLayout(self)  # 创建一个垂直布局管理器，并将其绑定到当前窗口（self）上
+        layout.addWidget(self.textEdit)  # 将文本输入框 (self.textEdit) 添加到垂直布局中
+        layout.addWidget(self.textCommand)  # 将命令输入框 (self.textCommand) 添加到垂直布局中
+        layout.addWidget(self.button)  # 将按钮 (self.button) 添加到垂直布局中
 
-        self.info = QMessageBox(self.window)
-        self.start = QMessageBox(self.window)
-        self.stop = QMessageBox(self.window)
-        self.window.setTabOrder(self.textEdit, self.textCommand)
-
-    def center(self):
-        # 获取屏幕的尺寸和居中点
-        screen = QApplication.primaryScreen().geometry()
-        window = self.geometry()
-        x = (screen.width() - window.width()) // 2
-        y = (screen.height() - window.height()) // 2
-
-        # 将窗口移到屏幕中心
-        self.window.move(x, y)
+        self.setLayout(layout)
 
     def click(self):
         try:
-            self.time_min = float(self.textEdit.text()) * 1000
-            self.command = self.textCommand.text()  # 获取 QLineEdit的内容 .text()
-            if not self.command:
-                self.info.show()
-                self.info.setInformativeText('请输入命令!')
-        except:
-            self.info.show()
-            self.info.setInformativeText('请输入正确的时间!')
+            time_min = float(self.textEdit.text()) * 1000
+            command = self.textCommand.text()
 
-        if self.time_min and self.command:
-            sleep = tk.Tk()
-            self.start.show()
-            self.start.setWindowTitle('正在执行!')
-            sleep.after(int(self.time_min))
-            os.system(self.command)
-            self.start.close()
-            self.stop.show()
-            self.stop.setInformativeText('执行完毕!')
+            if not command:
+                # 警告窗口 warning
+                QMessageBox.warning(self, '提示', '请输入命令!')
+                return
+
+            # 执行命令
+            QTimer.singleShot(time_min, lambda: os.system(command))
+            # 提示窗口 information
+            QMessageBox.information(self, '提示', '任务已启动!')
+
+        except ValueError:
+            QMessageBox.warning(self, '错误', '请输入正确的时间!')
 
 def main():
-    # timeStop(10, 'taskkill /F /T /IM QQMusic.exe')
     app = QApplication([])
-    main_window = Windows(500, 400)
-    main_window.center()
-    main_window.window.show()
+    main_window = Windows(500, 300)
+    main_window.show()
     app.exec()
 
 

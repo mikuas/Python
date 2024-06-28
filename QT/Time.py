@@ -25,7 +25,7 @@ class Windows(QWidget):
 
         # 设置按钮
         self.button = QPushButton('开始执行')
-        self.button.setMinimumSize(w, h * 0.2)
+        self.button.setMinimumSize(w * 0.3, h * 0.2)
         # 添加点击功能
         self.button.clicked.connect(self.click)
 

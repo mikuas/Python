@@ -1,8 +1,6 @@
 import os
-import time
 import tkinter as tk
 from PySide6.QtWidgets import *
-from PySide6.QtCore import Qt
 
 
 class Windows(QWidget):

@@ -8,7 +8,7 @@ class Windows(QWidget):
     def __init__(self, w, h):
         super().__init__()
         self.window = QMainWindow()
-        self.window.setWindowTitle('Time')
+        self.window.setWindowTitle('Timing Task')
         self.window.resize(500, 300)
         self.window.move(w, h)
 
@@ -56,7 +56,7 @@ class Windows(QWidget):
                 self.info.setInformativeText('请输入命令!')
         except:
             self.info.show()
-            self.info.setInformativeText('请输入时间!')
+            self.info.setInformativeText('请输入正确的时间!')
 
         if self.time_min and self.command:
             sleep = tk.Tk()

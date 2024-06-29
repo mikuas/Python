@@ -51,7 +51,7 @@ class Windows(QWidget):
 
         # 添加系统托盘图标
         self.tray_icon = QSystemTrayIcon(self)
-        print('System tray icon created')  # 添加调试输出
+        print(True)  # 添加调试输出
 
         self.tray_icon.setIcon(QIcon(path))
         self.tray_icon.setToolTip('Ciallo～(∠・ω< )⌒☆')

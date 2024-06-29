@@ -4,7 +4,6 @@ import sys
 from PySide6.QtWidgets import (
     QApplication,
     QWidget,
-    QWidgetAction,
     QVBoxLayout,
     QPushButton,
     QLineEdit,
@@ -55,7 +54,7 @@ class Windows(QWidget):
         print('System tray icon created')  # 添加调试输出
 
         self.tray_icon.setIcon(QIcon(path))
-        self.tray_icon.setToolTip('后台运行示例')
+        self.tray_icon.setToolTip('Ciallo～(∠・ω< )⌒☆')
 
         # 托盘图标菜单
         tray_menu = QMenu()

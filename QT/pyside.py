@@ -1,3 +1,4 @@
+import sys
 from PySide6.QtWidgets import *
 
 
@@ -54,11 +55,13 @@ class Stats:
                         \n薪资20000 以下的有：\n{salary_below_20k}'''
                           )
 
+        return self.window
 
 if __name__ == '__main__':
-    app = QApplication([])
+    app = QApplication(sys.argv)
     stats = Stats(500, 500, 'Title', 300, 480)
     stats.window.show()
     app.exec()
+
 
 

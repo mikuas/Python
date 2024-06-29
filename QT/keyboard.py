@@ -34,28 +34,10 @@ class Keyboard:
             pyautogui.hotkey(args[0], args[1], args[2])
             print(3)
 
-    def open_web(self):
-
-        self.press('win')
-        self.sleep(0.5)
-        self._input('chrome')
-        self.sleep(1.5)
-        self.board('Enter')
-        self.sleep(1)
-        self.board('Enter')
-        self.sleep(5)
-        self._input('https://www.bilibili.com/video/BV13C41147Pm?t=3.1')
-        # self._input('https://bilibili.com')
-        self.board('Enter')
-        self.sleep(0.5)
-        self.board('Enter')
-        self.sleep(3)
-        self.board('m')
-
 
 if __name__ == '__main__':
     # vc = VideosControl(1)
     kb = Keyboard()
-    kb.open_web()
+    kb.board('ctrl', 'alt', 'space')
 
 

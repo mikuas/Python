@@ -1,11 +1,11 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 added_files = [
-	('video.mp4', '.')
+	('icon.png', '.')
 ]
 
 a = Analysis(
-    ['genshinstart.py'],
+    ['Time.py'],
     pathex=[],
     binaries=[],
     datas=added_files,
@@ -25,7 +25,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='原神',
+    name='Timing Task',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -38,5 +38,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['bitbug_favicon.ico'],
+    icon=['lyi.ico'],
 )

@@ -1,7 +1,7 @@
 import os
 import sys
 
-from QTFunction import *
+from QTFunction import KeyBoardControl
 from PySide6.QtWidgets import (
     QApplication,
     QWidget,
@@ -243,7 +243,7 @@ class Windows(QWidget):
         self.hide()     # 隐藏窗口
 
     def openWindow(self):
-        self.window.resize(400, 500)
+        self.window.setFixedSize(400, 500)
         layout = QVBoxLayout(self.window)
         layout.addWidget(self.keyBoardButton)
         layout.addWidget(self.keyBoardTimingButton)

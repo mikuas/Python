@@ -120,7 +120,7 @@ class Windows(QWidget):
         self.keyEdit.setPlaceholderText('输入按键,多个按键用逗号隔开')
         self.keyTimeEdit.setPlaceholderText('输入按键,多个按键用逗号隔开')
         self.timeEdit.setPlaceholderText('输入时间/s')
-        self.systemModeEdit.setPlaceholderText('输入模式, 重启, 关机, 注销')
+        self.systemModeEdit.setPlaceholderText('输入模式, 关机(1),重启(2),注销(3),锁定(4)')
         self.sysTimeEdit.setPlaceholderText('输入时间,不写默认为0')
 
     def showWindow(self):
@@ -165,14 +165,22 @@ class Windows(QWidget):
         else:
             interval = 0
 
-        if self.systemModeEdit.text() == '关机':
+        if self.systemModeEdit.text() == '关机' or self.systemModeEdit.text() == '1':
+            # QTimer.singleShot(interval, lambda: print(1))
             QTimer.singleShot(interval, lambda: os.system('shutdown -s -t 0'))
-        elif self.systemModeEdit.text() == '重启':
+        elif self.systemModeEdit.text() == '重启' or self.systemModeEdit.text() == '2':
             QTimer.singleShot(interval, lambda: os.system('shutdown -r -f -t 0'))
-        elif self.systemModeEdit.text() == '注销':
+            # QTimer.singleShot(interval, lambda: print(2))
+        elif self.systemModeEdit.text() == '注销' or self.systemModeEdit.text() == '3':
             QTimer.singleShot(interval, lambda: os.system('logoff'))
+            # QTimer.singleShot(interval, lambda: print(3))
+        elif self.systemModeEdit.text() == '锁定' or self.systemModeEdit.text() == '4':
+            QTimer.singleShot(interval, lambda: os.system('rundll32.exe user32.dll,LockWorkStation'))
+            # QTimer.singleShot(interval, lambda: print(4))
         else:
             QMessageBox.warning(self.sysWindow, '警告', '输入有误,请重新输入!')
+            return
+        QMessageBox.information(self.keyWindow, '提示', '已开始执行')
 
     def powerStart(self):
         self.sysWindow.setFixedSize(400, 250)

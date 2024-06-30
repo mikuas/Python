@@ -10,7 +10,6 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QMessageBox,
     QSystemTrayIcon,
-
     QMenu,
 )
 from PySide6.QtGui import QIcon, QAction
@@ -22,14 +21,24 @@ class Windows(QWidget):
         super().__init__()
         self.w = w
         self.h = h
-        self.window = QWidget()
+
+        self.window = QWidget(QWidget)
         self.window.setWindowTitle('功能')
-        self.keyWindow = QWidget()
-        self.keyWindow.setWindowTitle('键盘任务')
-        self.keyTimeWindow = QWidget()
-        self.keyTimeWindow.setWindowTitle('定时键盘任务')
-        self.sysWindow = QWidget()
-        self.sysWindow.setWindowTitle('System')
+
+        self.keyTaskWindow = QWidget()
+        self.keyTaskWindow.setWindowTitle('键盘任务')
+
+        self.keyTaskTimeWindow = QWidget()
+        self.keyTaskTimeWindow.setWindowTitle('定时键盘任务')
+
+        self.hotKeyTaskWindow = QWidget()
+        self.hotKeyTaskWindow.setWindowTitle('组合键盘任务')
+
+        self.hotKeyTimeTaskWindow = QWidget()
+        self.hotKeyTimeTaskWindow.setWindowTitle('定时组合键盘任务')
+
+        self.systemTask = QWidget()
+        self.systemTask.setWindowTitle('System')
 
         self.setWindowTitle('Timing Task')
         self.resize(w, h)
@@ -70,20 +79,18 @@ class Windows(QWidget):
         # 添加系统托盘图标
         self.tray_icon = QSystemTrayIcon(self)
         print(True)  # 添加调试输出
-
         self.tray_icon.setIcon(QIcon(path))
         self.tray_icon.setToolTip('Ciallo～(∠・ω< )⌒☆')
 
         # 托盘图标菜单
         tray_menu = QMenu()
         show_action_tray = QAction('显示窗口', self)
-        show_action_tray.triggered.connect(self.showWindow)
-
+        show_action_tray.triggered.connect(lambda: self.show())
         # 添加分隔符
         tray_menu.addSeparator()
 
         quit_action = QAction('退出', self)
-        quit_action.triggered.connect(self.quitWindow)
+        quit_action.triggered.connect(lambda: QApplication.quit())
 
         # 添加到托盘中
         tray_menu.addActions([show_action_tray, quit_action])
@@ -95,70 +102,117 @@ class Windows(QWidget):
         self.tray_icon.show()
 
         # newWindow
-        self.keyBoardButton = QPushButton('执行键盘任务', self.window)
+        self.keyBoardButton = QPushButton('逐一执行键盘任务', self.window)
         self.keyBoardButton.clicked.connect(self.openKey)
-        self.keyBoardTimingButton = QPushButton('定时执行键盘任务', self.window)
+
+        self.keyEdit = QLineEdit(self.keyTaskWindow)
+        self.keyEdit.setPlaceholderText('输入按键,多个按键用逗号隔开')
+        self.keyStartButton = QPushButton('开始', self.keyTaskWindow)
+        self.keyStartButton.clicked.connect(self.keyBoardStart)
+        # ------------------------------------------------------------------------------------ #
+
+        self.keyBoardTimingButton = QPushButton('定时逐一执行键盘任务', self.window)
         self.keyBoardTimingButton.clicked.connect(self.openTimeKey)
+        self.keyTimeEdit = QLineEdit(self.keyTaskTimeWindow)
+        self.timeEdit = QLineEdit(self.keyTaskTimeWindow)
+        self.timeEdit.setPlaceholderText('输入时间/s')
+        self.keyTimeEdit.setPlaceholderText('输入按键,多个按键用逗号隔开')
+        self.ketTimeStartButton = QPushButton('开始', self.keyTaskTimeWindow)
+        self.ketTimeStartButton.clicked.connect(self.keyBoardStart)
+        # ------------------------------------------------------------------------------------ #
+
+        self.hotKeyButton = QPushButton('执行组合按键任务', self.window)
+        self.hotKeyButton.clicked.connect(self.openHotKey)
+        self.hotkeyEdit = QLineEdit(self.hotKeyTaskWindow)
+        self.hotkeyEdit.setPlaceholderText('输入按键,多个按键用逗号隔开')
+        self.hotKeyStartButton = QPushButton('开始', self.hotKeyTaskWindow)
+        self.hotKeyStartButton.clicked.connect(self.hotKeyStart)
+        # ------------------------------------------------------------------------------------ #
+
+        self.hotkeyBoardTimingButton = QPushButton('定时执行行组合键盘任务', self.window)
+        self.hotkeyBoardTimingButton.clicked.connect(self.openTimeHotKey)
+        self.hotKeyTimeEdit = QLineEdit(self.hotKeyTimeTaskWindow)
+        self.hotKeyTime = QLineEdit(self.hotKeyTimeTaskWindow)
+        self.hotKeyTime.setPlaceholderText('输入时间/s')
+        self.hotKeyTimeEdit.setPlaceholderText('输入按键,多个按键用逗号隔开')
+        self.hotKeytimeStartButton = QPushButton('开始', self.hotKeyTimeTaskWindow)
+        self.hotKeytimeStartButton.clicked.connect(self.hotKeyTimeStart)
+
+        # ------------------------------------------------------------------------------------ #
+
         self.systemCommandButton = QPushButton('系统选项', self.window)
         self.systemCommandButton.clicked.connect(self.powerStart)
+        self.systemModeEdit = QLineEdit(self.systemTask)
+        self.sysTimeEdit = QLineEdit(self.systemTask)
+        self.sysStartButton = QPushButton('执行', self.systemTask)
+        self.sysStartButton.clicked.connect(self.startSystemCommand)
 
-        self.keyEdit = QLineEdit(self.keyWindow)
-        self.keyStartButton = QPushButton('开始', self.keyWindow)
-
-        self.timeEdit = QLineEdit(self.keyTimeWindow)
-        self.keyTimeEdit = QLineEdit(self.keyTimeWindow)
-        self.ketTimeStartButton = QPushButton('开始', self.keyTimeWindow)
-
-        self.systemModeEdit = QLineEdit(self.sysWindow)
-        self.sysTimeEdit = QLineEdit(self.sysWindow)
-        self.sysStartButton = QPushButton('执行', self.sysWindow)
-
-        self.keyStartButton.clicked.connect(self.keyBoardStart)
-        self.ketTimeStartButton.clicked.connect(self.keyBoardTimeStart)
-        self.sysStartButton.clicked.connect(self.startCommand)
-
-        self.keyEdit.setPlaceholderText('输入按键,多个按键用逗号隔开')
-        self.keyTimeEdit.setPlaceholderText('输入按键,多个按键用逗号隔开')
-        self.timeEdit.setPlaceholderText('输入时间/s')
         self.systemModeEdit.setPlaceholderText('输入模式, 关机(1),重启(2),注销(3),锁定(4)')
         self.sysTimeEdit.setPlaceholderText('输入时间,不写默认为0')
 
-    def showWindow(self):
-        self.show()
+    def openWindow(self):
+        self.window.setFixedSize(400, 500)
+        layout = QVBoxLayout(self.window)
+        layout.addWidget(self.keyBoardButton)
+        layout.addWidget(self.keyBoardTimingButton)
+        layout.addWidget(self.hotKeyButton)
+        layout.addWidget(self.hotkeyBoardTimingButton)
+        layout.addWidget(self.systemCommandButton)
+
+        self.keyBoardButton.setMinimumSize(100, 60)
+        self.keyBoardTimingButton.setMinimumSize(100, 60)
+        self.hotKeyButton.setMinimumSize(100, 60)
+        self.hotkeyBoardTimingButton.setMinimumSize(100, 60)
+        self.systemCommandButton.setMinimumSize(100, 60)
+
+        self.window.setLayout(layout)
+        self.window.show()
+
+    def hotKeyStart(self):
+        try:
+            if self.hotkeyEdit.text():
+                KeyBoardControl().keyHotkey(self.hotkeyEdit.text())
+                QMessageBox.information(self.hotKeyTaskWindow, '提示', '已开始执行')
+            else:
+                QMessageBox.warning(self.hotKeyTaskWindow, '错误', '请输入!')
+        except ValueError:
+            pass
 
     def keyBoardStart(self):
         print(tuple(self.keyEdit.text().replace(" ", "").split(',')))
         try:
-            if self.keyEdit.text():
-                KeyBoardControl().keyHotkey(tuple(self.keyEdit.text().replace(" ", "").split(',')))
-                QMessageBox.information(self.keyWindow, '提示', '已开始执行')
-            else:
-                QMessageBox.warning(self.keyWindow, '错误', '请输入!')
-        except ValueError:
-            pass
+            if self.timeEdit.text():
+                QTimer.singleShot(float(self.timeEdit.text()) * 1000, lambda: self.getQLineEdit(self.keyTimeEdit.text()))
+                QMessageBox.information(self.keyTaskWindow, '提示', '已开始执行')
+                return
 
-    def keyBoardTimeStart(self):
-        print(tuple(self.keyTimeEdit.text().replace(" ", "").split(',')), self.timeEdit.text())
-        try:
-            if self.keyTimeEdit.text() and self.timeEdit.text():
-                QTimer.singleShot(float(self.timeEdit.text()) * 1000, lambda: self.getQLineEdit(self.keyTimeEdit))
-                print('OK')
-                QMessageBox.information(self.keyWindow, '提示', '已开始执行')
+            if self.keyEdit.text():
+                KeyBoardControl().keyPress(self.keyEdit.text())
+                QMessageBox.information(self.keyTaskWindow, '提示', '已开始执行')
             else:
-                QMessageBox.warning(self.keyWindow, '错误', '请输入!')
+                QMessageBox.warning(self.keyTaskWindow, '错误', '请输入!')
         except ValueError:
             pass
 
     def getQLineEdit(self, obj):
-        KeyBoardControl().keyHotkey(tuple(obj.text().replace(" ", "").split(',')))
+        KeyBoardControl().keyPress(obj)
 
         return self
 
-    @staticmethod
-    def quitWindow():
-        QApplication.quit()
+    def hotKeyTimeStart(self):
+        pass
+        try:
+            if self.hotKeyTimeEdit.text():
+                QTimer.singleShot(float(self.hotKeyTime.text()) * 1000, lambda: self.getQLineEdit(self.hotKeyTimeEdit.text()))
+                QMessageBox.information(self.hotKeyTimeTaskWindow, '提示', '已开始执行')
+            else:
+                QMessageBox.warning(self.hotKeyTimeTaskWindow, '警告', '输入有误,请重新输入!')
+                return
 
-    def startCommand(self):
+        except ValueError:
+            pass
+
+    def startSystemCommand(self):
 
         if self.sysTimeEdit.text() and self.systemModeEdit.text():
             interval = float(self.sysTimeEdit.text()) * 1000
@@ -178,16 +232,46 @@ class Windows(QWidget):
             QTimer.singleShot(interval, lambda: os.system('rundll32.exe user32.dll,LockWorkStation'))
             # QTimer.singleShot(interval, lambda: print(4))
         else:
-            QMessageBox.warning(self.sysWindow, '警告', '输入有误,请重新输入!')
+            QMessageBox.warning(self.systemTask, '警告', '输入有误,请重新输入!')
             return
-        QMessageBox.information(self.keyWindow, '提示', '已开始执行')
+        QMessageBox.information(self.systemTask, '提示', '已开始执行')
+
+    def openTimeHotKey(self):
+        self.hotKeyTimeTaskWindow.setFixedSize(400, 250)
+        self.hotKeyTimeTaskWindow.move(self.w + 155, self.h + 100)
+        self.hotKeyTimeTaskWindow.show()
+
+        layout = QVBoxLayout(self.hotKeyTimeTaskWindow)
+        layout.addWidget(self.hotKeyTime)
+        layout.addWidget(self.hotKeyTimeEdit)
+        layout.addWidget(self.hotKeytimeStartButton)
+
+        self.hotKeyTime.setMinimumSize(100, 60)
+        self.hotKeyTimeEdit.setMinimumSize(100, 60)
+        self.hotKeytimeStartButton.setMinimumSize(100, 60)
+
+        self.hotKeyTimeTaskWindow.setLayout(layout)
+
+    def openHotKey(self):
+        self.hotKeyTaskWindow.setFixedSize(400, 250)
+        self.hotKeyTaskWindow.move(self.w + 155, self.h + 100)
+        self.hotKeyTaskWindow.show()
+
+        layout = QVBoxLayout(self.hotKeyTaskWindow)
+        layout.addWidget(self.hotkeyEdit)
+        layout.addWidget(self.hotKeyStartButton)
+
+        self.hotkeyEdit.setMinimumSize(100, 60)
+        self.hotKeyStartButton.setMinimumSize(100, 60)
+
+        self.hotKeyTaskWindow.setLayout(layout)
 
     def powerStart(self):
-        self.sysWindow.setFixedSize(400, 250)
-        self.sysWindow.move(self.w + 155, self.h + 100)
-        self.sysWindow.show()
+        self.systemTask.setFixedSize(400, 250)
+        self.systemTask.move(self.w + 155, self.h + 100)
+        self.systemTask.show()
 
-        layout = QVBoxLayout(self.sysWindow)
+        layout = QVBoxLayout(self.systemTask)
         layout.addWidget(self.systemModeEdit)
         layout.addWidget(self.sysTimeEdit)
         layout.addWidget(self.sysStartButton)
@@ -196,14 +280,14 @@ class Windows(QWidget):
         self.sysTimeEdit.setMinimumSize(100, 60)
         self.sysStartButton.setMinimumSize(100, 60)
 
-        self.sysWindow.setLayout(layout)
+        self.systemTask.setLayout(layout)
 
     def openTimeKey(self):
-        self.keyTimeWindow.setFixedSize(400, 250)
-        self.keyTimeWindow.move(self.w + 155, self.h + 100)
-        self.keyTimeWindow.show()
+        self.keyTaskTimeWindow.setFixedSize(400, 250)
+        self.keyTaskTimeWindow.move(self.w + 155, self.h + 100)
+        self.keyTaskTimeWindow.show()
 
-        layout = QVBoxLayout(self.keyTimeWindow)
+        layout = QVBoxLayout(self.keyTaskTimeWindow)
         layout.addWidget(self.timeEdit)
         layout.addWidget(self.keyTimeEdit)
         layout.addWidget(self.ketTimeStartButton)
@@ -212,21 +296,21 @@ class Windows(QWidget):
         self.timeEdit.setMinimumSize(100, 60)
         self.ketTimeStartButton.setMinimumSize(100, 60)
 
-        self.keyTimeWindow.setLayout(layout)
+        self.keyTaskTimeWindow.setLayout(layout)
 
     def openKey(self):
-        self.keyWindow.setFixedSize(400, 250)
-        self.keyWindow.move(self.w + 155, self.h + 100)
-        self.keyWindow.show()
+        self.keyTaskWindow.setFixedSize(400, 250)
+        self.keyTaskWindow.move(self.w + 155, self.h + 100)
+        self.keyTaskWindow.show()
 
-        layout = QVBoxLayout(self.keyWindow)
+        layout = QVBoxLayout(self.keyTaskWindow)
         layout.addWidget(self.keyEdit)
         layout.addWidget(self.keyStartButton)
 
         self.keyEdit.setMinimumSize(100, 60)
         self.keyStartButton.setMinimumSize(100, 60)
 
-        self.keyWindow.setLayout(layout)
+        self.keyTaskWindow.setLayout(layout)
 
     def click(self):
         try:
@@ -250,19 +334,6 @@ class Windows(QWidget):
         event.ignore()  # 忽略关闭事件
         self.hide()     # 隐藏窗口
 
-    def openWindow(self):
-        self.window.setFixedSize(400, 500)
-        layout = QVBoxLayout(self.window)
-        layout.addWidget(self.keyBoardButton)
-        layout.addWidget(self.keyBoardTimingButton)
-        layout.addWidget(self.systemCommandButton)
-
-        self.keyBoardTimingButton.setMinimumSize(100, 60)
-        self.keyBoardButton.setMinimumSize(100, 60)
-        self.systemCommandButton.setMinimumSize(100, 60)
-
-        self.window.setLayout(layout)
-        self.window.show()
 
 def getFilePath(file_name):
     # 获取打包后的可执行文件所在的临时目录

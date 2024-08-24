@@ -5,11 +5,17 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from ctypes import POINTER, cast
 import comtypes
 import pyautogui
+import argparse
 
 class KeyboardControl:
 
     def __init__(self):
         pass
+
+    def inputText(self, text):
+        pyautogui.typewrite(text)
+
+        return self
 
     def keyUp(self, key):
         pyautogui.keyUp(key)
@@ -36,7 +42,7 @@ class KeyboardControl:
         return self
 
 
-class SystemControl(object):
+class SystemControl:
 
     def __init__(self):
         pass
@@ -46,14 +52,30 @@ class SystemControl(object):
 
         return self
 
+    def copyFiles(self, copyFilePath: list, pastePath):
+        for _ in range(len(copyFilePath)):
+            os.system(f'copy {copyFilePath[_]} {pastePath}')
+
+        return self
+
     def disableTaskManage(self, num):
         # 1 disable | 0 enable
         os.system(f'reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v DisableTaskMgr /t REG_DWORD /d {num} /f')
 
         return self
 
+    def disableCMD(self):
+        os.system(f'reg add "HKCU\Software\Policies\Microsoft\Windows\System" /v "DisableCMD" /t REG_DWORD /d 1 /f')
+
+        return self
+
+    def disableRegedit(self):
+        os.system(f'reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v "DisableRegedit" /t REG_DWORD /d 1 /f')
+
+        return self
+
     @staticmethod
-    def getFilePath(self, fileName):
+    def getFilePath(fileName):
         # 获取打包后的可执行文件所在的临时目录
         basePath = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
         # 构建文件的绝对路径
@@ -67,6 +89,7 @@ class SystemControl(object):
             interface = devices.Activate(
                 IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
             volume = cast(interface, POINTER(IAudioEndpointVolume))
+            # GetMasterVolumeLevelScalar()
             return volume
         except comtypes.COMError as e:
             print(f"COMError: {e}")
@@ -98,11 +121,27 @@ class SystemControl(object):
 
         return self
 
+class Terminal:
+    def __init__(self):
+
+        pass
+
+    @staticmethod
+    def TerminalCommand(self):
+        # 创建解析器对象
+        parser = argparse.ArgumentParser(description="演示如何通过终端传参")
+
+        # 添加参数
+        parser.add_argument('-e', '--element', type=str, help='None', required=False)
+        parser.add_argument('-t', '--time', type=int, help='None', required=False)
+
+        # 解析参数
+        return parser.parse_args()
+
 if __name__ == '__main__':
-    KeyboardControl().keyHotkey('ctrl,alt,space')
-
-
-
+    print(str(SystemControl.getAudioEndpointVolume().GetMasterVolumeLevelScalar() * 100)[:2] + '%')
+    # pass
+    SystemControl.disableTaskManage(self=None, num=0)
 
 
 

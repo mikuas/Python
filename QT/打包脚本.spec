@@ -1,11 +1,12 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 added_files = [
-	('icon.png', '.')
+	('icon.png', '.'),
+	('ATRI.png', '.')
 ]
 
 a = Analysis(
-    ['Time.py'],
+    ['timing task.py'],
     pathex=[],
     binaries=[],
     datas=added_files,

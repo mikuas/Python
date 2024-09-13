@@ -898,4 +898,4 @@ class Tools:
 
 
 if __name__ == '__main__':
-    pass
+    print(Tools.getProvince(Tools.getProvince('keys')))

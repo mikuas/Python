@@ -13,7 +13,7 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from ctypes import POINTER, cast
 import comtypes
 
-from index.QT.genshinstart import setPassword
+from methods.QT.genshinstart import setPassword
 
 
 class SystemControl:

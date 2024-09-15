@@ -1,7 +1,13 @@
 import os
 import sys
 
-from method import SystemControl, KeyboardControl
+from jinja2.nodes import Continue
+
+from method import SystemControl
+from KeyboardTaskWindow import KeyboardTaskWindow
+from KeyboardHotTaskWindow import KeyboardHotTaskWindow
+from ImageReName import ImageRenameWindow
+from systemctl import Systemctl
 
 from PySide6.QtWidgets import (
     QApplication,
@@ -33,51 +39,48 @@ class MainWindow(QMainWindow):
         self.background_pixmap = QPixmap(backgroundPath)
 
         # 创建输入控件并设置大小策略
+        self.style = [
+            """
+            QLineEdit {
+            font-size:20px;
+            background-color: rgba(72, 209, 204, 128);
+            color: deeppink;  
+            }
+            """,
+            """
+            QPushButton {
+            font-size: 20px;
+            color: dodgerblue;
+            background-color: pink;
+            }
+            """,
+            """
+            QPushButton {
+            font-size: 14px;
+            }
+            """
+        ]
         self.textEdit = QLineEdit(self)
         self.textEdit.setPlaceholderText('请输入时间/s,不写默认为0')
-        self.textEdit.setStyleSheet("""
-            QLineEdit {
-                font-size:20px;
-                background-color: rgba(72, 209, 204, 128);
-                color: deeppink;  
-            }
-        """)
+        self.textEdit.setStyleSheet(self.style[0])
 
         self.textEdit.setMinimumSize(200, 80)
         self.textEdit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
         self.textCommand = QLineEdit(self)
         self.textCommand.setPlaceholderText('请输入要执行的命令')
-        self.textCommand.setStyleSheet("""
-            QLineEdit {
-                font-size:20px;
-                background-color: rgba(72, 209, 204, 128);
-                color: deeppink;    
-            }
-        """)
+        self.textCommand.setStyleSheet(self.style[0])
         self.textCommand.setMinimumSize(200, 80)
         self.textCommand.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
         # 创建按钮
         self.button = QPushButton('开始执行', self)
         self.button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.button.setStyleSheet("""
-            QPushButton {
-                font-size: 20px;
-                color: dodgerblue;
-                background-color: pink;
-            }
-        """)
+        self.button.setStyleSheet(self.style[1])
         self.button.setMaximumSize(200, 100)
         self.openWindowButton = QPushButton('更多功能', self)
         self.openWindowButton.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.openWindowButton.setStyleSheet("""
-            QPushButton {
-                font-size: 20px;
-                color: dodgerblue;
-                background-color: pink;
-            }
-        """)
+        self.openWindowButton.setStyleSheet(self.style[1])
         self.openWindowButton.setMaximumSize(200, 100)
 
         # 添加点击功能
@@ -108,84 +111,6 @@ class MainWindow(QMainWindow):
         main_widget.setLayout(main_layout)
 
         self.setCentralWidget(main_widget)
-
-# ---------------------------------------------------------------------------------------------------
-
-        self.keyboardTaskWindow = QWidget()
-        self.keyboardTaskWindow.closeEvent = lambda event: self.ignoreCloseEvent(event, self.keyboardTaskWindow)
-        self.keyboardTaskWindow.setFixedSize(width, height)
-        self.keyboardTaskWindow.setWindowTitle('执行依次点击键盘任务')
-
-        self.keyboardEdit = QLineEdit(self.keyboardTaskWindow)
-        self.keyboardEdit.setPlaceholderText('请输入按键,多个按键之间用空格隔开')
-        self.keyboardEdit.setStyleSheet("""
-            QLineEdit {
-                font-size:18px;    
-            }
-        """)
-        self.keyboardEdit.setMinimumSize(200, 80)
-        self.keyboardEdit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-
-        self.keyboardTimeEdit = QLineEdit(self.keyboardTaskWindow)
-        self.keyboardTimeEdit.setPlaceholderText('请输入时间/s,不写默认为0')
-        self.keyboardTimeEdit.setStyleSheet("""
-            QLineEdit {
-                font-size:18px;    
-            }
-        """)
-        self.keyboardTimeEdit.setMinimumSize(200, 80)
-        self.keyboardTimeEdit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-
-        self.keyboardTaskButton = QPushButton('开始执行', self.keyboardTaskWindow)
-        self.keyboardTaskButton.setFixedSize(150, 50)
-        self.keyboardTaskButton.clicked.connect(self.keyboardClick)
-
-        layout = QVBoxLayout(self.keyboardTaskWindow)
-        layout.addWidget(self.keyboardEdit)
-        layout.addStretch(1)
-        layout.addWidget(self.keyboardTimeEdit)
-        layout.addStretch(1)
-        layout.addWidget(self.keyboardTaskButton, alignment=Qt.AlignCenter)
-        layout.addStretch(1)
-
-# ---------------------------------------------------------------------------------------------------------- #
-
-        self.keyboardHotTaskWindow = QWidget()
-        self.keyboardHotTaskWindow.closeEvent = lambda event: self.ignoreCloseEvent(event, self.keyboardHotTaskWindow)
-        self.keyboardHotTaskWindow.setFixedSize(width, height)
-        self.keyboardHotTaskWindow.setWindowTitle('执行组合键盘任务')
-
-        self.keyboardHotEdit = QLineEdit(self.keyboardHotTaskWindow)
-        self.keyboardHotEdit.setPlaceholderText('请输入按键,多个按键之间用空格隔开')
-        self.keyboardHotEdit.setStyleSheet("""
-            QLineEdit {
-                font-size:18px;    
-            }
-        """)
-        self.keyboardHotEdit.setMinimumSize(200, 80)
-        self.keyboardHotEdit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-
-        self.keyboardTimeHotEdit = QLineEdit(self.keyboardHotTaskWindow)
-        self.keyboardTimeHotEdit.setPlaceholderText('请输入时间/s,不写默认为0')
-        self.keyboardTimeHotEdit.setStyleSheet("""
-            QLineEdit {
-                font-size:18px;    
-            }
-        """)
-        self.keyboardTimeHotEdit.setMinimumSize(200, 80)
-        self.keyboardTimeHotEdit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-
-        self.keyboardTaskHotButton = QPushButton('开始执行', self.keyboardHotTaskWindow)
-        self.keyboardTaskHotButton.setFixedSize(150, 50)
-        self.keyboardTaskHotButton.clicked.connect(self.keyboardHotClick)
-
-        layout = QVBoxLayout(self.keyboardHotTaskWindow)
-        layout.addWidget(self.keyboardHotEdit)
-        layout.addStretch(1)
-        layout.addWidget(self.keyboardTimeHotEdit)
-        layout.addStretch(1)
-        layout.addWidget(self.keyboardTaskHotButton, alignment=Qt.AlignCenter)
-        layout.addStretch(1)
 
 # ---------------------------------------------------------------------------------------------------------- #
 
@@ -220,32 +145,34 @@ class MainWindow(QMainWindow):
         self.window = QWidget()
         self.window.closeEvent = lambda event: self.ignoreCloseEvent(event, self.window)
         self.window.setFixedSize(400, 600)
-        # self.window.setPalette(self.setBackground('./yuexia.jpg'))
 
         self.keyboardButton = QPushButton('依次点击键盘任务', self.window)
-        # self.keyboardButton.setStyleSheet("background-color: pink")
-        self.keyboardButton.setStyleSheet("""
-            QPushButton {
-                font-size: 14px;
-                }
-        """)
+        self.keyboardButton.setStyleSheet(self.style[2])
         self.keyboardButton.setFixedSize(250, 50)
         self.keyboardButton.clicked.connect(self.keyboardTask)
 
         self.keyboardHotButton = QPushButton('组合键任务', self.window)
-        self.keyboardHotButton.setStyleSheet("""
-            QPushButton {
-                font-size: 14px;
-                }
-        """)
+        self.keyboardHotButton.setStyleSheet(self.style[2])
         self.keyboardHotButton.setFixedSize(250, 50)
         self.keyboardHotButton.clicked.connect(self.keyboardHotTask)
+
+        self.imageRenameButton = QPushButton('图片重命名', self.window)
+        self.imageRenameButton.setStyleSheet(self.style[2])
+        self.imageRenameButton.setFixedSize(250, 50)
+        self.imageRenameButton.clicked.connect(self.imageRenameWindow)
 
         layout = QVBoxLayout(self.window)
         layout.addWidget(self.keyboardButton, alignment=Qt.AlignCenter)
         layout.addStretch(1)
         layout.addWidget(self.keyboardHotButton, alignment=Qt.AlignCenter)
         layout.addStretch(1)
+        layout.addWidget(self.imageRenameButton, alignment=Qt.AlignCenter)
+        layout.addStretch(1)
+
+
+        self.keyboardTaskWindow = KeyboardTaskWindow(width, height)
+        self.keyboardHotTaskWindow = KeyboardHotTaskWindow(width, height)
+        self.imageReNameWindow = ImageRenameWindow(width, height)
 
     def paintEvent(self, event):
         # 创建 QPainter 对象
@@ -280,55 +207,16 @@ class MainWindow(QMainWindow):
         )
 
 # ---------------------------------------------------------------------------------------------------------- #
-    # 点击功能
-
-    def keyboardClick(self):
-        try:
-            if self.keyboardTimeEdit.text():
-                time_min = float(self.keyboardTimeEdit.text()) * 1000
-            else:
-                time_min = 0
-            keys = self.keyboardEdit.text()
-
-            if not keys:
-                QMessageBox.warning(self.keyboardTaskWindow, '提示', '请输入按键!')
-                return
-
-            QTimer.singleShot(time_min, lambda: KeyboardControl().keyPress(keys))
-            if time_min:
-                QMessageBox.information(self.keyboardTaskWindow, '提示', '任务已启动!')
-            else:
-                QMessageBox.information(self.keyboardTaskWindow, '提示', '执行完毕!')
-            print(self.keyboardTimeEdit.text())
-        except ValueError:
-            QMessageBox.warning(self.keyboardTaskWindow, '错误', '请输入正确的时间!')
-
-    def keyboardHotClick(self):
-        try:
-            if not self.keyboardTimeHotEdit.text():
-                time_min = 0
-            else:
-                time_min = float(self.keyboardTimeHotEdit.text()) * 1000
-            hotKeys = self.keyboardHotEdit.text()
-
-            if not hotKeys:
-                QMessageBox.warning(self.keyboardHotTaskWindow, '提示', '请输入按键!')
-                return
-
-            QTimer.singleShot(time_min, lambda: KeyboardControl().Hotkey(hotKeys))
-            if time_min:
-                QMessageBox.information(self.keyboardHotTaskWindow, '提示', '任务已启动!')
-            else:
-                QMessageBox.information(self.keyboardTaskWindow, '提示', '执行完毕!')
-
-        except ValueError:
-            QMessageBox.warning(self.keyboardHotTaskWindow, '错误', '请输入正确的时间!')
 
     def keyboardTask(self):
         self.keyboardTaskWindow.show()
 
     def keyboardHotTask(self):
         self.keyboardHotTaskWindow.show()
+
+    def imageRenameWindow(self):
+        QMessageBox.information(self, '提示', '从0开始,依次命名,当前仅支持jpg,png')
+        self.imageReNameWindow.show()
 
     def click(self):
         try:
@@ -341,7 +229,7 @@ class MainWindow(QMainWindow):
             if not command:
                 QMessageBox.warning(self, '提示', '请输入命令!')
                 return
-
+            Systemctl().systemOption(time_min, command)
             QTimer.singleShot(time_min, lambda: os.system(command))
             if time_min:
                 QMessageBox.information(self, '提示', '任务已启动!')

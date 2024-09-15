@@ -3,7 +3,7 @@ import sys
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from ctypes import POINTER, cast
-import pygetwindow as gw
+import shutil
 import comtypes
 import pyautogui
 import argparse
@@ -13,32 +13,32 @@ class KeyboardControl:
     def __init__(self):
         pass
 
-    def inputText(self, text) -> 'KeyboardControl':
+    def inputText(self, text):
         pyautogui.typewrite(text)
 
         return self
 
-    def keyUp(self, key) -> 'KeyboardControl':
+    def keyUp(self, key):
         pyautogui.keyUp(key)
 
         return self
 
-    def keyDown(self, key) -> 'KeyboardControl':
+    def keyDown(self, key):
         pyautogui.keyDown(key)
 
         return self
 
-    def keyPress(self, key: str) -> 'KeyboardControl':
+    def keyPress(self, keys: str):
         # 依次点击
-        result = key.split(' ')
+        result = keys.split(' ')
         for i in range(len(result)):
             pyautogui.press(result[i])
 
         return self
 
-    def Hotkey(self, key: str) -> 'KeyboardControl':
+    def Hotkey(self, keys: str):
         # 共同点击
-        pyautogui.hotkey(tuple(key.split(' ')))
+        pyautogui.hotkey(tuple(keys.split(' ')))
 
         return self
 
@@ -48,57 +48,33 @@ class SystemControl:
     def __init__(self):
         pass
 
-    def copyFile(self, copyPath, pastePath) -> 'SystemControl':
+    def copyFile(self, copyPath, pastePath):
         os.system(f'copy {copyPath} {pastePath}')
 
         return self
 
-    def copyFiles(self, copyFilePath: list, pastePath) -> 'SystemControl':
+    def copyFiles(self, copyFilePath: list, pastePath):
         for _ in range(len(copyFilePath)):
             os.system(f'copy {copyFilePath[_]} {pastePath}')
 
         return self
 
-    class OS:
-        def __init__(self):
-            pass
-
-        def powerOff(self):
-            os.system('shutdown -s -f -t 0')
-
-            return self
-
-        def reboot(self):
-            os.system('shutdown -r -t 0')
-
-            return self
-
-        def logout(self):
-            os.system('logoff')
-
-            return self
-
-        def lockout(self):
-            os.system('rundll32.exe user32.dll,LockWorkStation')
-
-            return self
-
-    def disableUser(self, userName, parameters) -> 'SystemControl':
+    def disableUser(self, userName, parameters):
         os.system(f'net user {userName} /active:{parameters}')
 
         return self
 
-    def disableCMD(self) -> 'SystemControl':
+    def disableCMD(self):
         os.system('reg add "HKCU\Software\Policies\Microsoft\Windows\System" /v DisableCMD /t REG_DWORD /d 2 /f')
 
         return self
 
-    def disablePowershell(self) -> 'SystemControl':
+    def disablePowershell(self):
         os.system('reg add "HKCU\Software\Microsoft\PowerShell/1\ShellIds\Microsoft.PowerShell" /v ExecutionPolicy /t REG_SZ /d Restricted /f')
 
         return self
 
-    def disableTaskManage(self, num) -> 'SystemControl':
+    def disableTaskManage(self, num):
         os.system(f'reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v DisableTaskMgr /t REG_DWORD /d {num} /f')
 
         return self
@@ -119,7 +95,7 @@ class SystemControl:
 
         return userName
 
-    def createUser(self, userName, password, manager=False) -> 'SystemControl':
+    def createUser(self, userName, password, manager=False):
         if manager:
             os.system(f'net user {userName} {password} /add')
             os.system(f'net localgroup Administrators {userName} /add')
@@ -130,6 +106,7 @@ class SystemControl:
 
     @staticmethod
     def getFilePath(fileName):
+        print(f"Requested file: {fileName}")
         # 获取打包后的可执行文件所在的临时目录
         basePath = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
         # 构建文件的绝对路径
@@ -150,7 +127,7 @@ class SystemControl:
             return None
 
     # 取消静音
-    def clearMute(self) -> 'SystemControl':
+    def clearMute(self):
         volume = self.getAudioEndpointVolume()
         if volume is None:
             print("无法获取音频设备")
@@ -169,7 +146,7 @@ class SystemControl:
             return self
 
     # 设置音量
-    def setAudio(self, num: float) -> 'SystemControl':
+    def setAudio(self, num: float):
         devices = AudioUtilities.GetSpeakers()
         interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
         volume_interface = cast(interface, POINTER(IAudioEndpointVolume))
@@ -178,13 +155,13 @@ class SystemControl:
 
         return self
 
-class Terminal:
+class TerminalControl:
     def __init__(self):
 
         pass
 
     @staticmethod
-    def TerminalCommand():
+    def terminalArgs():
         # 创建解析器对象
         parser = argparse.ArgumentParser(description="演示如何通过终端传参")
 
@@ -200,12 +177,12 @@ class Terminal:
         # 解析参数
         return parser.parse_args()
 
-    @staticmethod
-    def getArgs(fileName, args1, args2, args3):
+    def getArgs(self, fileName, args1, args2, args3):
         import subprocess
         processes = []
         subprocess.run(['bash', fileName, args1, args2, args3])
         # 异步运行
+        # args1,2,3 为 fileName 的 位置传参
         proc = subprocess.Popen(['bash', fileName, args1, args2, args3])
         processes.append(proc)
 
@@ -213,18 +190,49 @@ class Terminal:
             # 等待所有的进程完成
             proc.wait()
 
-def is_user_on_desktop():
-    # 获取当前激活的窗口
-    active_window = gw.getActiveWindow()
+        return self
 
-    # 检查窗口标题是否为空（通常桌面窗口没有标题）
-    if active_window and active_window.title == '':
-        return True
-    return False
+class FileControl:
+
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def getDirFiles(path):
+        return os.listdir(path)
+
+    @staticmethod
+    def isDir(fileName):
+        return os.path.isdir(fileName)
+
+    @staticmethod
+    def getSuffixName(fileName):
+        return fileName.split('.')[-1]
+
+    def imageReName(self, path):
+        """
+        :param path: DirPath
+        :return: self
+        支持 jpg png
+        """
+        i = 0
+        print(self.getDirFiles(path))
+        for name in self.getDirFiles(path):
+            print(name)
+            if self.getSuffixName(name) == 'jpg' or self.getSuffixName(name) == 'png':
+                if os.path.exists(os.path.join(path, f"{str(i)}.{self.getSuffixName(name)}")):
+                    i += 1
+                    continue
+
+                # 移动并重命名文件
+                shutil.move(os.path.join(path, name), os.path.join(path, f"{str(i)}.{self.getSuffixName(name)}"))
+                i += 1
+        return self
 
 if __name__ == '__main__':
     # SystemControl.disablePowershell(None)
-    KeyboardControl.Hotkey(KeyboardControl, 'win tab')
+    KeyboardControl = KeyboardControl()
+    KeyboardControl.Hotkey('win tab')
 
 
 

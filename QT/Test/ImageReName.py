@@ -40,4 +40,3 @@ class ImageRenameWindow(QWidget):
             return
         result = FileControl().imageReName(self.dirPath)
         QMessageBox.information(self, '提示', f'执行完毕! 以下文件被修改:\n{result}')
-

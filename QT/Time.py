@@ -1,7 +1,8 @@
 import os
 import sys
 
-from QTFunction import KeyBoardControl
+from method import KeyboardControl
+
 from PySide6.QtWidgets import (
     QApplication,
     QWidget,
@@ -171,7 +172,7 @@ class Windows(QWidget):
     def hotKeyStart(self):
         try:
             if self.hotkeyEdit.text():
-                KeyBoardControl().keyHotkey(self.hotkeyEdit.text())
+                KeyboardControl().Hotkey(self.hotkeyEdit.text())
                 QMessageBox.information(self.hotKeyTaskWindow, '提示', '已开始执行')
             else:
                 QMessageBox.warning(self.hotKeyTaskWindow, '错误', '请输入!')
@@ -182,12 +183,12 @@ class Windows(QWidget):
         print(tuple(self.keyEdit.text().replace(" ", "").split(',')))
         try:
             if self.timeEdit.text():
-                QTimer.singleShot(float(self.timeEdit.text()) * 1000, lambda: self.getQLineEdit(self.keyTimeEdit.text()))
+                QTimer.singleShot(int(self.timeEdit.text()) * 1000, lambda: self.getQLineEdit(self.keyTimeEdit.text()))
                 QMessageBox.information(self.keyTaskWindow, '提示', '已开始执行')
                 return
 
             if self.keyEdit.text():
-                KeyBoardControl().keyPress(self.keyEdit.text())
+                KeyboardControl().keyPress(self.keyEdit.text())
                 QMessageBox.information(self.keyTaskWindow, '提示', '已开始执行')
             else:
                 QMessageBox.warning(self.keyTaskWindow, '错误', '请输入!')
@@ -195,7 +196,7 @@ class Windows(QWidget):
             pass
 
     def getQLineEdit(self, obj):
-        KeyBoardControl().keyPress(obj)
+        KeyboardControl().keyPress(obj)
 
         return self
 
@@ -203,7 +204,7 @@ class Windows(QWidget):
         pass
         try:
             if self.hotKeyTimeEdit.text():
-                QTimer.singleShot(float(self.hotKeyTime.text()) * 1000, lambda: self.getQLineEdit(self.hotKeyTimeEdit.text()))
+                QTimer.singleShot(int(self.hotKeyTime.text()) * 1000, lambda: self.getQLineEdit(self.hotKeyTimeEdit.text()))
                 QMessageBox.information(self.hotKeyTimeTaskWindow, '提示', '已开始执行')
             else:
                 QMessageBox.warning(self.hotKeyTimeTaskWindow, '警告', '输入有误,请重新输入!')
@@ -314,7 +315,7 @@ class Windows(QWidget):
 
     def click(self):
         try:
-            time_min = float(self.textEdit.text()) * 1000
+            time_min = int(self.textEdit.text()) * 1000
             command = self.textCommand.text()
 
             if not command:
@@ -349,7 +350,7 @@ def main():
     sys.exit(app.exec())
 
 def a(time, command):
-    QTimer.singleShot(float(time), lambda: os.system(command))
+    QTimer.singleShot(int(time), lambda: os.system(command))
 
 if __name__ == '__main__':
     main()

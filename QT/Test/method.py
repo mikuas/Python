@@ -187,18 +187,25 @@ class TerminalControl:
             i += 1
         return parser.parse_args()
 
-    def getArgs(self, fileName, args1, args2, args3):
+    def runTerminalArgs(self, element: list,asynchronous=False):
         import subprocess
-        processes = []
-        subprocess.run(['bash', fileName, args1, args2, args3])
-        # 异步运行
-        # args1,2,3 为 fileName 的 位置传参
-        proc = subprocess.Popen(['bash', fileName, args1, args2, args3])
-        processes.append(proc)
+        '''
+        element
+        ['运行方式(bash, cmd, python...)', 'filePath', args...]
+        python -参数 args...
+        '''
+        if asynchronous:
+            processes = []
+            # 异步运行
+            # args1,2,3 为 fileName 的 位置传参
+            proc = subprocess.Popen(element)
+            processes.append(proc)
 
-        for proc in processes:
-            # 等待所有的进程完成
-            proc.wait()
+            for proc in processes:
+                # 等待所有的进程完成
+                proc.wait()
+        else:
+            subprocess.run(element)
 
         return self
 

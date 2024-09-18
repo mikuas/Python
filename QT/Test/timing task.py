@@ -158,7 +158,6 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.imageRenameButton, alignment=Qt.AlignCenter)
         layout.addStretch(1)
 
-
         self.keyboardTaskWindow = KeyboardTaskWindow(width, height)
         self.keyboardHotTaskWindow = KeyboardHotTaskWindow(width, height)
         self.imageReNameWindow = ImageRenameWindow(width, height)

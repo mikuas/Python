@@ -175,6 +175,18 @@ class TerminalControl:
         # 解析参数
         return parser.parse_args()
 
+    @staticmethod
+    def createTerminalArgs(args: list, types: list, helpInfo: list, requireds: list[bool]):
+        parser = argparse.ArgumentParser(description='getArgs')
+        i = 0
+        for arg in args:
+            if types[i] == 'list':
+                parser.add_argument(f'-{arg}', type=str, nargs="+", help=helpInfo[i], required=requireds[i])
+            else:
+                parser.add_argument(f'-{arg}', type=str, help=helpInfo[i], required=requireds[i])
+            i += 1
+        return parser.parse_args()
+
     def getArgs(self, fileName, args1, args2, args3):
         import subprocess
         processes = []

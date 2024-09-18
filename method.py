@@ -7,6 +7,7 @@ import shutil
 import comtypes
 import pyautogui
 import argparse
+from PySide6.QtCore import QTimer
 
 class KeyboardControl:
 
@@ -43,10 +44,22 @@ class KeyboardControl:
         return self
 
 
-class SystemControl:
+class SystemCtl:
 
     def __init__(self):
         pass
+
+    def systemOption(self, time, element):
+        if element == '关机':
+            QTimer.singleShot(time, lambda: os.system("shutdown /s /f /t 0"))
+        elif element == '重启':
+            QTimer.singleShot(time, lambda: os.system("shutdown /r /f /t 0"))
+        elif element == '注销':
+            QTimer.singleShot(time, lambda: os.system("logoff"))
+        elif element == '锁定':
+            QTimer.singleShot(time, lambda: os.system("rundll32.exe user32.dll,LockWorkStation"))
+
+        return self
 
     def copyFile(self, copyPath, pastePath):
         os.system(f'copy {copyPath} {pastePath}')
@@ -61,21 +74,6 @@ class SystemControl:
 
     def disableUser(self, userName, parameters):
         os.system(f'net user {userName} /active:{parameters}')
-
-        return self
-
-    def disableCMD(self):
-        os.system('reg add "HKCU\Software\Policies\Microsoft\Windows\System" /v DisableCMD /t REG_DWORD /d 2 /f')
-
-        return self
-
-    def disablePowershell(self):
-        os.system('reg add "HKCU\Software\Microsoft\PowerShell/1\ShellIds\Microsoft.PowerShell" /v ExecutionPolicy /t REG_SZ /d Restricted /f')
-
-        return self
-
-    def disableTaskManage(self, num):
-        os.system(f'reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v DisableTaskMgr /t REG_DWORD /d {num} /f')
 
         return self
 
@@ -106,6 +104,7 @@ class SystemControl:
 
     @staticmethod
     def getFilePath(fileName):
+        print(f"Requested file: {fileName}")
         # 获取打包后的可执行文件所在的临时目录
         basePath = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
         # 构建文件的绝对路径
@@ -176,6 +175,18 @@ class TerminalControl:
         # 解析参数
         return parser.parse_args()
 
+    @staticmethod
+    def createTerminalArgs(args: list, types: list, helpInfo: list, requireds: list[bool]):
+        parser = argparse.ArgumentParser(description='getArgs')
+        i = 0
+        for arg in args:
+            if types[i] == 'list':
+                parser.add_argument(f'-{arg}', type=str, nargs="+", help=helpInfo[i], required=requireds[i])
+            else:
+                parser.add_argument(f'-{arg}', type=str, help=helpInfo[i], required=requireds[i])
+            i += 1
+        return parser.parse_args()
+
     def getArgs(self, fileName, args1, args2, args3):
         import subprocess
         processes = []
@@ -208,6 +219,11 @@ class FileControl:
     def getSuffixName(fileName):
         return fileName.split('.')[-1]
 
+    @staticmethod
+    def getDirPath():
+        from PySide6.QtWidgets import QFileDialog
+        return QFileDialog.getExistingDirectory(None, "选择目录")
+
     def imageReName(self, path):
         """
         :param path: DirPath
@@ -216,9 +232,10 @@ class FileControl:
         """
         i = 0
         print(self.getDirFiles(path))
+        result = []
         for name in self.getDirFiles(path):
-            print(name)
             if self.getSuffixName(name) == 'jpg' or self.getSuffixName(name) == 'png':
+                result.append(name)
                 if os.path.exists(os.path.join(path, f"{str(i)}.{self.getSuffixName(name)}")):
                     i += 1
                     continue
@@ -226,12 +243,8 @@ class FileControl:
                 # 移动并重命名文件
                 shutil.move(os.path.join(path, name), os.path.join(path, f"{str(i)}.{self.getSuffixName(name)}"))
                 i += 1
-        return self
+        return result
 
 if __name__ == '__main__':
-    # SystemControl.disablePowershell(None)
-    KeyboardControl = KeyboardControl()
-    KeyboardControl.Hotkey('win tab')
-
-
+    KeyboardControl.Hotkey(None, 'win tab')
 

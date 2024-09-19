@@ -9,8 +9,9 @@ from method import TerminalControl
 #
 # print(args.c, args.n, args.s)
 
-(TerminalControl()
+(
+ TerminalControl()
  .runTerminalArgs(['python', 'C:\\write.py', '-c', 'Hello World', 'Hello Python', '-p', 'C:\\test.txt', '-E', 'True'])
  .runTerminalArgs(['cmd', '/c' 'C:\\Users\\scripts\\Timingtask.exe'])
- )
+)
 

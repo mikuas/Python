@@ -9,7 +9,7 @@ class ImageRenameWindow(QWidget):
         self.dirFiles = None
         self.dirPath = None
         self.closeEvent = lambda event: self.ignoreCloseEvent(event, self)
-        self.setFixedSize(width / 1.5, height / 1.5)
+        self.setMinimumSize(width / 1.5, height / 1.5)
         self.setWindowTitle('图片重命名')
 
         self.filePathButton = QPushButton('选择目录', self)

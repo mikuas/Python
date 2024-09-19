@@ -15,7 +15,7 @@ class KeyboardHotTaskWindow(QWidget):
     def __init__(self, width, height):
         super().__init__()
         self.closeEvent = lambda event: self.ignoreCloseEvent(event, self)
-        self.setFixedSize(width, height)
+        self.setMinimumSize(width, height)
         self.setWindowTitle('执行组合键盘任务')
 
         self.keyboardHotEdit = QLineEdit(self)

@@ -24,7 +24,7 @@ from PySide6.QtGui import QIcon, QAction, QPalette, QBrush, QPixmap, QPainter
 
 class MainWindow(QMainWindow):
 
-    def __init__(self, width, height, path=None, backgroundPath=None):
+    def __init__(self, width, height, trayIconPath, backgroundPath):
         super().__init__()
         self.flag = True
 
@@ -109,7 +109,7 @@ class MainWindow(QMainWindow):
         # 添加系统托盘图标
         self.trayIcon = QSystemTrayIcon(self)
         # print(True)  # 添加调试输出
-        self.trayIcon.setIcon(QIcon(path))
+        self.trayIcon.setIcon(QIcon(trayIconPath))
         self.trayIcon.setToolTip('Ciallo～(∠・ω< )⌒☆')
 
         # 托盘图标菜单
@@ -240,8 +240,8 @@ def main():
     window = MainWindow(
         650,
         350,
-        SystemCtl().getFilePath('./icon.png'),
-        SystemCtl().getFilePath('./ATRI.png')
+        SystemCtl().getFilePath('./trayIcon.png'),
+        SystemCtl().getFilePath('./background.png')
     )
     window.show()
     sys.exit(app.exec())

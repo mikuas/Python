@@ -1,8 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 added_files = [
-	('icon.png', '.'),
-	('ATRI.png', '.')
+	('trayIcon.png', '.'),
+	('background.png', '.')
 ]
 
 a = Analysis(
@@ -39,5 +39,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['liuyin.ico'],
+    icon=['icon.ico'],
 )

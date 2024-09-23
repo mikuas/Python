@@ -8,7 +8,7 @@ class ImageRenameWindow(QWidget):
         super().__init__()
         self.dirFiles = None
         self.dirPath = None
-        self.closeEvent = lambda event: self.ignoreCloseEvent(event, self)
+        self.closeEvent = lambda event: (event.ignore(), self.hide())
         self.setMinimumSize(width / 1.5, height / 1.5)
         self.setWindowTitle('图片重命名')
 
@@ -25,11 +25,6 @@ class ImageRenameWindow(QWidget):
         layout.addStretch(1)
         layout.addWidget(self.button, alignment=Qt.AlignCenter)
         layout.addStretch(1)
-
-    @staticmethod
-    def ignoreCloseEvent(event, window):
-        event.ignore()
-        window.hide()
 
     def getDir(self):
         self.dirPath = FileControl.getDirPath()

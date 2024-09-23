@@ -129,16 +129,15 @@ class SystemCtl:
         volume = self.getAudioEndpointVolume()
         if volume is None:
             print("无法获取音频设备")
-            return self
-
+            return False
         try:
             if volume.GetMute():
                 volume.SetMute(0, None)
                 print("系统已解除静音")
-                return self
+                return True
             else:
                 print("系统未处于静音状态")
-                return self
+                return True
         except comtypes.COMError as e:
             print(f"COMError: {e}")
             return self
@@ -155,25 +154,7 @@ class SystemCtl:
 
 class TerminalControl:
     def __init__(self):
-
         pass
-
-    @staticmethod
-    def terminalArgs():
-        # 创建解析器对象
-        parser = argparse.ArgumentParser(description="演示如何通过终端传参")
-
-        # 添加参数
-        parser.add_argument('-e', '--element', type=str, help='None', required=False)
-        parser.add_argument('-t', '--time', type=int, help='None', required=False)
-
-        # 添加到列表
-        """
-        parser.add_argument('--list', type=str, help='None', nargs='+', required=True)
-        """
-
-        # 解析参数
-        return parser.parse_args()
 
     @staticmethod
     def createTerminalArgs(args: list, types: list, helpInfo: list, requireds: list[bool]):

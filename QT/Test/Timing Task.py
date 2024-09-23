@@ -5,6 +5,7 @@ from method import SystemCtl
 from KeyboardTaskWindow import KeyboardTaskWindow
 from KeyboardHotTaskWindow import KeyboardHotTaskWindow
 from ImageReName import ImageRenameWindow
+from SubWindow import SubWindow
 
 from PySide6.QtWidgets import (
     QApplication,
@@ -80,7 +81,7 @@ class MainWindow(QMainWindow):
 
         # 添加点击功能
         self.button.clicked.connect(self.click)
-        self.openWindowButton.clicked.connect(lambda: self.window.show())
+        self.openWindowButton.clicked.connect(lambda: self.subWindow.window.show())
 
         # 创建主部件和布局
         mainWidget = QWidget(self)
@@ -106,20 +107,16 @@ class MainWindow(QMainWindow):
 
 # ---------------------------------------------------------------------------------------------------------- #
 
-        # 添加系统托盘图标
         self.trayIcon = QSystemTrayIcon(self)
-        # print(True)  # 添加调试输出
         self.trayIcon.setIcon(QIcon(trayIconPath))
         self.trayIcon.setToolTip('Ciallo～(∠・ω< )⌒☆')
-
         # 托盘图标菜单
         trayMenu = QMenu()
-        showActionTray = QAction('显示窗口', self)
-        showActionTray.triggered.connect(lambda: self.show())
-
         # 添加分隔符
         trayMenu.addSeparator()
 
+        showActionTray = QAction('显示窗口', self)
+        showActionTray.triggered.connect(lambda: self.show())
         quitAction = QAction('退出', self)
         quitAction.triggered.connect(self.quitApp)
         # 添加到托盘中
@@ -131,36 +128,15 @@ class MainWindow(QMainWindow):
 
 # ---------------------------------------------------------------------------------------------------------- #
 
-        self.window = QWidget()
-        self.window.closeEvent = lambda event: self.ignoreCloseEvent(event, self.window)
-        self.window.setFixedSize(400, 600)
+        self.subWindow = SubWindow(
+            self,
+            self.style,
+            KeyboardTaskWindow(width, height),
+            KeyboardHotTaskWindow(width, height),
+            ImageRenameWindow(width, height)
+        )
 
-        self.keyboardButton = QPushButton('依次点击键盘任务', self.window)
-        self.keyboardButton.setStyleSheet(self.style[2])
-        self.keyboardButton.setFixedSize(250, 50)
-        self.keyboardButton.clicked.connect(lambda: self.keyboardTaskWindow.show())
-
-        self.keyboardHotButton = QPushButton('组合键任务', self.window)
-        self.keyboardHotButton.setStyleSheet(self.style[2])
-        self.keyboardHotButton.setFixedSize(250, 50)
-        self.keyboardHotButton.clicked.connect(lambda: self.keyboardHotTaskWindow.show())
-
-        self.imageRenameButton = QPushButton('图片重命名', self.window)
-        self.imageRenameButton.setStyleSheet(self.style[2])
-        self.imageRenameButton.setFixedSize(250, 50)
-        self.imageRenameButton.clicked.connect(lambda: (QMessageBox.information(self, '提示', '从0开始,依次命名,当前仅支持jpg,png'), self.imageReNameWindow.show()))
-
-        layout = QVBoxLayout(self.window)
-        layout.addWidget(self.keyboardButton, alignment=Qt.AlignCenter)
-        layout.addStretch(1)
-        layout.addWidget(self.keyboardHotButton, alignment=Qt.AlignCenter)
-        layout.addStretch(1)
-        layout.addWidget(self.imageRenameButton, alignment=Qt.AlignCenter)
-        layout.addStretch(1)
-
-        self.keyboardTaskWindow = KeyboardTaskWindow(width, height)
-        self.keyboardHotTaskWindow = KeyboardHotTaskWindow(width, height)
-        self.imageReNameWindow = ImageRenameWindow(width, height)
+# ---------------------------------------------------------------------------------------------------------- #
 
     def paintEvent(self, event):
         # 创建 QPainter 对象
@@ -177,11 +153,6 @@ class MainWindow(QMainWindow):
         # 在窗口内绘制缩放后的背景图片
         painter.drawPixmap(0, 0, scaled_pixmap)
 
-    @staticmethod
-    def ignoreCloseEvent(event, window):
-        event.ignore()
-        window.hide()
-
     def closeEvent(self, event):
 
         # 重载关闭事件，使得窗口关闭时只是隐藏而不是退出应用程序
@@ -189,12 +160,11 @@ class MainWindow(QMainWindow):
         self.hide()  # 隐藏窗口
         if self.flag:
             self.trayIcon.showMessage(
-                "Timing Task",
-                "程序已最小化到系统托盘",
+                'Timing Task',
+                '程序已最小化到系统托盘',
                 QSystemTrayIcon.Information,
                 2000
             )
-
 # ---------------------------------------------------------------------------------------------------------- #
 
     def click(self):

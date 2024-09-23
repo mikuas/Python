@@ -14,7 +14,7 @@ from PySide6.QtCore import QTimer, Qt
 class KeyboardTaskWindow(QWidget):
     def __init__(self, width, height):
         super().__init__()
-        self.closeEvent = lambda event: self.ignoreCloseEvent(event, self)
+        self.closeEvent = lambda event: (event.ignore(), self.hide())
         self.setMinimumSize(width, height)
         self.setWindowTitle('执行依次点击键盘任务')
 
@@ -49,11 +49,6 @@ class KeyboardTaskWindow(QWidget):
         layout.addStretch(1)
         layout.addWidget(self.keyboardTaskButton, alignment=Qt.AlignCenter)
         layout.addStretch(1)
-
-    @staticmethod
-    def ignoreCloseEvent(event, window):
-        event.ignore()
-        window.hide()
 
     def keyboardClick(self):
         try:

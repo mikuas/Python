@@ -3,7 +3,6 @@ import argparse
 
 
 def getArgsList():
-    # 依次传入多个 target IP，最后一个是网关 IP
     parser = argparse.ArgumentParser(description="传参")
     # 要攻击的ip 最后写网关
     parser.add_argument('-l', type=str, nargs="+", help='runHostIP', required=False)

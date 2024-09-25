@@ -250,7 +250,7 @@ class FileControl:
                 # 移动并重命名文件
                 shutil.move(os.path.join(path, name), os.path.join(path, f"{str(i)}.{self.getSuffixName(name)}"))
                 i += 1
-        return result
+        return [result, i]
 
 if __name__ == '__main__':
     KeyboardControl.Hotkey(None, 'win tab')

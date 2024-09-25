@@ -34,4 +34,4 @@ class ImageRenameWindow(QWidget):
             QMessageBox.warning(self, '错误', '请选择目录!')
             return
         result = FileControl().imageReName(self.dirPath)
-        QMessageBox.information(self, '提示', f'执行完毕! 以下文件被修改:\n{result}')
+        QMessageBox.information(self, '提示', f'执行完毕! 以下文件被修改:{result[1]}\n{result[0]}')

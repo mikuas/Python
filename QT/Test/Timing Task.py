@@ -165,6 +165,7 @@ class MainWindow(QMainWindow):
                 QSystemTrayIcon.Information,
                 2000
             )
+
 # ---------------------------------------------------------------------------------------------------------- #
 
     def click(self):

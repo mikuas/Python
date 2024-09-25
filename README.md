@@ -105,9 +105,8 @@ print(bool1 is bool2) // 输出 False
 print(bool1 is not bool2) // 输出 True
 ~~~
 
-### 其他可调用的布尔函数 用于检查给定条件的真假
-
 ~~~python
+### 其他可调用的布尔函数 用于检查给定条件的真假
 # any() 和 all()
 conditions = [True, False, True]
 if any(conditions):

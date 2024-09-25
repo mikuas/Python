@@ -1,4 +1,4 @@
-# for循环写法
+）# for循环写法
 
 ~~~python
 # 1. 遍历列表
@@ -107,8 +107,43 @@ print(bool1 is not bool2) // 输出 True
 
 ### 其他可调用的布尔函数 用于检查给定条件的真假
 
-* all()：如果可迭代对象中的所有元素都为真，则返回 True
+~~~python
+# any() 和 all()
+conditions = [True, False, True]
+if any(conditions):
+    print("至少一个条件为真")
 
-* any()：如果可迭代对象中的任何元素都为真，则返回 True
+if all(conditions):
+    print("所有条件都为真")
 
-  
+# 列表推导式中的条件
+
+numbers = [1, 2, 3, 4, 5]
+even_numbers = [x for x in numbers if x % 2 == 0]
+print(even_numbers)
+
+# 使用 assert 语句
+x = 10
+assert x > 5, "x 必须大于 5"
+
+# match 语句（Python 3.10 及更高版本）
+
+def check_value(x):
+    match x:
+        case 1:
+            print("值为 1")
+        case 2:
+            print("值为 2")
+        case _:
+            print("其他值")
+
+check_value(1)
+
+# 三元运算符
+
+x = 10
+result = "大于 5" if x > 5 else "不大于 5"
+print(result)
+
+~~~
+

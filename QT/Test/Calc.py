@@ -6,7 +6,7 @@ import sys
 class CaliWindow:
     def __init__(self):
         self.calcWindow = QWidget()
-        self.calcWindow.setWindowTitle('Calc')
+        self.calcWindow.setWindowTitle('简易计算器')
         self.calcWindow.setFixedSize(850, 570)
         self.text = QTextEdit(self.calcWindow)
         self.text.setFixedSize(830, 100)

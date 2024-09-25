@@ -9,7 +9,8 @@ class SubWindow:
             style,
             keyboardTaskWindow,
             keyboardHotTaskWindow,
-            imageReNameWindow
+            imageReNameWindow,
+            calcWindow
     ):
         self.window = QWidget()
         self.window.closeEvent = lambda event: self.ignoreCloseEvent(event, self.window)
@@ -31,6 +32,11 @@ class SubWindow:
         self.imageRenameButton.clicked.connect(lambda: (
         QMessageBox.information(self.window, '提示', '从0开始,依次命名,当前仅支持jpg,png'), imageReNameWindow.show()))
 
+        self.calcWindowButton = QPushButton('简易计算器', self.window)
+        self.calcWindowButton.setStyleSheet(style[2])
+        self.calcWindowButton.setFixedSize(250, 50)
+        self.calcWindowButton.clicked.connect(lambda: calcWindow.show())
+
         layout = QVBoxLayout(self.window)
         layout.addWidget(self.keyboardButton, alignment=Qt.AlignCenter)
         layout.addStretch(1)
@@ -38,6 +44,7 @@ class SubWindow:
         layout.addStretch(1)
         layout.addWidget(self.imageRenameButton, alignment=Qt.AlignCenter)
         layout.addStretch(1)
+        layout.addWidget(self.calcWindowButton, alignment=Qt.AlignCenter)
 
     @staticmethod
     def ignoreCloseEvent(event, window):

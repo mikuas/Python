@@ -6,6 +6,7 @@ from KeyboardTaskWindow import KeyboardTaskWindow
 from KeyboardHotTaskWindow import KeyboardHotTaskWindow
 from ImageReName import ImageRenameWindow
 from SubWindow import SubWindow
+from Calc import CaliWindow
 
 from PySide6.QtWidgets import (
     QApplication,
@@ -133,7 +134,8 @@ class MainWindow(QMainWindow):
             self.style,
             KeyboardTaskWindow(width, height),
             KeyboardHotTaskWindow(width, height),
-            ImageRenameWindow(width, height)
+            ImageRenameWindow(width, height),
+            CaliWindow().calcWindow
         )
 
 # ---------------------------------------------------------------------------------------------------------- #

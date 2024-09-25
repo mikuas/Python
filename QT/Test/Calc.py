@@ -39,7 +39,7 @@ class CaliWindow:
                 background-color: pink;
             """
         )
-        self.buttonCiFang = QPushButton('**', self.calcWindow)
+        self.buttonCiFang = QPushButton('^', self.calcWindow)
         self.buttonCiFang.setStyleSheet(
             """
                 font-size: 24px;
@@ -96,7 +96,7 @@ class CaliWindow:
         self.button5.setStyleSheet(self.buttonStyle[0])
         self.button6 = QPushButton('6', self.calcWindow)
         self.button6.setStyleSheet(self.buttonStyle[0])
-        self.buttonX = QPushButton('*', self.calcWindow)
+        self.buttonX = QPushButton('x', self.calcWindow)
         self.buttonX.setStyleSheet(
             """
                 font-size: 24px;
@@ -140,8 +140,8 @@ class CaliWindow:
         self.buttonCu.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         # Line 5
-        self.test = QPushButton('test', self.calcWindow)
-        self.test.setStyleSheet(
+        self.buttonQuYu = QPushButton('%', self.calcWindow)
+        self.buttonQuYu.setStyleSheet(
             """
                 font-size: 32px;
                 background-color: pink;
@@ -153,23 +153,23 @@ class CaliWindow:
         self.buttonDian.setStyleSheet(
             """
                 font-size: 45px;
+                background-color: pink;
             """
         )
         self.buttonDengYu = QPushButton('=', self.calcWindow)
         self.buttonDengYu.setStyleSheet(
             """
                 font-size: 32px;
-                background-color: blue;
-                color: white;
+                background-color: #00FFFF;
             """
         )
 
-        self.test.setFixedSize(200, 85)
+        self.buttonQuYu.setFixedSize(200, 85)
         self.button0.setFixedSize(200, 85)
         self.buttonDian.setFixedSize(200, 85)
         self.buttonDengYu.setFixedSize(200, 85)
 
-        self.test.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.buttonQuYu.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         self.button0.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         self.buttonDian.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         self.buttonDengYu.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -200,7 +200,7 @@ class CaliWindow:
         hLayout4.addWidget(self.buttonCu, alignment=Qt.AlignCenter)
 
         hLayout5 = QHBoxLayout()
-        hLayout5.addWidget(self.test, alignment=Qt.AlignCenter)
+        hLayout5.addWidget(self.buttonQuYu, alignment=Qt.AlignCenter)
         hLayout5.addWidget(self.button0, alignment=Qt.AlignCenter)
         hLayout5.addWidget(self.buttonDian, alignment=Qt.AlignCenter)
         hLayout5.addWidget(self.buttonDengYu, alignment=Qt.AlignCenter)
@@ -236,6 +236,9 @@ class CaliWindow:
         self.buttonX.clicked.connect(lambda: self.click(self.buttonX))
         self.buttonCu.clicked.connect(lambda: self.click(self.buttonCu))
         self.buttonDian.clicked.connect(lambda: self.click(self.buttonDian))
+        self.buttonCiFang.clicked.connect(lambda: self.click(self.buttonCiFang))
+        self.buttonQuYu.clicked.connect(lambda: self.click(self.buttonQuYu))
+
         self.buttonAC.clicked.connect(lambda: self.text.setPlainText('0'))
         self.buttonDelete.clicked.connect(self.backspace)
 
@@ -253,13 +256,12 @@ class CaliWindow:
             self.text.setPlainText(self.text.toPlainText()[:-1])
 
     def click(self, obj):
-        if self.text.toPlainText() == '' and obj in [self.buttonJia, self.buttonJian, self.buttonX, self.buttonCu, self.buttonCiFang]:
-            return
-        elif self.text.toPlainText() == '0' and obj == self.button0:
+        element = [self.buttonJia, self.buttonJian, self.buttonX, self.buttonCu, self.buttonCiFang, self.buttonDian, self.buttonQuYu]
+        if self.text.toPlainText() == '0' and obj == self.button0:
             self.text.setPlainText('0')
-        elif self.text.toPlainText() == '0' and obj != self.buttonDian:
+        elif self.text.toPlainText() == '0' and obj not in element:
             self.text.setPlainText(obj.text())
-        elif self.text.toPlainText()[-1] in ['+', '-', 'x', '/', '.'] and obj in [self.buttonJia, self.buttonJian, self.buttonX, self.buttonCu, self.buttonDian]:
+        elif self.text.toPlainText()[-1] in ['+', '-', 'x', '/', '.', '^'] and obj in element:
             return
         else:
             self.text.setPlainText(self.text.toPlainText() + obj.text())
@@ -268,20 +270,24 @@ class CaliWindow:
         result = self.text.toPlainText()
         index = 0
         for string in result:
-            if string == '+' or string == '-' or string == 'x' or string == '/':
+            if string == '+' or string == '-' or string == 'x' or string == '/'or string == '^' or string == '%':
                 print(index)
                 if result[index] == '+':
-                    result = float(result[0:index]) + float(result[index + 1:])
+                    result = float(result[:index]) + float(result[index + 1:])
                     break
                 elif result[index] == '-':
-                    result = float(result[0:index]) - float(result[index + 1:])
+                    result = float(result[:index]) - float(result[index + 1:])
                     break
                 elif result[index] == 'x':
-                    result = float(result[0:index]) * float(result[index + 1:])
+                    result = float(result[:index]) * float(result[index + 1:])
                     break
                 elif result[index] == '/':
-                    result = float(result[0:index]) / float(result[index + 1:])
+                    result = float(result[:index]) / float(result[index + 1:])
                     break
+                elif result[index] == '^':
+                    result = float(result[:index]) ** float(result[index + 1:])
+                elif result[index] == '%':
+                    result = float(result[:index]) % float(result[index + 1:])
             else:
                 index += 1
         re = str(result).split('.')

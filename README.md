@@ -62,7 +62,7 @@ for item in itertools.product(['A', 'B'], [1, 2]):
 
 ~~~
 
-# if
+# if写法
 ### 逻辑运算符  用于连接多个条件，构建复杂的条件表达式
 
 * and(于)
@@ -84,6 +84,11 @@ for item in itertools.product(['A', 'B'], [1, 2]):
 
   print(str in strs) // 输出 True
   print(str not in strs) // 输出 False
+
+  fruits = ['apple', 'banana', 'cherry']
+  if 'banana' in fruits:
+      print("香蕉在列表中")
+
   ~~~
 
 

@@ -35,21 +35,21 @@ class CaliWindow:
         self.buttonDelete = QPushButton('<---', self.calcWindow)
         self.buttonDelete.setStyleSheet(
             """
-                font-size: 24px;
+                font-size: 32px;
                 background-color: pink;
             """
         )
         self.buttonCiFang = QPushButton('^', self.calcWindow)
         self.buttonCiFang.setStyleSheet(
             """
-                font-size: 24px;
+                font-size: 32px;
                 background-color: pink;
             """
         )
         self.buttonJia = QPushButton('+', self.calcWindow)
         self.buttonJia.setStyleSheet(
             """
-                font-size: 24px;
+                font-size: 32px;
                 background-color: pink;
             """
         )
@@ -74,7 +74,7 @@ class CaliWindow:
         self.buttonJian = QPushButton('-', self.calcWindow)
         self.buttonJian.setStyleSheet(
             """
-                font-size: 24px;
+                font-size: 48px;
                 background-color: pink;
             """
         )
@@ -99,7 +99,7 @@ class CaliWindow:
         self.buttonX = QPushButton('x', self.calcWindow)
         self.buttonX.setStyleSheet(
             """
-                font-size: 24px;
+                font-size: 32px;
                 background-color: pink;
             """
         )

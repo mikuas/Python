@@ -1,4 +1,4 @@
-# for循环写法
+# for循环
 
 ~~~python
 # 1. 遍历列表
@@ -62,7 +62,7 @@ for item in itertools.product(['A', 'B'], [1, 2]):
 
 ~~~
 
-# if写法
+# if
 ### 逻辑运算符  用于连接多个条件，构建复杂的条件表达式
 
 * and(于)

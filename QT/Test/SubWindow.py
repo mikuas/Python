@@ -29,14 +29,12 @@ class SubWindow:
         self.imageRenameButton = QPushButton('图片重命名', self.window)
         self.imageRenameButton.setStyleSheet(style[2])
         self.imageRenameButton.setFixedSize(250, 50)
-        self.imageRenameButton.clicked.connect(lambda: (
-            QMessageBox.information(self.window, '提示', '从0开始,依次命名,当前仅支持jpg,png'), imageReNameWindow.show()))
+        self.imageRenameButton.clicked.connect(lambda: (QMessageBox.information(self.window, '提示', '从0开始,依次命名,当前仅支持jpg,png'), imageReNameWindow.show()))
 
         self.calcWindowButton = QPushButton('简易计算器', self.window)
         self.calcWindowButton.setStyleSheet(style[2])
         self.calcWindowButton.setFixedSize(250, 50)
-        self.calcWindowButton.clicked.connect(lambda: (
-            QMessageBox.information(self.window, '提示', '暂时一次只能输入一个运算符'), calcWindow.show()))
+        self.calcWindowButton.clicked.connect(lambda: calcWindow.show())
 
         layout = QVBoxLayout(self.window)
         layout.addWidget(self.keyboardButton, alignment=Qt.AlignCenter)

@@ -261,41 +261,24 @@ class CaliWindow:
             self.text.setPlainText('0')
         elif self.text.toPlainText() == '0' and obj not in element:
             self.text.setPlainText(obj.text())
+        elif obj == self.buttonX:
+            self.text.setPlainText(self.text.toPlainText() + '*')
+        elif obj == self.buttonCiFang:
+            self.text.setPlainText(self.text.toPlainText() + '**')
         elif self.text.toPlainText()[-1] in ['+', '-', 'x', '/', '.', '^'] and obj in element:
             return
         else:
             self.text.setPlainText(self.text.toPlainText() + obj.text())
 
     def getSum(self):
-        result = self.text.toPlainText()
-        index = 0
-        for string in result:
-            if string == '+' or string == '-' or string == 'x' or string == '/'or string == '^' or string == '%':
-                print(index)
-                if result[index] == '+':
-                    result = float(result[:index]) + float(result[index + 1:])
-                    break
-                elif result[index] == '-':
-                    result = float(result[:index]) - float(result[index + 1:])
-                    break
-                elif result[index] == 'x':
-                    result = float(result[:index]) * float(result[index + 1:])
-                    break
-                elif result[index] == '/':
-                    result = float(result[:index]) / float(result[index + 1:])
-                    break
-                elif result[index] == '^':
-                    result = float(result[:index]) ** float(result[index + 1:])
-                elif result[index] == '%':
-                    result = float(result[:index]) % float(result[index + 1:])
+        result = str(eval(self.text.toPlainText()))
+        if '.' in result:
+            if int(result.split('.')[-1]) > 0:
+                self.text.setPlainText(str(result))
             else:
-                index += 1
-        re = str(result).split('.')
-        if int(re[-1]) > 0:
-            self.text.setPlainText(str(result))
+                self.text.setPlainText(str(result.split('.')[0]))
         else:
-            self.text.setPlainText(re[0])
-
+            self.text.setPlainText(str(result))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

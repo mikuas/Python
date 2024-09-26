@@ -10,7 +10,8 @@ class CaliWindow:
         self.calcWindow.setFixedSize(850, 570)
         self.text = QTextEdit(self.calcWindow)
         self.text.setFixedSize(830, 100)
-        self.text.setReadOnly(True) # 设置只读
+        # 设置只读
+        self.text.setReadOnly(True)
         self.text.setText('0')
         self.text.setStyleSheet(
             """
@@ -207,8 +208,8 @@ class CaliWindow:
 
         layout = QVBoxLayout(self.calcWindow)
         layout.addWidget(self.text)
-        layout.addStretch(1)
-        layout.addStretch(1)
+        # 添加间隔
+        layout.addSpacing(30)
         layout.addLayout(hLayout1)
         layout.addStretch(1)
         layout.addLayout(hLayout2)
@@ -241,7 +242,6 @@ class CaliWindow:
 
         self.buttonAC.clicked.connect(lambda: self.text.setPlainText('0'))
         self.buttonDelete.clicked.connect(self.backspace)
-
         self.buttonDengYu.clicked.connect(self.getSum)
         #-------------------------
 
@@ -259,6 +259,8 @@ class CaliWindow:
         element = [self.buttonJia, self.buttonJian, self.buttonX, self.buttonCu, self.buttonCiFang, self.buttonDian, self.buttonQuYu]
         if self.text.toPlainText() == '0' and obj == self.button0:
             self.text.setPlainText('0')
+        elif '.' in self.text.toPlainText() and obj == self.buttonDian:
+            pass
         elif self.text.toPlainText() == '0' and obj not in element:
             self.text.setPlainText(obj.text())
         elif obj == self.buttonX:

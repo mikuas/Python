@@ -29,6 +29,8 @@ class Window(QWidget):
         self.textEdit.move(200, 200)
         # 文本控件大小
         self.textEdit.resize(100, 50)
+        # 设置只读
+        self.textEdit.setReadOnly(True)
         '''获取文本控件内容'''
         self.info = self.textEdit.toPlainText()
 

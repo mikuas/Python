@@ -259,8 +259,6 @@ class CaliWindow:
         element = [self.buttonJia, self.buttonJian, self.buttonX, self.buttonCu, self.buttonCiFang, self.buttonDian, self.buttonQuYu]
         if self.text.toPlainText() == '0' and obj == self.button0:
             self.text.setPlainText('0')
-        elif '.' in self.text.toPlainText() and obj == self.buttonDian:
-            pass
         elif self.text.toPlainText() == '0' and obj not in element:
             self.text.setPlainText(obj.text())
         elif obj == self.buttonX:
@@ -273,14 +271,17 @@ class CaliWindow:
             self.text.setPlainText(self.text.toPlainText() + obj.text())
 
     def getSum(self):
-        result = str(eval(self.text.toPlainText()))
-        if '.' in result:
-            if int(result.split('.')[-1]) > 0:
-                self.text.setPlainText(str(result))
+        try:
+            result = str(eval(self.text.toPlainText()))
+            if '.' in result:
+                if int(result.split('.')[-1]) > 0:
+                    self.text.setPlainText(str(result))
+                else:
+                    self.text.setPlainText(str(result.split('.')[0]))
             else:
-                self.text.setPlainText(str(result.split('.')[0]))
-        else:
-            self.text.setPlainText(str(result))
+                self.text.setPlainText(str(result))
+        except Exception as e:
+            self.text.setPlainText(f'输入有误:{str(e)}')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

@@ -72,8 +72,13 @@ class SystemCtl:
 
         return self
 
-    def disableUser(self, userName, parameters):
-        os.system(f'net user {userName} /active:{parameters}')
+    def disableUser(self, userName):
+        os.system(f'net user {userName} /active:no')
+
+        return self
+
+    def enableUser(self, userName):
+        os.system(f'net user {userName} /active:yes')
 
         return self
 
@@ -82,11 +87,9 @@ class SystemCtl:
         os.system('echo %username% > userName')
 
         file = open('./userName', 'r', encoding='utf-8')
-        userName = file.readlines()
+
+        userName = file.readlines()[0].split()[0]
         userName = userName[0].split()[0]
-
-        print(userName)
-
         os.system(f'net user {userName} {password}')
         file.close()
         os.remove('./userName')
@@ -99,7 +102,6 @@ class SystemCtl:
             os.system(f'net localgroup Administrators {userName} /add')
         else:
             os.system(f'net user {userName} {password} /add')
-
         return self
 
     @staticmethod
@@ -130,7 +132,6 @@ class SystemCtl:
         if volume is None:
             print("无法获取音频设备")
             return self
-
         try:
             if volume.GetMute():
                 volume.SetMute(0, None)
@@ -150,40 +151,28 @@ class SystemCtl:
         volume_interface = cast(interface, POINTER(IAudioEndpointVolume))
         # 设置音量（0.0到1.0之间的浮点数）
         volume_interface.SetMasterVolumeLevelScalar(num, None)
-
         return self
 
 class TerminalControl:
     def __init__(self):
-
         pass
 
     @staticmethod
-    def terminalArgs():
-        # 创建解析器对象
-        parser = argparse.ArgumentParser(description="演示如何通过终端传参")
-
-        # 添加参数
-        parser.add_argument('-e', '--element', type=str, help='None', required=False)
-        parser.add_argument('-t', '--time', type=int, help='None', required=False)
-
-        # 添加到列表
+    def createTerminalArgs(args: list, types: list, helpInfo: list, requireds: list[bool], default: list, defaultValue: list, isList: list):
         """
-        parser.add_argument('--list', type=str, help='None', nargs='+', required=True)
+        default defaultValue 一一对应
+        有defaultValue type 写 ?
         """
-
-        # 解析参数
-        return parser.parse_args()
-
-    @staticmethod
-    def createTerminalArgs(args: list, types: list, helpInfo: list, requireds: list[bool]):
         parser = argparse.ArgumentParser(description='getArgs')
         i = 0
         for arg in args:
-            if types[i] == 'list':
-                parser.add_argument(f'-{arg}', type=str, nargs="+", help=helpInfo[i], required=requireds[i])
+            if isList[i]:
+                parser.add_argument(f'-{arg}', type=types[i], nargs="+", help=helpInfo[i], required=requireds[i])
             else:
-                parser.add_argument(f'-{arg}', type=str, help=helpInfo[i], required=requireds[i])
+                if arg in default:
+                    parser.add_argument(f'-{arg}', nargs=types[i], const=defaultValue[default.index(arg)], help=helpInfo[i], required=requireds[i])
+                else:
+                    parser.add_argument(f'-{arg}', type=types[i], help=helpInfo[i], required=requireds[i])
             i += 1
         return parser.parse_args()
 
@@ -206,7 +195,6 @@ class TerminalControl:
                 proc.wait()
         else:
             subprocess.run(element)
-
         return self
 
 class FileControl:
@@ -231,7 +219,7 @@ class FileControl:
         from PySide6.QtWidgets import QFileDialog
         return QFileDialog.getExistingDirectory(None, "选择目录")
 
-    def imageReName(self, path):
+    def imageReName(self, path) -> list:
         """
         :param path: DirPath
         :return: self
@@ -252,6 +240,33 @@ class FileControl:
                 i += 1
         return [result, i]
 
-if __name__ == '__main__':
-    KeyboardControl.Hotkey(None, 'win tab')
+class Regedit:
 
+    def __init__(self) -> None:
+        pass
+
+    def addLeftKeyClick(self, name, path, iconPath=None):
+        if iconPath:
+            os.system(f'reg add "HKEY_CLASSES_ROOT\Directory\Background\shell\\{name}" /v Icon /t REG_SZ /d "{iconPath}" /f')
+            os.system(f'reg add "HKEY_CLASSES_ROOT\Directory\Background\shell\\{name}\command" /ve /d "{path}" /f')
+        else:
+            os.system(f'reg add "HKEY_CLASSES_ROOT\Directory\Background\shell\\{name}\command" /ve /d "{path}" /f')
+        return self
+
+    def addFileLeftKeyClick(self, name, path, iconPath=None, args=False):
+        if iconPath:
+            os.system(f'reg add "HKEY_CLASSES_ROOT\*\shell\\{name}" /v Icon /t REG_SZ /d "{iconPath}" /f')
+            if args:
+                os.system(f'reg add "HKEY_CLASSES_ROOT\*\shell\\{name}\command" /ve /d "{path + " %1"}" /f')
+            else:
+                os.system(f'reg add "HKEY_CLASSES_ROOT\*\shell\\{name}\command" /ve /d "{path}" /f')
+        else:
+            if args:
+                os.system(f'reg add "HKEY_CLASSES_ROOT\*\shell\\{name}\command" /ve /d "{path + " %1"}" /f')
+            else:
+                os.system(f'reg add "HKEY_CLASSES_ROOT\*\shell\\{name}\command" /ve /d "{path}" /f')
+        return self
+
+if __name__ == '__main__':
+    # Regedit().addFileLeftKeyClick('leftClick', 'notepad.exe', "C:\IDE\Icons\clion.ico", True)
+    pass

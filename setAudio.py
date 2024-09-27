@@ -26,7 +26,7 @@ def getAudioEndpointVolume():
         return None
 
 # 静音
-def getMute(num):
+def setMute(num):
     volume = getAudioEndpointVolume()
     if volume is None:
         print("无法获取音频设备")
@@ -40,21 +40,20 @@ def getMute(num):
     except comtypes.COMError as e:
         print(f"COMError: {e}")
 
-parser = argparse.ArgumentParser(description="设置音量")
+argparse = argparse.ArgumentParser()
+argparse.add_argument('-n', type=float, help='设置声音大小0-100', required=False)
+argparse.add_argument('-m', nargs='?', const=True, help='静音', required=False)
+argparse.add_argument('-c', nargs='?', const=True, help='取消静音', required=False)
 
-# 添加参数
-parser.add_argument('-a', '--Audio', type=float, help='设置音量大小0-100', required=False)
-parser.add_argument('-M', '--Mute', type=int, help='静音', required=False)
-
-args = parser.parse_args()
+result = argparse.parse_args()
 
 if __name__ == '__main__':
-    if args.Audio is not None:
-        setAudio(args.Audio / 100)
-        print(f'当前音量: {args.Audio}%', type(args.Audio))
-    if args.Mute == 0:
-        getMute(1)
-        print(False)
-    else:
-        getMute(0)
-        print(True)
+    if result.m:
+        setMute(1)
+        print('已静音')
+    elif result.c:
+        setMute(0)
+        print('已取消静音')
+    elif  result.n is not None:
+        setAudio(result.n / 100)
+        print(f'当前音量: {result.n}%', type(result.n))

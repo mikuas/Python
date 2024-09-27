@@ -123,11 +123,11 @@ class CaliWindow:
         current_text = self.text.toPlainText()
         if current_text == '0' and text not in '+-x/%^.':
             self.text.setPlainText(text)
-        elif text == 'x':
+        elif text == 'x' and not (current_text[-1] in '+-*/.%^' and text in '+-x/.%^'):
             self.text.setPlainText(current_text + '*')
-        elif text == '^':
+        elif text == '^' and not (current_text[-1] in '+-*/.%^' and text in '+-x/.%^'):
             self.text.setPlainText(current_text + '**')
-        elif not (current_text[-1] in '+-*/.%^' and text in '+-*/.%^'):
+        elif not (current_text[-1] in '+-*/.%^' and text in '+-x/.%^'):
             self.text.setPlainText(current_text + text)
 
     def calculateResult(self):

@@ -134,8 +134,8 @@ class CaliWindow:
         try:
             result = str(eval(self.text.toPlainText()))
             self.text.setPlainText(result.rstrip('0').rstrip('.') if '.' in result else result)
-        except Exception as e:
-            self.text.setPlainText(f'输入有误:{str(e)}')
+        except Exception:
+            self.text.setPlainText(f'输入有误,表达式不正确')
 
 
 if __name__ == '__main__':

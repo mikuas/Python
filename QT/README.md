@@ -62,6 +62,17 @@ class Window(QWidget):
                 color: #333333;            /* 设置字体颜色 */
             }
         """)
+        # 设置单独样式
+        self.button.setObjectName('button')
+        """
+                QPushButton#button {
+                    background-color: pink;
+                    font-size: 40px;
+                }
+                QPushButton#button:hover {
+                    background-color: aqua;
+                }
+        """
 
         # 设置按钮大小
         self.button.resize(50, 20)

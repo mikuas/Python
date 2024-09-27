@@ -1,287 +1,142 @@
-from PySide6.QtWidgets import QWidget, QPushButton, QMessageBox, QApplication, QTextEdit, QVBoxLayout, QHBoxLayout, \
-    QSizePolicy
+from PySide6.QtWidgets import QWidget, QPushButton, QApplication, QTextEdit, QVBoxLayout, QHBoxLayout, QSizePolicy
 from PySide6.QtGui import Qt
 import sys
+
 
 class CaliWindow:
     def __init__(self):
         self.calcWindow = QWidget()
         self.calcWindow.setWindowTitle('简易计算器')
         self.calcWindow.setFixedSize(850, 570)
+
         self.text = QTextEdit(self.calcWindow)
         self.text.setFixedSize(830, 100)
-        # 设置只读
         self.text.setReadOnly(True)
         self.text.setText('0')
-        self.text.setStyleSheet(
-            """
-            border: 1px solid black;
-            font-size: 70px;
-            """
-        )
-        self.buttonStyle = [
-            """
-                font-size: 24px;
-            """
-        ]
+        self.text.setStyleSheet("border: 1px solid black; font-size: 70px;")
 
-        # Line 1
-        self.buttonAC = QPushButton('AC', self.calcWindow)
-        self.buttonAC.setStyleSheet(
-            """
-                font-size: 24px;
-                background-color: pink;
-            """
-        )
-        self.buttonDelete = QPushButton('<---', self.calcWindow)
-        self.buttonDelete.setStyleSheet(
-            """
-                font-size: 32px;
-                background-color: pink;
-            """
-        )
-        self.buttonCiFang = QPushButton('^', self.calcWindow)
-        self.buttonCiFang.setStyleSheet(
-            """
-                font-size: 32px;
-                background-color: pink;
-            """
-        )
-        self.buttonJia = QPushButton('+', self.calcWindow)
-        self.buttonJia.setStyleSheet(
-            """
-                font-size: 32px;
-                background-color: pink;
-            """
-        )
-
-        self.buttonAC.setFixedSize(200, 85)
-        self.buttonDelete.setFixedSize(200, 85)
-        self.buttonCiFang.setFixedSize(200, 85)
-        self.buttonJia.setFixedSize(200, 85)
-
-        self.buttonAC.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.buttonDelete.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.buttonCiFang.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.buttonJia.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-
-        # Line 2
-        self.button7 = QPushButton('7', self.calcWindow)
-        self.button7.setStyleSheet(self.buttonStyle[0])
-        self.button8 = QPushButton('8', self.calcWindow)
-        self.button8.setStyleSheet(self.buttonStyle[0])
-        self.button9 = QPushButton('9', self.calcWindow)
-        self.button9.setStyleSheet(self.buttonStyle[0])
-        self.buttonJian = QPushButton('-', self.calcWindow)
-        self.buttonJian.setStyleSheet(
-            """
-                font-size: 48px;
-                background-color: pink;
-            """
-        )
-
-        self.button7.setFixedSize(200, 85)
-        self.button8.setFixedSize(200, 85)
-        self.button9.setFixedSize(200, 85)
-        self.buttonJian.setFixedSize(200, 85)
-
-        self.button7.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.button8.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.button9.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.buttonJian.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-
-        # Line 3
-        self.button4 = QPushButton('4', self.calcWindow)
-        self.button4.setStyleSheet(self.buttonStyle[0])
-        self.button5 = QPushButton('5', self.calcWindow)
-        self.button5.setStyleSheet(self.buttonStyle[0])
-        self.button6 = QPushButton('6', self.calcWindow)
-        self.button6.setStyleSheet(self.buttonStyle[0])
-        self.buttonX = QPushButton('x', self.calcWindow)
-        self.buttonX.setStyleSheet(
-            """
-                font-size: 32px;
-                background-color: pink;
-            """
-        )
-
-        self.button4.setFixedSize(200, 85)
-        self.button5.setFixedSize(200, 85)
-        self.button6.setFixedSize(200, 85)
-        self.buttonX.setFixedSize(200, 85)
-
-        self.button4.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.button5.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.button6.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.buttonX.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-
-        # Line 4
-        self.button1 = QPushButton('1', self.calcWindow)
-        self.button1.setStyleSheet(self.buttonStyle[0])
-        self.button2 = QPushButton('2', self.calcWindow)
-        self.button2.setStyleSheet(self.buttonStyle[0])
-        self.button3 = QPushButton('3', self.calcWindow)
-        self.button3.setStyleSheet(self.buttonStyle[0])
-        self.buttonCu = QPushButton('/', self.calcWindow)
-        self.buttonCu.setStyleSheet(
-            """
-                font-size: 32px;
-                background-color: pink;
-            """
-        )
-
-        self.button1.setFixedSize(200, 85)
-        self.button2.setFixedSize(200, 85)
-        self.button3.setFixedSize(200, 85)
-        self.buttonCu.setFixedSize(200, 85)
-
-        self.button1.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.button2.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.button3.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.buttonCu.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-
-        # Line 5
-        self.buttonQuYu = QPushButton('%', self.calcWindow)
-        self.buttonQuYu.setStyleSheet(
-            """
-                font-size: 32px;
-                background-color: pink;
-            """
-        )
-        self.button0 = QPushButton('0', self.calcWindow)
-        self.button0.setStyleSheet(self.buttonStyle[0])
-        self.buttonDian = QPushButton('.', self.calcWindow)
-        self.buttonDian.setStyleSheet(
-            """
-                font-size: 45px;
-                background-color: pink;
-            """
-        )
-        self.buttonDengYu = QPushButton('=', self.calcWindow)
-        self.buttonDengYu.setStyleSheet(
-            """
-                font-size: 32px;
-                background-color: #00FFFF;
-            """
-        )
-
-        self.buttonQuYu.setFixedSize(200, 85)
-        self.button0.setFixedSize(200, 85)
-        self.buttonDian.setFixedSize(200, 85)
-        self.buttonDengYu.setFixedSize(200, 85)
-
-        self.buttonQuYu.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.button0.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.buttonDian.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.buttonDengYu.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        #------------------------------------------
-
-        hLayout1 = QHBoxLayout()
-        hLayout1.addWidget(self.buttonAC, alignment=Qt.AlignCenter)
-        hLayout1.addWidget(self.buttonDelete, alignment=Qt.AlignCenter)
-        hLayout1.addWidget(self.buttonCiFang, alignment=Qt.AlignCenter)
-        hLayout1.addWidget(self.buttonJia, alignment=Qt.AlignCenter)
-
-        hLayout2 = QHBoxLayout()
-        hLayout2.addWidget(self.button7, alignment=Qt.AlignCenter)
-        hLayout2.addWidget(self.button8, alignment=Qt.AlignCenter)
-        hLayout2.addWidget(self.button9, alignment=Qt.AlignCenter)
-        hLayout2.addWidget(self.buttonJian, alignment=Qt.AlignCenter)
-
-        hLayout3 = QHBoxLayout()
-        hLayout3.addWidget(self.button4, alignment=Qt.AlignCenter)
-        hLayout3.addWidget(self.button5, alignment=Qt.AlignCenter)
-        hLayout3.addWidget(self.button6, alignment=Qt.AlignCenter)
-        hLayout3.addWidget(self.buttonX, alignment=Qt.AlignCenter)
-
-        hLayout4 = QHBoxLayout()
-        hLayout4.addWidget(self.button1, alignment=Qt.AlignCenter)
-        hLayout4.addWidget(self.button2, alignment=Qt.AlignCenter)
-        hLayout4.addWidget(self.button3, alignment=Qt.AlignCenter)
-        hLayout4.addWidget(self.buttonCu, alignment=Qt.AlignCenter)
-
-        hLayout5 = QHBoxLayout()
-        hLayout5.addWidget(self.buttonQuYu, alignment=Qt.AlignCenter)
-        hLayout5.addWidget(self.button0, alignment=Qt.AlignCenter)
-        hLayout5.addWidget(self.buttonDian, alignment=Qt.AlignCenter)
-        hLayout5.addWidget(self.buttonDengYu, alignment=Qt.AlignCenter)
+        self.createButtons()
 
         layout = QVBoxLayout(self.calcWindow)
         layout.addWidget(self.text)
-        # 添加间隔
         layout.addSpacing(30)
-        layout.addLayout(hLayout1)
-        layout.addStretch(1)
-        layout.addLayout(hLayout2)
-        layout.addStretch(1)
-        layout.addLayout(hLayout3)
-        layout.addStretch(1)
-        layout.addLayout(hLayout4)
-        layout.addStretch(1)
-        layout.addLayout(hLayout5)
-        layout.addStretch(1)
+        for row in self.button_rows:
+            layout.addLayout(row)
+            layout.addStretch(1)
 
-        # Button Click Events
-        self.button0.clicked.connect(lambda: self.click(self.button0))
-        self.button1.clicked.connect(lambda: self.click(self.button1))
-        self.button2.clicked.connect(lambda: self.click(self.button2))
-        self.button3.clicked.connect(lambda: self.click(self.button3))
-        self.button4.clicked.connect(lambda: self.click(self.button4))
-        self.button5.clicked.connect(lambda: self.click(self.button5))
-        self.button6.clicked.connect(lambda: self.click(self.button6))
-        self.button7.clicked.connect(lambda: self.click(self.button7))
-        self.button8.clicked.connect(lambda: self.click(self.button8))
-        self.button9.clicked.connect(lambda: self.click(self.button9))
-        self.buttonJia.clicked.connect(lambda: self.click(self.buttonJia))
-        self.buttonJian.clicked.connect(lambda: self.click(self.buttonJian))
-        self.buttonX.clicked.connect(lambda: self.click(self.buttonX))
-        self.buttonCu.clicked.connect(lambda: self.click(self.buttonCu))
-        self.buttonDian.clicked.connect(lambda: self.click(self.buttonDian))
-        self.buttonCiFang.clicked.connect(lambda: self.click(self.buttonCiFang))
-        self.buttonQuYu.clicked.connect(lambda: self.click(self.buttonQuYu))
+        self.applyButtonStyles()
 
-        self.buttonAC.clicked.connect(lambda: self.text.setPlainText('0'))
-        self.buttonDelete.clicked.connect(self.backspace)
-        self.buttonDengYu.clicked.connect(self.getSum)
-        #-------------------------
+    def createButtons(self):
+        button_texts = [
+            ['AC', '<---', '^', '+'],
+            ['7', '8', '9', '-'],
+            ['4', '5', '6', 'x'],
+            ['1', '2', '3', '/'],
+            ['%', '0', '.', '=']
+        ]
 
-        # Get Text Content
-        content = self.text.toPlainText()
-        print(content)
+        self.button_dict = {}
+        self.button_rows = []
+
+        for row in button_texts:
+            hLayout = QHBoxLayout()
+            for text in row:
+                button = QPushButton(text, self.calcWindow)
+                button.setFixedSize(200, 85)
+                button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+                button.clicked.connect(lambda _, t=text: self.onButtonClick(t))
+                self.button_dict[text] = button
+                hLayout.addWidget(button, alignment=Qt.AlignCenter)
+            self.button_rows.append(hLayout)
+
+    def applyButtonStyles(self):
+        operators = ['+', 'x', '/', '%', '^', 'AC', '<---', '.', '-', '=']
+        numberArr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        for op, number in zip(operators, numberArr):
+            if op:
+                if op in '.-':
+                    self.button_dict[op].setStyleSheet(
+                        """
+                            QPushButton {
+                                background-color: pink;
+                                font-size: 45px;
+                            }
+                            QPushButton:hover {
+                                color: aqua;
+                            }
+                        """
+                    )
+                else:
+                    self.button_dict[op].setStyleSheet(
+                        """
+                            QPushButton {
+                            background-color: pink;
+                            font-size: 32px;
+                            }
+                            QPushButton:hover {
+                                color: aqua;
+                            }
+                        """
+                    )
+                self.button_dict[number].setStyleSheet(
+                    """
+                        QPushButton {
+                            font-size: 32px;
+                        }
+                        QPushButton:hover {
+                            background-color: lightblue;
+                            font-size: 32px;
+                        }
+                    """
+                )
+
+        self.button_dict['='].setStyleSheet(
+            """
+                QPushButton {
+                    background-color: aqua;
+                    font-size: 40px;
+                }
+                QPushButton:hover {
+                    background-color: #00FF7F;
+                }
+            """
+        )
+
+    def onButtonClick(self, text):
+        if text == 'AC':
+            self.text.setPlainText('0')
+        elif text == '<---':
+            self.backspace()
+        elif text == '=':
+            self.calculateResult()
+        else:
+            self.updateExpression(text)
 
     def backspace(self):
-        if len(self.text.toPlainText()) == 1:
+        current_text = self.text.toPlainText()
+        if len(current_text) == 1:
             self.text.setPlainText('0')
         else:
-            self.text.setPlainText(self.text.toPlainText()[:-1])
+            self.text.setPlainText(current_text[:-1])
 
-    def click(self, obj):
-        element = [self.buttonJia, self.buttonJian, self.buttonX, self.buttonCu, self.buttonCiFang, self.buttonDian, self.buttonQuYu]
-        if self.text.toPlainText() == '0' and obj == self.button0:
-            self.text.setPlainText('0')
-        elif self.text.toPlainText() == '0' and obj not in element:
-            self.text.setPlainText(obj.text())
-        elif obj == self.buttonX:
-            self.text.setPlainText(self.text.toPlainText() + '*')
-        elif obj == self.buttonCiFang:
-            self.text.setPlainText(self.text.toPlainText() + '**')
-        elif self.text.toPlainText()[-1] in ['+', '-', 'x', '/', '.', '^'] and obj in element:
-            return
-        else:
-            self.text.setPlainText(self.text.toPlainText() + obj.text())
+    def updateExpression(self, text):
+        current_text = self.text.toPlainText()
+        if current_text == '0' and text not in '+-x/%^.':
+            self.text.setPlainText(text)
+        elif text == 'x':
+            self.text.setPlainText(current_text + '*')
+        elif text == '^':
+            self.text.setPlainText(current_text + '**')
+        elif not (current_text[-1] in '+-*/.%^' and text in '+-*/.%^'):
+            self.text.setPlainText(current_text + text)
 
-    def getSum(self):
+    def calculateResult(self):
         try:
             result = str(eval(self.text.toPlainText()))
-            if '.' in result:
-                if int(result.split('.')[-1]) > 0:
-                    self.text.setPlainText(str(result))
-                else:
-                    self.text.setPlainText(str(result.split('.')[0]))
-            else:
-                self.text.setPlainText(str(result))
+            self.text.setPlainText(result.rstrip('0').rstrip('.') if '.' in result else result)
         except Exception as e:
             self.text.setPlainText(f'输入有误:{str(e)}')
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

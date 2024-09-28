@@ -9,6 +9,7 @@ import pyautogui
 import argparse
 from PySide6.QtCore import QTimer
 
+
 class KeyboardControl:
 
     def __init__(self):
@@ -86,12 +87,10 @@ class SystemCtl:
     def setPassword(password):
         os.system('echo %username% > userName')
 
-        file = open('./userName', 'r', encoding='utf-8')
+        with open('./userName', 'r') as file:
+            userName = [file.readlines()[0].split()[0]][0].split()[0]
 
-        userName = file.readlines()[0].split()[0]
-        userName = userName[0].split()[0]
         os.system(f'net user {userName} {password}')
-        file.close()
         os.remove('./userName')
 
         return userName
@@ -143,6 +142,13 @@ class SystemCtl:
         except comtypes.COMError as e:
             print(f"COMError: {e}")
             return self
+
+    def setMute(self):
+        volume = self.getAudioEndpointVolume()
+        if volume is None:
+            print('无法获取音频设备')
+            return
+        volume.SetMute(1, None)
 
     # 设置音量
     def setAudio(self, num: float):
@@ -247,26 +253,27 @@ class Regedit:
 
     def addLeftKeyClick(self, name, path, iconPath=None):
         if iconPath:
-            os.system(f'reg add "HKEY_CLASSES_ROOT\Directory\Background\shell\\{name}" /v Icon /t REG_SZ /d "{iconPath}" /f')
-            os.system(f'reg add "HKEY_CLASSES_ROOT\Directory\Background\shell\\{name}\command" /ve /d "{path}" /f')
+            os.system(fr'reg add "HKEY_CLASSES_ROOT\Directory\Background\shell\{name}" /v Icon /t REG_SZ /d "{iconPath}" /f')
+            os.system(fr'reg add "HKEY_CLASSES_ROOT\Directory\Background\shell\{name}\command" /ve /d "{path}" /f')
         else:
-            os.system(f'reg add "HKEY_CLASSES_ROOT\Directory\Background\shell\\{name}\command" /ve /d "{path}" /f')
+            os.system(fr'reg add "HKEY_CLASSES_ROOT\Directory\Background\shell\{name}\command" /ve /d "{path}" /f')
         return self
 
     def addFileLeftKeyClick(self, name, path, iconPath=None, args=False):
         if iconPath:
-            os.system(f'reg add "HKEY_CLASSES_ROOT\*\shell\\{name}" /v Icon /t REG_SZ /d "{iconPath}" /f')
+            os.system(fr'reg add "HKEY_CLASSES_ROOT\*\shell\{name}" /v Icon /t REG_SZ /d "{iconPath}" /f')
             if args:
-                os.system(f'reg add "HKEY_CLASSES_ROOT\*\shell\\{name}\command" /ve /d "{path + " %1"}" /f')
+                os.system(fr'reg add "HKEY_CLASSES_ROOT\*\shell\{name}\command" /ve /d "{path + " %1"}" /f')
             else:
-                os.system(f'reg add "HKEY_CLASSES_ROOT\*\shell\\{name}\command" /ve /d "{path}" /f')
+                os.system(fr'reg add "HKEY_CLASSES_ROOT\*\shell\{name}\command" /ve /d "{path}" /f')
         else:
             if args:
-                os.system(f'reg add "HKEY_CLASSES_ROOT\*\shell\\{name}\command" /ve /d "{path + " %1"}" /f')
+                os.system(fr'reg add "HKEY_CLASSES_ROOT\*\shell\{name}\command" /ve /d "{path + " %1"}" /f')
             else:
-                os.system(f'reg add "HKEY_CLASSES_ROOT\*\shell\\{name}\command" /ve /d "{path}" /f')
+                os.system(fr'reg add "HKEY_CLASSES_ROOT\*\shell\{name}\command" /ve /d "{path}" /f')
         return self
 
 if __name__ == '__main__':
     # Regedit().addFileLeftKeyClick('leftClick', 'notepad.exe', "C:\IDE\Icons\clion.ico", True)
-    pass
+    SystemCtl().setPassword(200771)
+    # pass

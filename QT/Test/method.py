@@ -275,5 +275,4 @@ class Regedit:
 
 if __name__ == '__main__':
     # Regedit().addFileLeftKeyClick('leftClick', 'notepad.exe', "C:\IDE\Icons\clion.ico", True)
-    SystemCtl().setPassword(200771)
-    # pass
+    pass

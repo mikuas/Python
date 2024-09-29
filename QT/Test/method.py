@@ -8,9 +8,15 @@ import comtypes
 import pyautogui
 import argparse
 from PySide6.QtCore import QTimer
+from parentMethod import (
+    KeyboardControl as Keyboard,
+    SystemCtl as System,
+    TerminalControl as Terminal,
+    FileControl as FileCtl,
+    Regedit as Re
+)
 
-
-class KeyboardControl:
+class KeyboardControl(Keyboard):
 
     def __init__(self):
         pass
@@ -30,22 +36,20 @@ class KeyboardControl:
 
         return self
 
-    def keyPress(self, keys: str):
-        # 依次点击
+    def keyPress(self, keys):
         result = keys.split(' ')
         for i in range(len(result)):
             pyautogui.press(result[i])
 
         return self
 
-    def Hotkey(self, keys: str):
-        # 共同点击
+    def Hotkey(self, keys):
         pyautogui.hotkey(tuple(keys.split(' ')))
 
         return self
 
 
-class SystemCtl:
+class SystemCtl(System):
 
     def __init__(self):
         pass
@@ -67,9 +71,13 @@ class SystemCtl:
 
         return self
 
-    def copyFiles(self, copyFilePath: list, pastePath):
-        for _ in range(len(copyFilePath)):
-            os.system(f'copy {copyFilePath[_]} {pastePath}')
+    def copyFiles(self, copyFilePath, pastePath):
+        if type(copyFilePath) is str:
+            for _ in range(len(copyFilePath)):
+                os.system(f'copy {copyFilePath[_]} {pastePath}')
+        else:
+            for _ in range(len(copyFilePath)):
+                os.system(f'copy {copyFilePath[_]} {pastePath[_]}')
 
         return self
 
@@ -84,7 +92,7 @@ class SystemCtl:
         return self
 
     @staticmethod
-    def setPassword(password):
+    def setPassword(password, **kwargs):
         os.system('echo %username% > userName')
 
         with open('./userName', 'r') as file:
@@ -103,31 +111,27 @@ class SystemCtl:
             os.system(f'net user {userName} {password} /add')
         return self
 
-    @staticmethod
-    def getFilePath(fileName):
-        print(f"Requested file: {fileName}")
-        # 获取打包后的可执行文件所在的临时目录
-        basePath = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
-        # 构建文件的绝对路径
-        return os.path.join(basePath, fileName)
+    def deleteUser(self, userName):
+        os.system(f'net user {userName} /del')
+
+        return self
 
     @staticmethod
     # 获取系统音量
-    def getAudioEndpointVolume():
+    def getAudioEndpointVolume(**kwargs):
         try:
             devices = AudioUtilities.GetSpeakers()
             interface = devices.Activate(
                 IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
             volume = cast(interface, POINTER(IAudioEndpointVolume))
-            # GetMasterVolumeLevelScalar()
-            return volume
+            return volume, volume.GetMasterVolumeLevelScalar()
         except comtypes.COMError as e:
             print(f"COMError: {e}")
             return None
 
     # 取消静音
     def clearMute(self):
-        volume = self.getAudioEndpointVolume()
+        volume = self.getAudioEndpointVolume()[0]
         if volume is None:
             print("无法获取音频设备")
             return self
@@ -144,31 +148,31 @@ class SystemCtl:
             return self
 
     def setMute(self):
-        volume = self.getAudioEndpointVolume()
+        volume = self.getAudioEndpointVolume()[0]
         if volume is None:
             print('无法获取音频设备')
-            return
+            return self
         volume.SetMute(1, None)
+        print('系统已静音')
+
+        return self
 
     # 设置音量
-    def setAudio(self, num: float):
+    def setAudio(self, audio):
         devices = AudioUtilities.GetSpeakers()
         interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
         volume_interface = cast(interface, POINTER(IAudioEndpointVolume))
-        # 设置音量（0.0到1.0之间的浮点数）
-        volume_interface.SetMasterVolumeLevelScalar(num, None)
+        volume_interface.SetMasterVolumeLevelScalar(audio, None)
+
         return self
 
-class TerminalControl:
+
+class TerminalControl(Terminal):
     def __init__(self):
         pass
 
     @staticmethod
-    def createTerminalArgs(args: list, types: list, helpInfo: list, requireds: list[bool], default: list, defaultValue: list, isList: list):
-        """
-        default defaultValue 一一对应
-        有defaultValue type 写 ?
-        """
+    def createTerminalArgs(args, types, helpInfo, requireds, default, defaultValue, isList, **kwargs):
         parser = argparse.ArgumentParser(description='getArgs')
         i = 0
         for arg in args:
@@ -182,13 +186,8 @@ class TerminalControl:
             i += 1
         return parser.parse_args()
 
-    def runTerminalArgs(self, element: list,asynchronous=False):
+    def runTerminalArgs(self, element, asynchronous=False):
         import subprocess
-        '''
-        element
-        ['运行方式(bash, cmd, python...)', 'filePath', args...]
-        python -参数 args...
-        '''
         if asynchronous:
             processes = []
             # 异步运行
@@ -203,34 +202,39 @@ class TerminalControl:
             subprocess.run(element)
         return self
 
-class FileControl:
+class FileControl(FileCtl):
 
     def __init__(self):
         pass
 
     @staticmethod
-    def getDirFiles(path):
+    def getDirFiles(path, **kwargs):
         return os.listdir(path)
 
     @staticmethod
-    def isDir(fileName):
+    def getFilePackagePath(fileName, **kwargs):
+        print(f"Requested file: {fileName}")
+        basePath = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
+        return os.path.join(basePath, fileName)
+
+    @staticmethod
+    def getFileAbsolutePath(fileName, **kwargs):
+        return os.path.abspath(fileName)
+
+    @staticmethod
+    def isDir(fileName, **kwargs):
         return os.path.isdir(fileName)
 
     @staticmethod
-    def getSuffixName(fileName):
+    def getSuffixName(fileName, **kwargs):
         return fileName.split('.')[-1]
 
     @staticmethod
-    def getDirPath():
+    def getDirPath(parent=None, **kwargs):
         from PySide6.QtWidgets import QFileDialog
-        return QFileDialog.getExistingDirectory(None, "选择目录")
+        return QFileDialog.getExistingDirectory(parent, "选择目录")
 
-    def imageReName(self, path) -> list:
-        """
-        :param path: DirPath
-        :return: self
-        支持 jpg png
-        """
+    def imageReName(self, path):
         i = 0
         print(self.getDirFiles(path))
         result = []
@@ -246,7 +250,7 @@ class FileControl:
                 i += 1
         return [result, i]
 
-class Regedit:
+class Regedit(Re):
 
     def __init__(self) -> None:
         pass

@@ -240,7 +240,9 @@ class FileControl(FileCtl):
         print(self.getDirFiles(path))
         result = []
         for name in self.getDirFiles(path):
-            if self.getSuffixName(name) == 'jpg' or self.getSuffixName(name) == 'png':
+            element = self.getSuffixName(name)
+            suffix = ['jpg', 'png']
+            if element in suffix:
                 result.append(name)
                 if os.path.exists(os.path.join(path, f"{str(i)}.{self.getSuffixName(name)}")):
                     i += 1

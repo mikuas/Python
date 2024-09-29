@@ -20,6 +20,12 @@ class Window(QWidget):
         self.window.move(500, 500)
         # 设置窗口标题
         self.window.setWindowTitle('Title')
+        # 设置窗口始终位于前方
+        self.window(Qt.WindowStaysOnTopHint)
+        # 设置窗口位于前方
+        self.window.raise_()
+        # 激活窗口
+        self.window.activateWindow()
 
         # 设置文本控件
         self.textEdit = QPlainTextEdit(self.window)

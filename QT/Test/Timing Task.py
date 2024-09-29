@@ -1,7 +1,7 @@
 import os
 import sys
 
-from method import SystemCtl
+from method import FileControl
 from KeyboardTaskWindow import KeyboardTaskWindow
 from KeyboardHotTaskWindow import KeyboardHotTaskWindow
 from ImageReName import ImageRenameWindow
@@ -82,7 +82,11 @@ class MainWindow(QMainWindow):
 
         # 添加点击功能
         self.button.clicked.connect(self.click)
-        self.openWindowButton.clicked.connect(lambda: self.subWindow.window.show())
+        self.openWindowButton.clicked.connect(lambda: (
+            self.subWindow.window.show(),
+            self.subWindow.window.raise_(),
+            self.subWindow.window.activateWindow()
+        ))
 
         # 创建主部件和布局
         mainWidget = QWidget(self)
@@ -130,7 +134,6 @@ class MainWindow(QMainWindow):
 # ---------------------------------------------------------------------------------------------------------- #
 
         self.subWindow = SubWindow(
-            self,
             self.style,
             KeyboardTaskWindow(width, height),
             KeyboardHotTaskWindow(width, height),
@@ -213,8 +216,8 @@ def main():
     window = MainWindow(
         650,
         350,
-        SystemCtl().getFilePath('./trayIcon.png'),
-        SystemCtl().getFilePath('./background.png')
+        FileControl().getFilePackagePath('./trayIcon.png'),
+        FileControl().getFilePackagePath('./background.png')
     )
     window.show()
     sys.exit(app.exec())

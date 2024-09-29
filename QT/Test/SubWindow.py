@@ -5,7 +5,6 @@ from PySide6.QtGui import Qt
 class SubWindow:
     def __init__(
             self,
-            parent,
             style,
             keyboardTaskWindow,
             keyboardHotTaskWindow,
@@ -19,22 +18,24 @@ class SubWindow:
         self.keyboardButton = QPushButton('依次点击键盘任务', self.window)
         self.keyboardButton.setStyleSheet(style[2])
         self.keyboardButton.setFixedSize(250, 50)
-        self.keyboardButton.clicked.connect(lambda: keyboardTaskWindow.show())
+        self.keyboardButton.clicked.connect(lambda: self.openWindow(keyboardTaskWindow))
 
         self.keyboardHotButton = QPushButton('组合键任务', self.window)
         self.keyboardHotButton.setStyleSheet(style[2])
         self.keyboardHotButton.setFixedSize(250, 50)
-        self.keyboardHotButton.clicked.connect(lambda: keyboardHotTaskWindow.show())
+        self.keyboardHotButton.clicked.connect(lambda: self.openWindow(keyboardHotTaskWindow))
 
         self.imageRenameButton = QPushButton('图片重命名', self.window)
         self.imageRenameButton.setStyleSheet(style[2])
         self.imageRenameButton.setFixedSize(250, 50)
-        self.imageRenameButton.clicked.connect(lambda: (QMessageBox.information(self.window, '提示', '从0开始,依次命名,当前仅支持jpg,png'), imageReNameWindow.show()))
+        self.imageRenameButton.clicked.connect(lambda: (
+                QMessageBox.information(self.window, '提示', '从0开始,依次命名,当前仅支持jpg,png'), self.openWindow(imageReNameWindow)
+        ))
 
         self.calcWindowButton = QPushButton('简易计算器', self.window)
         self.calcWindowButton.setStyleSheet(style[2])
         self.calcWindowButton.setFixedSize(250, 50)
-        self.calcWindowButton.clicked.connect(lambda: calcWindow.show())
+        self.calcWindowButton.clicked.connect(lambda: self.openWindow(calcWindow))
 
         layout = QVBoxLayout(self.window)
         layout.addWidget(self.keyboardButton, alignment=Qt.AlignCenter)
@@ -50,5 +51,8 @@ class SubWindow:
         event.ignore()
         window.hide()
 
-    def show(self):
-        self.window.show()
+    @staticmethod
+    def openWindow(parent):
+        parent.show()
+        parent.raise_()
+        parent.activateWindow()

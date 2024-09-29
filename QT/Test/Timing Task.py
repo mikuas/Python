@@ -1,7 +1,7 @@
 import os
 import sys
 
-from method import FileControl
+from method import FileControl, SystemCtl
 from KeyboardTaskWindow import KeyboardTaskWindow
 from KeyboardHotTaskWindow import KeyboardHotTaskWindow
 from ImageReName import ImageRenameWindow

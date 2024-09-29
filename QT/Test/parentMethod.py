@@ -46,6 +46,9 @@ class KeyboardControl:
 
 class SystemCtl:
 
+    def __init__(self):
+        pass
+
     def systemOption(self, time: int | float, element: str) -> 'SystemCtl':
         """
         :param time: 等待时间

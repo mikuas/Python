@@ -168,6 +168,7 @@ class SystemCtl(System):
 
 
 class TerminalControl(Terminal):
+
     def __init__(self):
         pass
 
@@ -252,7 +253,7 @@ class FileControl(FileCtl):
 
 class Regedit(Re):
 
-    def __init__(self) -> None:
+    def __init__(self):
         pass
 
     def addLeftKeyClick(self, name, path, iconPath=None):

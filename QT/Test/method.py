@@ -195,6 +195,7 @@ class TerminalControl(Terminal):
             subprocess.run(element)
         return self
 
+
 class FileControl(FileCtl):
 
     def __init__(self):
@@ -245,6 +246,7 @@ class FileControl(FileCtl):
                 i += 1
         return [result, i]
 
+
 class Regedit(Re):
 
     def __init__(self):
@@ -271,6 +273,7 @@ class Regedit(Re):
             else:
                 os.system(fr'reg add "HKEY_CLASSES_ROOT\*\shell\{name}\command" /ve /d "{path}" /f')
         return self
+
 
 if __name__ == '__main__':
     Regedit().addFileLeftKeyClick('Notepad', 'notepad.exe', r"C:\IDE\Icons\clion.ico", True)

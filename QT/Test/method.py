@@ -117,7 +117,6 @@ class SystemCtl(System):
         return self
 
     @staticmethod
-    # 获取系统音量
     def getAudioEndpointVolume(**kwargs):
         try:
             devices = AudioUtilities.GetSpeakers()
@@ -129,19 +128,17 @@ class SystemCtl(System):
             print(f"COMError: {e}")
             return None
 
-    # 取消静音
     def clearMute(self):
         volume = self.getAudioEndpointVolume()[0]
         if volume is None:
-            print("无法获取音频设备")
             return self
         try:
             if volume.GetMute():
                 volume.SetMute(0, None)
-                print("系统已解除静音")
+                print("System not Mute")
                 return self
             else:
-                print("系统未处于静音状态")
+                print("System Mute")
                 return self
         except comtypes.COMError as e:
             print(f"COMError: {e}")
@@ -150,14 +147,12 @@ class SystemCtl(System):
     def setMute(self):
         volume = self.getAudioEndpointVolume()[0]
         if volume is None:
-            print('无法获取音频设备')
             return self
         volume.SetMute(1, None)
-        print('系统已静音')
+        print('System Mute')
 
         return self
 
-    # 设置音量
     def setAudio(self, audio):
         devices = AudioUtilities.GetSpeakers()
         interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
@@ -191,13 +186,10 @@ class TerminalControl(Terminal):
         import subprocess
         if asynchronous:
             processes = []
-            # 异步运行
-            # args1,2,3 为 fileName 的 位置传参
             proc = subprocess.Popen(element)
             processes.append(proc)
 
             for proc in processes:
-                # 等待所有的进程完成
                 proc.wait()
         else:
             subprocess.run(element)
@@ -281,5 +273,5 @@ class Regedit(Re):
         return self
 
 if __name__ == '__main__':
-    # Regedit().addFileLeftKeyClick('leftClick', 'notepad.exe', "C:\IDE\Icons\clion.ico", True)
+    Regedit().addFileLeftKeyClick('Notepad', 'notepad.exe', r"C:\IDE\Icons\clion.ico", True)
     pass

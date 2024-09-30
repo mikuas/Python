@@ -2,7 +2,7 @@
 
 ~~~python
 import sys
-from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLineEdit, QMessageBox, QMainWindow, QPlainTextEdit
+from PySide6.QtWidgets import QLabel, QWidget, QComboBox, QVBoxLayout, QPushButton, QLineEdit, QMessageBox, QMainWindow, QPlainTextEdit
 from PySide6.QtCore import QTimer, Qt
 from PySide6.QtGui import QPalette, QBrush, QPixmap
 
@@ -26,6 +26,16 @@ class Window(QWidget):
         self.window.raise_()
         # 激活窗口
         self.window.activateWindow()
+        
+        # 创建标签
+        self.label = QLabel('Selector')
+    
+        # 创建下拉菜单
+        self.comboBox = QComboBox()
+        # 添加内容
+        self.comboBox.addItem('element')
+        # 获取当前内容
+        self.comboBox.currentText()
 
         # 设置文本控件
         self.textEdit = QPlainTextEdit(self.window)
@@ -46,6 +56,8 @@ class Window(QWidget):
         
         # 设置按钮
         self.button = QPushButton('Name', self.window)
+        # 设置悬停为点击手势
+        self.button.setCursor(Qt.PointingHandCursor)
         # 设置按钮背景颜色
         self.button.setStyleSheet("background-color: COLOR")
         # 设置按钮背景图片

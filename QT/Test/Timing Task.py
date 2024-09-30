@@ -7,6 +7,7 @@ from KeyboardHotTaskWindow import KeyboardHotTaskWindow
 from ImageReNameWindow import ImageRenameWindow
 from SubWindow import SubWindow
 from Calc import CaliWindow
+from RegeditWindow import RegeditWindow
 
 from PySide6.QtWidgets import (
     QApplication,
@@ -74,11 +75,13 @@ class MainWindow(QMainWindow):
         self.button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.button.setStyleSheet(self.style[1])
         self.button.setMaximumSize(200, 100)
+        self.button.setCursor(Qt.PointingHandCursor)
 
         self.openWindowButton = QPushButton('更多功能', self)
         self.openWindowButton.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.openWindowButton.setStyleSheet(self.style[1])
         self.openWindowButton.setMaximumSize(200, 100)
+        self.openWindowButton.setCursor(Qt.PointingHandCursor)
 
         # 添加点击功能
         self.button.clicked.connect(self.click)
@@ -138,7 +141,8 @@ class MainWindow(QMainWindow):
             KeyboardTaskWindow(width, height),
             KeyboardHotTaskWindow(width, height),
             ImageRenameWindow(width, height),
-            CaliWindow().calcWindow
+            CaliWindow().calcWindow,
+            RegeditWindow(750, 550)
         )
 
 # ---------------------------------------------------------------------------------------------------------- #

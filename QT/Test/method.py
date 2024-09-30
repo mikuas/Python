@@ -8,7 +8,7 @@ import comtypes
 import pyautogui
 import argparse
 from PySide6.QtCore import QTimer
-from PySide6.QtWidgets import QMessageBox
+from PySide6.QtWidgets import QMessageBox, QFileDialog
 from parentMethod import (
     KeyboardControl as Keyboard,
     SystemCtl as System,
@@ -253,14 +253,23 @@ class FileControl(FileCtl):
         return fileName.split('.')[-1]
 
     @staticmethod
-    def getDirPath(parent=None, message=False, **kwargs):
-        from PySide6.QtWidgets import QFileDialog
+    def getDirPathQT(parent=None, message=False, **kwargs):
         path =  QFileDialog.getExistingDirectory(parent, "选择目录")
         if message:
             if path:
                 QMessageBox.information(parent, '提示', f'选择的目录是:{path}')
             else:
                 QMessageBox.warning(parent, '警告', '未选择目录')
+        return path
+
+    @staticmethod
+    def getFilePathQT(parent=None, message=False, **kwargs):
+        path = QFileDialog.getOpenFileName()[0]
+        if message:
+            if path:
+                QMessageBox.information(parent, '提示', f'选择的文件是:{path}')
+            else:
+                QMessageBox.warning(parent, '警告', '未选择文件')
         return path
 
     def imageReName(self, path):
@@ -295,6 +304,10 @@ class Regedit(Re):
             os.system(fr'reg add "HKEY_CLASSES_ROOT\Directory\Background\shell\{name}\command" /ve /d "{path}" /f')
         return self
 
+    def delLeftKeyClick(self, name):
+        os.system(fr'reg delete "HKEY_CLASSES_ROOT\Directory\Background\shell\{name}" /f')
+        return self
+
     def addFileLeftKeyClick(self, name, path, iconPath=None, args=False):
         if iconPath:
             os.system(fr'reg add "HKEY_CLASSES_ROOT\*\shell\{name}" /v Icon /t REG_SZ /d "{iconPath}" /f')
@@ -309,7 +322,11 @@ class Regedit(Re):
                 os.system(fr'reg add "HKEY_CLASSES_ROOT\*\shell\{name}\command" /ve /d "{path}" /f')
         return self
 
+    def delFileLeftKeyClick(self, name):
+        os.system(fr'reg delete "HKEY_CLASSES_ROOT\Directory\Background\shell\{name}" /f')
+        return self
+
 
 if __name__ == '__main__':
-    Regedit().addFileLeftKeyClick('Notepad', 'notepad.exe', r"C:\IDE\Icons\clion.ico", True)
+    # Regedit().addFileLeftKeyClick('在记事本里打开', 'C:\\Windows\\System32\\notepad.exe', args=False)
     pass

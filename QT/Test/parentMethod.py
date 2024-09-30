@@ -284,12 +284,21 @@ class FileControl:
         """
         pass
 
-    def getDirPath(self, parent, message) -> str:
+    def getDirPathQT(self, parent, message: bool) -> str:
         """
-        在Qt里选择文件目录
+        在Qt里选择目录路径
         :param parent: 父窗口
         :param message: 是否显示提示信息
-        :return: 文件目录
+        :return: 目录路径
+        """
+        pass
+
+    def getFilePathQT(self, parent, message: bool, **kwargs):
+        """
+        在Qt里选择文件路径
+        :param parent: 父窗口
+        :param message: 是否显示提示信息
+        :return: 文件路径
         """
         pass
 

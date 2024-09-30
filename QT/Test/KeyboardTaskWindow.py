@@ -40,6 +40,7 @@ class KeyboardTaskWindow(QWidget):
 
         self.keyboardTaskButton = QPushButton('开始执行', self)
         self.keyboardTaskButton.setFixedSize(150, 50)
+        self.keyboardTaskButton.setCursor(Qt.PointingHandCursor)
         self.keyboardTaskButton.clicked.connect(self.keyboardClick)
 
         layout = QVBoxLayout(self)

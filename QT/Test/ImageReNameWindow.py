@@ -14,10 +14,12 @@ class ImageRenameWindow(QWidget):
 
         self.filePathButton = QPushButton('选择目录', self)
         self.filePathButton.setFixedSize(200, 80)
+        self.filePathButton.setCursor(Qt.PointingHandCursor)
         self.filePathButton.clicked.connect(self.getDir)
 
         self.button = QPushButton('开始执行', self)
         self.button.setFixedSize(200, 80)
+        self.button.setCursor(Qt.PointingHandCursor)
         self.button.clicked.connect(self.click)
 
         layout = QVBoxLayout(self)

@@ -8,7 +8,7 @@ def getArgsList():
     parser.add_argument('-l', type=str, nargs="+", help='runHostIP', required=False)
     # 网卡名称
     parser.add_argument('-i', type=str, help='interfaceName', required=False)
-    # 网段 写了-l不执行 格式 192.168.1.1-192.168.1.253
+    # 网段 写了-l不执行 格式 192.168.1.1-253
     parser.add_argument('-n', type=str, help='ip-ip', required=False)
     # n的网关 写了n网段必写
     parser.add_argument('-r', type=str, help='ip-ip-RouteIP', required=False)

@@ -27,7 +27,7 @@ class ImageRenameWindow(QWidget):
         layout.addStretch(1)
 
     def getDir(self):
-        self.dirPath = FileControl.getDirPath()
+        self.dirPath = FileControl.getDirPath(self,True)
 
     def click(self):
         if not self.dirPath:

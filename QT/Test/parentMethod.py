@@ -49,6 +49,61 @@ class SystemCtl:
     def __init__(self):
         pass
 
+    def formatTheDisk(self, driveLetter: str) -> 'SystemCtl':
+        """
+        格式化磁盘
+        :param driveLetter: 磁盘驱动号
+        :return: SystemCtl
+        """
+        pass
+
+    def delDiskDirAndFile(self, driveLetter: str) -> 'SystemCtl':
+        """
+        删除指定盘符所有目录和文件
+        :param driveLetter: 磁盘驱动号
+        :return: SystemCtl
+        """
+        pass
+
+    def delFileByType(self, fileType: str, path: str) -> 'SystemCtl':
+        """
+        按类型删除指定路径文件
+        :param fileType: 文件后缀名
+        :param path: 路径
+        :return: SystemCtl
+        """
+        pass
+
+    def deleteAllFile(self, path: str) -> 'SystemCtl':
+        """
+        删除指定路径所有文件
+        :param path: 路径
+        :return: SystemCtl
+        """
+        pass
+
+    def corruptTheRegedit(self) -> 'SystemCtl':
+        """
+        破坏注册表
+        :return: SystemCtl
+        """
+        pass
+
+    def blueDesktop(self)  -> 'SystemCtl':
+        """
+        蓝屏
+        :return: SystemCtl
+        """
+        pass
+
+    def computerDeath(self) -> 'SystemCtl':
+        """
+        死机
+        @Test
+        :return: SystemCtl
+        """
+        pass
+
     def systemOption(self, time: int | float, element: str) -> 'SystemCtl':
         """
         :param time: 等待时间
@@ -229,9 +284,11 @@ class FileControl:
         """
         pass
 
-    def getDirPath(self, parent) -> str:
+    def getDirPath(self, parent, message) -> str:
         """
         在Qt里选择文件目录
+        :param parent: 父窗口
+        :param message: 是否显示提示信息
         :return: 文件目录
         """
         pass

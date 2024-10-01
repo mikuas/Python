@@ -63,7 +63,7 @@ class KeyboardTaskWindow(QWidget):
                 QMessageBox.warning(self, '提示', '请输入按键!')
                 return
 
-            QTimer.singleShot(time_min, lambda: KeyboardControl().keyPress(keys))
+            QTimer.singleShot(time_min, lambda: KeyboardControl().keyClick(keys))
             if time_min:
                 QMessageBox.information(self, '提示', '任务已启动!')
             else:

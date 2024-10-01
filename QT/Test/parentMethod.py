@@ -27,7 +27,7 @@ class KeyboardControl:
         """
         pass
 
-    def keyPress(self, keys: str) -> 'KeyboardControl':
+    def keyClick(self, keys: str) -> 'KeyboardControl':
         """
         按传入的按键,多个按键用空格隔开
         :param keys: 按键
@@ -47,6 +47,20 @@ class KeyboardControl:
 class SystemCtl:
 
     def __init__(self):
+        pass
+
+    def getStrToPaste(self, string: str) -> 'SystemCtl':
+        """
+        把字符串复制到粘贴板
+        :param string: 要复制的字符串
+        :return: SystemCtl
+        """
+
+    def getPasteContent(self) -> str:
+        """
+        获取粘贴板内容
+        :return: 粘贴板内容
+        """
         pass
 
     def formatTheDisk(self, driveLetter: str) -> 'SystemCtl':
@@ -209,21 +223,21 @@ class TerminalControl:
 
     def createTerminalArgs(
             self,
-            args: list,
+            args: str,
             types: list,
-            helpInfo: list,
+            helpInfos: str | list,
             requireds: list[bool],
-            default: list,
-            defaultValue: list,
-            isList: list
+            isList: list,
+            default: list = None,
+            defaultValue: list = None
     ):
         """
         创建终端传参, 通过参数对象.参数名,获取参数
         :param args: 要传递的参数
         :param types: 类型
-        :param helpInfo: 提示信息
+        :param helpInfos: 提示信息
         :param requireds: 是否必填
-        :param default: 要传递的参数里的默认参数
+        :param default: 要传递的参数里的默认参数, 没有不写
         :param defaultValue: 默认参数的值,与默认参数一一对应, 填了此参数types写 ?
         :param isList: 是否获取的是列表类型
         :return: 获取参数对象
@@ -313,7 +327,7 @@ class FileControl:
 
 class Regedit:
 
-    def __init__(self) -> None:
+    def __init__(self):
         pass
 
     def addLeftKeyClick(self, name: str, path: str, iconPath=None) -> 'Regedit':
@@ -336,3 +350,20 @@ class Regedit:
         :return: Regedit
         """
         pass
+
+    def delLeftKeyClick(self, name: str) -> 'Regedit':
+        """
+        删除右键点击空白选项
+        :param name: 值名称
+        :return: Regedit
+        """
+        pass
+
+    def delFileLeftKeyClick(self, name) -> 'Regedit':
+        """
+        删除右键点击文件选项
+        :param name: 值名称
+        :return: Regedit
+        """
+        pass
+

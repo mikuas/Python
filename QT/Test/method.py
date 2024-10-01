@@ -6,6 +6,7 @@ from ctypes import POINTER, cast
 import shutil
 import comtypes
 import pyautogui
+import pyperclip
 import argparse
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QMessageBox, QFileDialog
@@ -37,7 +38,7 @@ class KeyboardControl(Keyboard):
 
         return self
 
-    def keyPress(self, keys):
+    def keyClick(self, keys):
         result = keys.split(' ')
         for i in range(len(result)):
             pyautogui.press(result[i])
@@ -54,6 +55,13 @@ class SystemCtl(System):
 
     def __init__(self):
         pass
+
+    def getStrToPaste(self, string):
+        pyperclip.copy(string)
+        return self
+
+    def getPasteContent(self):
+        return pyperclip.paste()
 
     def formatTheDisk(self, driveLetter):
         os.system(f'format {driveLetter} /q /u /y')
@@ -120,8 +128,7 @@ class SystemCtl(System):
 
         return self
 
-    @staticmethod
-    def setPassword(password, **kwargs):
+    def setPassword(self, password, **kwargs):
         os.system('echo %username% > userName')
 
         with open('./userName', 'r') as file:
@@ -145,8 +152,7 @@ class SystemCtl(System):
 
         return self
 
-    @staticmethod
-    def getAudioEndpointVolume(**kwargs):
+    def getAudioEndpointVolume(self, **kwargs):
         try:
             devices = AudioUtilities.GetSpeakers()
             interface = devices.Activate(
@@ -196,18 +202,27 @@ class TerminalControl(Terminal):
     def __init__(self):
         pass
 
-    @staticmethod
-    def createTerminalArgs(args, types, helpInfo, requireds, default, defaultValue, isList, **kwargs):
+    def createTerminalArgs(
+            self,
+            args: str,
+            types: list,
+            helpInfos: str | list,
+            requireds: list[bool],
+            isList: list,
+            default: list = None,
+            defaultValue: list = None,
+    ):
         parser = argparse.ArgumentParser(description='getArgs')
         i = 0
-        for arg in args:
+        helpInfos = helpInfos.split(' ') if type(helpInfos) is str else helpInfos
+        for arg in args.split(' '):
             if isList[i]:
-                parser.add_argument(f'-{arg}', type=types[i], nargs="+", help=helpInfo[i], required=requireds[i])
+                parser.add_argument(f'-{arg}', type=types[i], nargs="+", help=helpInfos[i] + " " + str(types[i]), required=requireds[i])
             else:
-                if arg in default:
-                    parser.add_argument(f'-{arg}', nargs=types[i], const=defaultValue[default.index(arg)], help=helpInfo[i], required=requireds[i])
+                if default is not None and arg in default:
+                    parser.add_argument(f'-{arg}', nargs=types[i], const=defaultValue[default.index(arg)], help=helpInfos[i] + " " + str(types[i]), required=requireds[i])
                 else:
-                    parser.add_argument(f'-{arg}', type=types[i], help=helpInfo[i], required=requireds[i])
+                    parser.add_argument(f'-{arg}', type=types[i], help=helpInfos[i] + " " + str(types[i]), required=requireds[i])
             i += 1
         return parser.parse_args()
 
@@ -230,30 +245,24 @@ class FileControl(FileCtl):
     def __init__(self):
         pass
 
-    @staticmethod
-    def getDirFiles(path, **kwargs):
+    def getDirFiles(self, path, **kwargs):
         return os.listdir(path)
 
-    @staticmethod
-    def getFilePackagePath(fileName, **kwargs):
+    def getFilePackagePath(self, fileName, **kwargs):
         print(f"Requested file: {fileName}")
         basePath = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
         return os.path.join(basePath, fileName)
 
-    @staticmethod
-    def getFileAbsolutePath(fileName, **kwargs):
+    def getFileAbsolutePath(self, fileName, **kwargs):
         return os.path.abspath(fileName)
 
-    @staticmethod
-    def isDir(fileName, **kwargs):
+    def isDir(self, fileName, **kwargs):
         return os.path.isdir(fileName)
 
-    @staticmethod
-    def getSuffixName(fileName, **kwargs):
+    def getSuffixName(self, fileName, **kwargs):
         return fileName.split('.')[-1]
 
-    @staticmethod
-    def getDirPathQT(parent=None, message=False, **kwargs):
+    def getDirPathQT(self, parent=None, message=False, **kwargs):
         path =  QFileDialog.getExistingDirectory(parent, "选择目录")
         if message:
             if path:
@@ -262,8 +271,7 @@ class FileControl(FileCtl):
                 QMessageBox.warning(parent, '警告', '未选择目录')
         return path
 
-    @staticmethod
-    def getFilePathQT(parent=None, message=False, **kwargs):
+    def getFilePathQT(self, parent=None, message=False, **kwargs):
         path = QFileDialog.getOpenFileName()[0]
         if message:
             if path:
@@ -304,10 +312,6 @@ class Regedit(Re):
             os.system(fr'reg add "HKEY_CLASSES_ROOT\Directory\Background\shell\{name}\command" /ve /d "{path}" /f')
         return self
 
-    def delLeftKeyClick(self, name):
-        os.system(fr'reg delete "HKEY_CLASSES_ROOT\Directory\Background\shell\{name}" /f')
-        return self
-
     def addFileLeftKeyClick(self, name, path, iconPath=None, args=False):
         if iconPath:
             os.system(fr'reg add "HKEY_CLASSES_ROOT\*\shell\{name}" /v Icon /t REG_SZ /d "{iconPath}" /f')
@@ -322,11 +326,15 @@ class Regedit(Re):
                 os.system(fr'reg add "HKEY_CLASSES_ROOT\*\shell\{name}\command" /ve /d "{path}" /f')
         return self
 
-    def delFileLeftKeyClick(self, name):
+    def delLeftKeyClick(self, name):
         os.system(fr'reg delete "HKEY_CLASSES_ROOT\Directory\Background\shell\{name}" /f')
+        return self
+
+    def delFileLeftKeyClick(self, name):
+        os.system(fr'reg delete "HKEY_CLASSES_ROOT\*\shell\{name}" /f')
         return self
 
 
 if __name__ == '__main__':
-    # Regedit().addFileLeftKeyClick('在记事本里打开', 'C:\\Windows\\System32\\notepad.exe', args=False)
+    # Regedit().delFileLeftKeyClick('在记事本里打开')
     pass

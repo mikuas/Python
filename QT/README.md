@@ -155,6 +155,12 @@ class systemIcon(QMainWindow, Window):
         # 托盘图标菜单
         tray_menu = QMenu()
         show_action_tray = QAction('显示窗口', self)
+        # 添加托盘点击事件
+        self.tray_icon.activated.connect(lambda: None)
+        # 判断点击
+        # 左键单击 lambda reason: if reason == QSystemTrayIcon.Trigger:  # 左键单击
+        # 左键双击 lambda reason: if reason == QSystemTrayIcon.DoubleClick:  # 左键双击
+        
         show_action_tray.triggered.connect(self.showWindow)
         # tray_menu.addAction(show_action_tray)
 

@@ -307,6 +307,16 @@ class Regedit(Re):
     def __init__(self):
         pass
 
+    def queryRegeditContent(self, path, Boot=False):
+        if Boot:
+            os.system(fr'reg query "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" > result')
+        else:
+            os.system(fr'reg query {path} > result')
+        with open('result', 'r') as f:
+            result = f.read()
+        os.remove('result')
+        return result
+
     def addLeftKeyClick(self, name, path, iconPath=None):
         if iconPath:
             os.system(fr'reg add "HKEY_CLASSES_ROOT\Directory\Background\shell\{name}" /v Icon /t REG_SZ /d "{iconPath}" /f')

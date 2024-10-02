@@ -330,6 +330,15 @@ class Regedit:
     def __init__(self):
         pass
 
+    def queryRegeditContent(self, path: str, Boot: bool = False) -> str:
+        """
+        查询注册表内容
+        :param Boot: 开机自启动路径
+        :param path: 查询路径
+        :return: 查询结果
+        """
+        pass
+
     def addLeftKeyClick(self, name: str, path: str, iconPath: str = None) -> 'Regedit':
         """
         添加右键点击空白选项

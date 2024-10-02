@@ -55,7 +55,7 @@ class RegeditAddBootWindow(QWidget):
         self.queryButton.setFixedSize(100, 60)
         self.queryButton.setObjectName('queryButton')
         self.queryButton.setMinimumWidth(int(self.width() * 0.5))
-        self.queryButton.clicked.connect(self.queryClick)
+        self.queryButton.clicked.connect(lambda: QMessageBox.information(self, '查询结果', Regedit().queryRegeditContent('', True)))
 
         self.comboBox = QComboBox()
         self.comboBox.setMinimumSize(100, 60)
@@ -96,13 +96,6 @@ class RegeditAddBootWindow(QWidget):
                 }
             """
         )
-
-    def queryClick(self):
-        os.system(r'reg query "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" > result')
-        with open('result', 'r') as f:
-            result = f.read()
-        os.remove('result')
-        QMessageBox.information(self, '查询结果', result)
 
     def addClick(self, name):
         text = self.comboBox.currentText()

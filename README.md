@@ -77,7 +77,7 @@ for item in itertools.product(['A', 'B'], [1, 2]):
 
 * not in(不存在于)
 
-  ~~~ 1pyt
+  ~~~python
   str = '1'
 
   strs = '123'
@@ -97,7 +97,7 @@ for item in itertools.product(['A', 'B'], [1, 2]):
 * is(是同一对象)
 * is not(不是同一对象)
 
-~~~pyt
+~~~python
 bool1 = True
 bool2 = False
 

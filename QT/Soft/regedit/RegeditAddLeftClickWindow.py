@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (
     QMessageBox
 )
 from PySide6.QtCore import Qt
-from QT.Soft.method import FileControl, Regedit
+from PyMyMethods.myMethod import FileControl, Regedit
 
 class RegeditAddLeftWindow(QWidget):
     def __init__(self):

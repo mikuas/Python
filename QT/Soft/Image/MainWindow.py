@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QPushButton, QVBoxLayout, QWidget, QApplication
 from PySide6.QtGui import Qt
-from QT.Soft.Image.ImageReNameWindow import ImageRenameWindow
+from .ImageReNameWindow import ImageRenameWindow
 
 class ImageMainWindow:
     def __init__(self, width, height):
@@ -11,7 +11,7 @@ class ImageMainWindow:
         self.window.setFixedSize(400, 600)
 
         self.imageReNameButton = QPushButton('图片重命名', self.window)
-        self.imageReNameButton.setStyleSheet("font-size: 24px")
+        self.imageReNameButton.setStyleSheet("font-size: 18px")
         self.imageReNameButton.setFixedSize(250, 50)
         self.imageReNameButton.setCursor(Qt.PointingHandCursor)
         self.imageReNameButton.clicked.connect(lambda: self.openWindow(self.imageReNameWindow))

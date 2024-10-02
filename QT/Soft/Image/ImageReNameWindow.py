@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget, QPushButton, QVBoxLayout, QMessageBox
 from PySide6.QtCore import Qt
 
-from QT.Soft.method import FileControl
+from PyMyMethods.myMethod import FileControl
 
 class ImageRenameWindow(QWidget):
     def __init__(self, width, height):

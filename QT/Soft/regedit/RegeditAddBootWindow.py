@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt
 
-from QT.Soft.method import Regedit, FileControl
+from PyMyMethods.myMethod import FileControl, Regedit
 
 
 class RegeditAddBootWindow(QWidget):

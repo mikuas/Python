@@ -1,11 +1,11 @@
 import os
 import sys
 
-from QT.Soft.Calc import CaliWindow
-from method import FileControl, SystemCtl
-from QT.Soft.Keyboard.MainWindow import KeyboardMainWindow
-from QT.Soft.Image.MainWindow import ImageMainWindow
-from QT.Soft.regedit.MainWindow import RegeditMainWindow
+from Calc import CaliWindow
+from PyMyMethods.myMethod import FileControl, SystemCtl
+from Keyboard.MainWindow import KeyboardMainWindow
+from Image.MainWindow import ImageMainWindow
+from regedit.MainWindow import RegeditMainWindow
 from SubWindow import SubWindow
 
 from PySide6.QtWidgets import (
@@ -219,8 +219,11 @@ def main():
     window = MainWindow(
         650,
         350,
+        # package
         FileControl().getFilePackagePath('./trayIcon.png'),
         FileControl().getFilePackagePath('./background.png')
+        # FileControl().getFileAbsolutePath('./trayIcon.png'),
+        # FileControl().getFileAbsolutePath('./background.png')
     )
     window.show()
     sys.exit(app.exec())

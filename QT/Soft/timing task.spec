@@ -3,7 +3,6 @@
 added_files = [
 	('trayIcon.png', '.'),
 	('background.png', '.'),
-	('method.py', '.')
 ]
 
 a = Analysis(
@@ -11,7 +10,7 @@ a = Analysis(
     pathex=['.'],
     binaries=[],
     datas=added_files,
-    hiddenimports=['method'],
+    hiddenimports=[],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

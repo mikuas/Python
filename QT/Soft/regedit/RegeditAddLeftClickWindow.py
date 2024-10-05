@@ -17,6 +17,7 @@ class RegeditAddLeftWindow(QWidget):
         super().__init__()
         self.setMinimumSize(750, 550)
         self.setWindowTitle('添加注册表点击值')
+        self.closeEvent = lambda event: (event.ignore(), self.hide())
         self.filePath = None
         self.iconPath = None
 
@@ -97,10 +98,6 @@ class RegeditAddLeftWindow(QWidget):
                 buttonDict[key].setStyleSheet("background-color: pink; font-size: 32px;")
             else:
                 buttonDict[key].setStyleSheet("background-color: #00FF7F; font-size: 32px;")
-
-    def closeEvent(self, event):
-        event.ignore()
-        self.hide()
 
     def delete(self, name):
         if not name:

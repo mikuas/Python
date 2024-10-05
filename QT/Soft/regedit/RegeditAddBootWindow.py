@@ -1,4 +1,3 @@
-import os
 import sys
 
 from PySide6.QtWidgets import (
@@ -21,6 +20,7 @@ class RegeditAddBootWindow(QWidget):
         super().__init__()
         self.setMinimumSize(750, 500)
         self.setWindowTitle('添加开机启动项')
+        self.closeEvent = lambda event: (event.ignore(), self.hide())
         self.path = None
         self.centerLayout = QVBoxLayout()
 

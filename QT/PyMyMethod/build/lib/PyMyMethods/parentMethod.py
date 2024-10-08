@@ -224,18 +224,18 @@ class TerminalControl:
     def createTerminalArgs(
             self,
             args: str,
-            types: list,
             helpInfos: str | list,
-            requireds: list[bool],
-            isList: list,
+            requireds: list[bool] = None,
+            types: list = None,
+            isList: list[bool] = None,
             default: list = None,
-            defaultValue: list = None
+            defaultValue: list = None,
     ):
         """
         创建终端传参, 通过参数对象.参数名,获取参数
-        :param args: 要传递的参数
-        :param types: 类型
-        :param helpInfos: 提示信息
+        :param args: 要传递的参数 多个参数用空格隔开
+        :param types: 类型 不写默认str
+        :param helpInfos: 提示信息, 字符类型用空格隔开
         :param requireds: 是否必填
         :param default: 要传递的参数里的默认参数, 没有不写
         :param defaultValue: 默认参数的值,与默认参数一一对应, 填了此参数types写 ?

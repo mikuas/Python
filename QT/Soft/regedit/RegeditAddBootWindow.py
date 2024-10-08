@@ -12,7 +12,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt
 
-from PyMyMethods.myMethod import FileControl, Regedit
+from PyMyMethods.Method import FileControl, Regedit
 
 
 class RegeditAddBootWindow(QWidget):
@@ -32,18 +32,22 @@ class RegeditAddBootWindow(QWidget):
 
         self.pathButton = QPushButton('选择启动路径', self)
         self.pathButton.setFixedSize(100, 60)
+        self.pathButton.setObjectName('pathButton')
+        self.pathButton.setCursor(Qt.PointingHandCursor)
         self.pathButton.setMinimumWidth(int(self.width() * 0.5))
         self.pathButton.clicked.connect(self.click)
         self.pathButton.setStyleSheet("background-color: pink; font-size: 32px")
 
         self.addButton = QPushButton('添加', self)
         self.addButton.setFixedSize(100, 60)
+        self.addButton.setCursor(Qt.PointingHandCursor)
         self.addButton.setObjectName('addButton')
         self.addButton.setMinimumWidth(int(self.width() * 0.5))
         self.addButton.clicked.connect(lambda: self.addClick(self.textEdit.toPlainText()))
 
         self.delButton = QPushButton('删除', self)
         self.delButton.setFixedSize(100, 60)
+        self.delButton.setCursor(Qt.PointingHandCursor)
         self.delButton.setObjectName('delButton')
         self.delButton.setMinimumWidth(int(self.width() * 0.5))
         self.delButton.clicked.connect(lambda: self.delClick(self.textEdit.toPlainText()))
@@ -53,6 +57,7 @@ class RegeditAddBootWindow(QWidget):
 
         self.queryButton = QPushButton('查询', self)
         self.queryButton.setFixedSize(100, 60)
+        self.queryButton.setCursor(Qt.PointingHandCursor)
         self.queryButton.setObjectName('queryButton')
         self.queryButton.setMinimumWidth(int(self.width() * 0.5))
         self.queryButton.clicked.connect(lambda: QMessageBox.information(self, '查询结果', Regedit().queryRegeditContent('', True)))
@@ -93,6 +98,9 @@ class RegeditAddBootWindow(QWidget):
                 QPushButton#addButton, #delButton, #queryButton {
                     background-color: #00FF7F;
                     font-size: 32px;
+                }
+                QPushButton#addButton:hover, #delButton:hover, #queryButton:hover, #pathButton:hover {
+                    background-color: #00BFFF;
                 }
             """
         )

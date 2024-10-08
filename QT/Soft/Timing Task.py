@@ -2,7 +2,7 @@ import os
 import sys
 
 from Calc import CaliWindow
-from PyMyMethods.myMethod import FileControl, SystemCtl
+from PyMyMethods.Method import FileControl, SystemCtl
 from Keyboard.MainWindow import KeyboardMainWindow
 from Image.MainWindow import ImageMainWindow
 from regedit.MainWindow import RegeditMainWindow
@@ -35,51 +35,29 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(800, 450)
         # 背景图
         self.backgroundPixmap = QPixmap(backgroundPath)
-
-        self.style = [
-            """
-            QLineEdit {
-            font-size:20px;
-            background-color: rgba(72, 209, 204, 128);
-            color: deeppink;  
-            }
-            """,
-            """
-            QPushButton {
-            font-size: 20px;
-            color: dodgerblue;
-            background-color: pink;
-            }
-            """,
-            """
-            QPushButton {
-            font-size: 14px;
-            }
-            """
-        ]
         # 创建输入控件并设置大小策略
         self.textEdit = QLineEdit(self)
         self.textEdit.setPlaceholderText('请输入时间/s,不写默认为0')
-        self.textEdit.setStyleSheet(self.style[0])
+        self.textEdit.setStyleSheet('font-size:20px; background-color: rgba(72, 209, 204, 128); color: deeppink;')
         self.textEdit.setMinimumSize(200, 80)
         self.textEdit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
         self.textCommand = QLineEdit(self)
         self.textCommand.setPlaceholderText('请输入要执行的命令')
-        self.textCommand.setStyleSheet(self.style[0])
+        self.textCommand.setStyleSheet('font-size:20px; background-color: rgba(72, 209, 204, 128); color: deeppink;')
         self.textCommand.setMinimumSize(200, 80)
         self.textCommand.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
         # 创建按钮
         self.button = QPushButton('开始执行', self)
         self.button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.button.setStyleSheet(self.style[1])
+        self.button.setStyleSheet('font-size: 20px; color: dodgerblue; background-color: pink;')
         self.button.setMaximumSize(200, 100)
         self.button.setCursor(Qt.PointingHandCursor)
 
         self.openWindowButton = QPushButton('更多功能', self)
         self.openWindowButton.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.openWindowButton.setStyleSheet(self.style[1])
+        self.openWindowButton.setStyleSheet('font-size: 20px; color: dodgerblue; background-color: pink;')
         self.openWindowButton.setMaximumSize(200, 100)
         self.openWindowButton.setCursor(Qt.PointingHandCursor)
 

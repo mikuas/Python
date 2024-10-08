@@ -30,7 +30,7 @@ class KeyboardMainWindow:
         self.window.setStyleSheet(
             """
                 QPushButton:hover {
-                    background-color: aqua;
+                    background-color: #00BFFF;
                 }
             """
         )

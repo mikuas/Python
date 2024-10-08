@@ -1,3 +1,5 @@
+import sys
+
 from PySide6.QtWidgets import QPushButton, QVBoxLayout, QWidget, QApplication
 from PySide6.QtGui import Qt
 from .RegeditAddLeftClickWindow import RegeditAddLeftWindow
@@ -27,7 +29,7 @@ class RegeditMainWindow:
         self.window.setStyleSheet(
             """
                 QPushButton:hover {
-                    background-color: aqua;
+                    background-color: #00BFFF;
                 }
             """
         )
@@ -50,3 +52,8 @@ class RegeditMainWindow:
         parent.raise_()
         parent.activateWindow()
 
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = RegeditMainWindow()
+    window.window.show()
+    sys.exit(app.exec())

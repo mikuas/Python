@@ -1,4 +1,4 @@
-from PyMyMethods.myMethod import KeyboardControl
+from PyMyMethods.Method import KeyboardControl
 
 from PySide6.QtWidgets import (
     QWidget,
@@ -20,21 +20,13 @@ class KeyboardHotTaskWindow(QWidget):
 
         self.keyboardHotEdit = QLineEdit(self)
         self.keyboardHotEdit.setPlaceholderText('请输入按键,多个按键之间用空格隔开')
-        self.keyboardHotEdit.setStyleSheet("""
-                            QLineEdit {
-                                font-size:18px;    
-                            }
-                        """)
+        self.keyboardHotEdit.setStyleSheet('font-size:18px;')
         self.keyboardHotEdit.setMinimumSize(200, 80)
         self.keyboardHotEdit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
         self.keyboardTimeHotEdit = QLineEdit(self)
         self.keyboardTimeHotEdit.setPlaceholderText('请输入时间/s,不写默认为0')
-        self.keyboardTimeHotEdit.setStyleSheet("""
-                            QLineEdit {
-                                font-size:18px;    
-                            }
-                        """)
+        self.keyboardTimeHotEdit.setStyleSheet('font-size:18px;')
         self.keyboardTimeHotEdit.setMinimumSize(200, 80)
         self.keyboardTimeHotEdit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 

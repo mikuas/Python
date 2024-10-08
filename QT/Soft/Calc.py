@@ -62,7 +62,7 @@ class CaliWindow:
                                 font-size: 45px;
                             }
                             QPushButton:hover {
-                                color: aqua;
+                                color: #00BFFF;
                             }
                         """
                     )
@@ -74,7 +74,7 @@ class CaliWindow:
                             font-size: 32px;
                             }
                             QPushButton:hover {
-                                color: aqua;
+                                color: #00BFFF;
                             }
                         """
                     )
@@ -97,7 +97,7 @@ class CaliWindow:
                     font-size: 40px;
                 }
                 QPushButton:hover {
-                    background-color: #00FF7F;
+                    background-color: rgb(0,255,127);
                 }
             """
         )

@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (
     QMessageBox
 )
 from PySide6.QtCore import Qt
-from PyMyMethods.myMethod import FileControl, Regedit
+from PyMyMethods.Method import FileControl, Regedit
 
 class RegeditAddLeftWindow(QWidget):
     def __init__(self):
@@ -95,9 +95,29 @@ class RegeditAddLeftWindow(QWidget):
     def setButtonStyle(buttonDict: dict):
         for key in buttonDict.keys():
             if key in ['选择文件路径', '选择图标ico(可选)', 'False']:
-                buttonDict[key].setStyleSheet("background-color: pink; font-size: 32px;")
+                buttonDict[key].setStyleSheet(
+                    """
+                    QPushButton {
+                        background-color: pink;
+                        font-size: 32px;
+                    }
+                    QPushButton:hover {
+                        background-color: #00BFFF;
+                    }
+                    """
+                )
             else:
-                buttonDict[key].setStyleSheet("background-color: #00FF7F; font-size: 32px;")
+                buttonDict[key].setStyleSheet(
+                    """
+                    QPushButton {
+                        background-color: #00FF7F;
+                        font-size: 32px;
+                    }
+                    QPushButton:hover {
+                        background-color: aqua;
+                    }
+                    """
+                )
 
     def delete(self, name):
         if not name:

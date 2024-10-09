@@ -198,10 +198,10 @@ def main():
         650,
         350,
         # package
-        FileControl().getFilePackagePath('./trayIcon.png'),
-        FileControl().getFilePackagePath('./background.png')
-        # FileControl().getFileAbsolutePath('./trayIcon.png'),
-        # FileControl().getFileAbsolutePath('./background.png')
+        # FileControl().getFilePackagePath('./trayIcon.png'),
+        # FileControl().getFilePackagePath('./background.png')
+        FileControl().getFileAbsolutePath('./trayIcon.png'),
+        FileControl().getFileAbsolutePath('./background.png')
     )
     window.show()
     sys.exit(app.exec())

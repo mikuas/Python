@@ -361,6 +361,14 @@ class Regedit(Re):
         os.system(fr'reg delete "HKEY_CLASSES_ROOT\*\shell\{name}" /f')
         return self
 
+    def hideLoginUser(self, userName):
+        os.system(fr'reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList" /v {userName} /t REG_DWORD /d 0 /f')
+        return self
+
+    def showLoginUser(self, userName):
+        os.system(fr'reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList" /v {userName} /f')
+        return self
+
 
 if __name__ == '__main__':
     pass

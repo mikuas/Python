@@ -361,6 +361,10 @@ class Regedit(Re):
         os.system(fr'reg delete "HKEY_CLASSES_ROOT\*\shell\{name}" /f')
         return self
 
+    def setWindowsUpdateDays(self, days):
+        os.system(fr'reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "FlightSettingsMaxPauseDays" /t REG_DWORD /d {days} /f')
+        return self
+
     def hideLoginUser(self, userName):
         os.system(fr'reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList" /v {userName} /t REG_DWORD /d 0 /f')
         return self

@@ -146,7 +146,7 @@ def dict_for(my_dict):
 
 
 # dict_value_for(my_dict)
-dict_for(my_dict)
+# dict_for(my_dict)
 
 """
 统计字典的元素数量
@@ -155,7 +155,7 @@ dict_for(my_dict)
 
 my_dict = {"王力鸿": 99, "周杰轮": 88, "林俊节": 77}
 
-print(len(my_dict))
+# print(len(my_dict))
 
 # 练习案例
 
@@ -189,38 +189,54 @@ my_dict = {
 }
 
 
-def employee_data(dict_data):
-    """
-    通过传入的数据查询key的value值
-    :param dict_data: dict
-    :return: None
-    """
+# def employee_data(dict_data):
+#     """
+#     通过传入的数据查询key的value值
+#     :param dict_data: dict
+#     :return: None
+#     """
+#
+#     print("全体员工的数据如下:")
+#     for key in my_dict:
+#         print(f"{key}: {my_dict[key]}")
+#
+#
+# def employee_update_one(dict_date):
+#     """
+#     通过传入的字典吧级别为1的员工级别分别加1，薪水分别张1000
+#     :param dict_date:
+#     :return:
+#     """
+#
+#     print("全体员工级别为一的员工完成升职加薪后为:")
+#     for key in my_dict:
+#         # 通过if判断级别是否为1
+#         if my_dict[key]["级别"] == 1:
+#             # 级别加1
+#             my_dict[key]["级别"] += 1
+#             # 工资加1000
+#             my_dict[key]["工资"] += 1000
+#
+#     employee_data(my_dict)
+#
+#
+# # employee_data(my_dict)
+#
+# employee_update_one(my_dict)
 
-    print("全体员工的数据如下:")
-    for key in my_dict:
-        print(f"{key}: {my_dict[key]}")
+def printDictInfo(element: dict):
+    for key, value in element.items():
+        print(key, value)
+
+def getNewSalary(element: dict):
+    # 级别 1 的加 1000, 级别加 1
+    for key in element.keys():
+        if element[key]['级别'] == 1:
+            element[key]['工资'] += 1000
+            element[key]['级别'] += 1
 
 
-def employee_update_one(dict_date):
-    """
-    通过传入的字典吧级别为1的员工级别分别加1，薪水分别张1000
-    :param dict_date:
-    :return:
-    """
-
-    print("全体员工级别为一的员工完成升职加薪后为:")
-    for key in my_dict:
-        # 通过if判断级别是否为1
-        if my_dict[key]["级别"] == 1:
-            # 级别加1
-            my_dict[key]["级别"] += 1
-            # 工资加1000
-            my_dict[key]["工资"] += 1000
-
-    employee_data(my_dict)
-
-
-employee_data(my_dict)
-
-employee_update_one(my_dict)
-
+printDictInfo(my_dict)
+getNewSalary(my_dict)
+print('-----------------------------------------------')
+printDictInfo(my_dict)

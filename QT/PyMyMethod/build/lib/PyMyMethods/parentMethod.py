@@ -395,3 +395,26 @@ class Regedit:
         """
         pass
 
+    def setWindowsUpdateDays(self, days: int) -> 'Regedit':
+        """
+        设置windows更新最大暂停天数
+        :param days: 天数
+        :return: Regedit
+        """
+        pass
+
+    def hideLoginUser(self, userName: str) -> 'Regedit':
+        """
+        在登陆界面隐藏用户
+        :param userName: 要隐藏的用户
+        :return: Regedit
+        """
+        pass
+
+    def showLoginUser(self, userName: str) -> 'Regedit':
+        """
+        取消在登陆界面隐藏用户
+        :param userName: 要取消隐藏的用户
+        :return: Regedit
+        """
+        pass

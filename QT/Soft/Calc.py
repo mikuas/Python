@@ -8,6 +8,7 @@ class CaliWindow:
         self.window = QWidget()
         self.window.setWindowTitle('简易计算器')
         self.window.setFixedSize(850, 570)
+        self.window.closeEvent = lambda event: self.ignoreCloseEvent(event, self.window)
 
         self.text = QTextEdit(self.window)
         self.text.setFixedSize(830, 100)
@@ -136,6 +137,11 @@ class CaliWindow:
             self.text.setPlainText(result.rstrip('0').rstrip('.') if '.' in result else result)
         except Exception:
             self.text.setPlainText(f'输入有误,表达式不正确')
+
+    @staticmethod
+    def ignoreCloseEvent(event, window):
+        event.ignore()
+        window.hide()
 
 
 if __name__ == '__main__':

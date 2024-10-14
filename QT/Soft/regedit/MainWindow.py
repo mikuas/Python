@@ -4,36 +4,22 @@ from PySide6.QtWidgets import QPushButton, QVBoxLayout, QWidget, QApplication
 from PySide6.QtGui import Qt
 from .RegeditAddLeftClickWindow import RegeditAddLeftWindow
 from .RegeditAddBootWindow import RegeditAddBootWindow
-from .RegeditSetWinUpdateDays import SetWindowsUpdatePauseDays
+from .SetMaxUpdateDays import SetMaxUpdateDays
+# from QT.Soft.regedit.RegeditAddLeftClickWindow import RegeditAddLeftWindow
+# from QT.Soft.regedit.RegeditAddBootWindow import RegeditAddBootWindow
+# from QT.Soft.regedit.SetMaxUpdateDays import SetMaxUpdateDays
 
 class RegeditMainWindow:
     def __init__(self):
         self.regeditAddLeftClickWindow = RegeditAddLeftWindow()
         self.regeditAddBootWindow = RegeditAddBootWindow()
-        self.setWindowsDayWindow = SetWindowsUpdatePauseDays()
+        self.setWindowsDayWindow = SetMaxUpdateDays()
         self.window = QWidget()
         self.window.setWindowTitle('注册表操作')
         self.window.closeEvent = lambda event: self.ignoreCloseEvent(event, self.window)
         self.window.setFixedSize(400, 600)
 
-        self.rLeftButton = QPushButton('添加鼠标右键点机选项', self.window)
-        self.rLeftButton.setStyleSheet("font-size: 18px")
-        self.rLeftButton.setFixedSize(250, 50)
-        self.rLeftButton.setCursor(Qt.PointingHandCursor)
-        self.rLeftButton.clicked.connect(lambda: self.openWindow(self.regeditAddLeftClickWindow))
-
-        self.rAddBootButton = QPushButton('添加开机自启动', self.window)
-        self.rAddBootButton.setStyleSheet("font-size: 18px")
-        self.rAddBootButton.setFixedSize(250, 50)
-        self.rAddBootButton.setCursor(Qt.PointingHandCursor)
-        self.rAddBootButton.clicked.connect(lambda: self.openWindow(self.regeditAddBootWindow))
-
-        self.rAddDaysButton = QPushButton('设置Windows暂停更新天数', self.window)
-        self.rAddDaysButton.setStyleSheet("font-size: 18px")
-        self.rAddDaysButton.setFixedSize(250, 50)
-        self.rAddDaysButton.setCursor(Qt.PointingHandCursor)
-        self.rAddDaysButton.clicked.connect(lambda: self.openWindow(self.setWindowsDayWindow))
-
+        self.createButton()
 
         self.window.setStyleSheet(
             """
@@ -43,19 +29,29 @@ class RegeditMainWindow:
             """
         )
 
+    def createButton(self):
         layout = QVBoxLayout(self.window)
-        layout.addStretch()
-        layout.addWidget(self.rLeftButton, alignment=Qt.AlignCenter)
-        layout.addStretch()
-        layout.addWidget(self.rAddBootButton, alignment=Qt.AlignCenter)
-        layout.addStretch()
-        layout.addWidget(self.rAddDaysButton, alignment=Qt.AlignCenter)
-        layout.addStretch()
+        BtName = ['添加鼠标右键点机选项', '添加开机自启动', '设置Windows暂停更新天数']
+        BtClick = [
+            lambda: self.openWindow(self.regeditAddLeftClickWindow),
+            lambda: self.openWindow(self.regeditAddBootWindow),
+            lambda: self.openWindow(self.setWindowsDayWindow),
+        ]
+
+        for name, function in zip(BtName, BtClick):
+            button = QPushButton(name, self.window)
+            button.setStyleSheet("font-size: 18px")
+            button.setFixedSize(250, 50)
+            button.setCursor(Qt.CursorShape.PointingHandCursor)
+            button.clicked.connect(function)
+            layout.addStretch()
+            layout.addWidget(button, alignment=Qt.AlignmentFlag.AlignCenter)
+            layout.addStretch()
 
     @staticmethod
-    def ignoreCloseEvent(event, window):
+    def ignoreCloseEvent(event, windows):
         event.ignore()
-        window.hide()
+        windows.hide()
 
     @staticmethod
     def openWindow(parent):

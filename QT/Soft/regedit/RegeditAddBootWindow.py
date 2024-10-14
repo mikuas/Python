@@ -33,21 +33,21 @@ class RegeditAddBootWindow(QWidget):
         self.pathButton = QPushButton('选择启动路径', self)
         self.pathButton.setFixedSize(100, 60)
         self.pathButton.setObjectName('pathButton')
-        self.pathButton.setCursor(Qt.PointingHandCursor)
+        self.pathButton.setCursor(Qt.CursorShape.PointingHandCursor)
         self.pathButton.setMinimumWidth(int(self.width() * 0.5))
         self.pathButton.clicked.connect(self.click)
         self.pathButton.setStyleSheet("background-color: pink; font-size: 32px")
 
         self.addButton = QPushButton('添加', self)
         self.addButton.setFixedSize(100, 60)
-        self.addButton.setCursor(Qt.PointingHandCursor)
+        self.addButton.setCursor(Qt.CursorShape.PointingHandCursor)
         self.addButton.setObjectName('addButton')
         self.addButton.setMinimumWidth(int(self.width() * 0.5))
         self.addButton.clicked.connect(lambda: self.addClick(self.textEdit.toPlainText()))
 
         self.delButton = QPushButton('删除', self)
         self.delButton.setFixedSize(100, 60)
-        self.delButton.setCursor(Qt.PointingHandCursor)
+        self.delButton.setCursor(Qt.CursorShape.PointingHandCursor)
         self.delButton.setObjectName('delButton')
         self.delButton.setMinimumWidth(int(self.width() * 0.5))
         self.delButton.clicked.connect(lambda: self.delClick(self.textEdit.toPlainText()))
@@ -57,7 +57,7 @@ class RegeditAddBootWindow(QWidget):
 
         self.queryButton = QPushButton('查询', self)
         self.queryButton.setFixedSize(100, 60)
-        self.queryButton.setCursor(Qt.PointingHandCursor)
+        self.queryButton.setCursor(Qt.CursorShape.PointingHandCursor)
         self.queryButton.setObjectName('queryButton')
         self.queryButton.setMinimumWidth(int(self.width() * 0.5))
         self.queryButton.clicked.connect(lambda: QMessageBox.information(self, '查询结果', Regedit().queryRegeditContent('', True)))
@@ -79,14 +79,14 @@ class RegeditAddBootWindow(QWidget):
                 }
             """
         )
-        self.comboBox.setCursor(Qt.PointingHandCursor)
+        self.comboBox.setCursor(Qt.CursorShape.PointingHandCursor)
         self.comboBox.addItem('当前用户')
         self.comboBox.addItem('所有用户')
 
         mainLayout = QVBoxLayout(self)
 
         for i in [self.textEdit, self.pathButton, self.label, self.comboBox, self.queryButton, self.addButton, self.delButton]:
-            self.centerLayout.addWidget(i, alignment=Qt.AlignCenter)
+            self.centerLayout.addWidget(i, alignment=Qt.AlignmentFlag.AlignCenter)
             self.centerLayout.addStretch()
 
         mainLayout.addStretch()

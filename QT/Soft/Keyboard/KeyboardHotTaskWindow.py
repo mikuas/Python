@@ -22,17 +22,17 @@ class KeyboardHotTaskWindow(QWidget):
         self.keyboardHotEdit.setPlaceholderText('请输入按键,多个按键之间用空格隔开')
         self.keyboardHotEdit.setStyleSheet('font-size:18px;')
         self.keyboardHotEdit.setMinimumSize(200, 80)
-        self.keyboardHotEdit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.keyboardHotEdit.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
         self.keyboardTimeHotEdit = QLineEdit(self)
         self.keyboardTimeHotEdit.setPlaceholderText('请输入时间/s,不写默认为0')
         self.keyboardTimeHotEdit.setStyleSheet('font-size:18px;')
         self.keyboardTimeHotEdit.setMinimumSize(200, 80)
-        self.keyboardTimeHotEdit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.keyboardTimeHotEdit.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
         self.keyboardTaskHotButton = QPushButton('开始执行', self)
         self.keyboardTaskHotButton.setFixedSize(150, 50)
-        self.keyboardTaskHotButton.setCursor(Qt.PointingHandCursor)
+        self.keyboardTaskHotButton.setCursor(Qt.CursorShape.PointingHandCursor)
         self.keyboardTaskHotButton.clicked.connect(self.keyboardHotClick)
 
         layout = QVBoxLayout(self)
@@ -40,7 +40,7 @@ class KeyboardHotTaskWindow(QWidget):
         layout.addStretch(1)
         layout.addWidget(self.keyboardTimeHotEdit)
         layout.addStretch(1)
-        layout.addWidget(self.keyboardTaskHotButton, alignment=Qt.AlignCenter)
+        layout.addWidget(self.keyboardTaskHotButton, alignment=Qt.AlignmentFlag.AlignCenter)
         layout.addStretch(1)
 
     def keyboardHotClick(self):

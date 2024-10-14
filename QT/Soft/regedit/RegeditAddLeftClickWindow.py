@@ -20,17 +20,18 @@ class RegeditAddLeftWindow(QWidget):
         self.closeEvent = lambda event: (event.ignore(), self.hide())
         self.filePath = None
         self.iconPath = None
+        self.buttonDict = {}
 
         mainLayout = QVBoxLayout(self)
         self.centeredLayout = QVBoxLayout()
 
         self.label = QLabel('添加注册表点击值')
         self.label.setStyleSheet("font-size: 32px")
-        self.label.setAlignment(Qt.AlignCenter)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.centeredLayout.addWidget(self.label)
 
         self.comboBox = QComboBox()
-        self.comboBox.setCursor(Qt.PointingHandCursor)
+        self.comboBox.setCursor(Qt.CursorShape.PointingHandCursor)
         self.comboBox.addItem('添加右键点击空白选项')
         self.comboBox.addItem('添加右键点击文件选项')
         self.comboBox.setStyleSheet(
@@ -48,17 +49,17 @@ class RegeditAddLeftWindow(QWidget):
             """
         )
         self.comboBox.setFixedSize(int(self.width() * 0.6), 50)
-        self.centeredLayout.addWidget(self.comboBox, alignment=Qt.AlignCenter)
+        self.centeredLayout.addWidget(self.comboBox, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.addText = QTextEdit(self)
         self.addText.setPlaceholderText('输入要添加的名称')
         self.addText.setStyleSheet('font-size: 26px')
         self.addText.setFixedHeight(60)
         self.addText.setMinimumWidth(int(self.width() * 0.6))
-        self.centeredLayout.addWidget(self.addText, alignment=Qt.AlignCenter)
+        self.centeredLayout.addWidget(self.addText, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.createButtons()
-        self.setButtonStyle(self.button_dict)
+        self.setButtonStyle(self.buttonDict)
 
         mainLayout.addStretch()
         mainLayout.addLayout(self.centeredLayout)
@@ -66,14 +67,12 @@ class RegeditAddLeftWindow(QWidget):
 
     def createButtons(self):
         button_texts = ['选择文件路径', '选择图标ico(可选)', '点击文件是否传参', 'False', '添加', '删除(只需输入名称)']
-
-        self.button_dict = {}
-        self.clickEvent = [
+        clickEvent = [
             lambda: self.click('filePath', True),
             lambda: self.click('iconPath', False),
             '',
-            lambda: self.button_dict['False'].setText('True' if self.button_dict['False'].text() == 'False' else 'False'),
-            lambda: self.start(self.comboBox.currentText(), self.addText.toPlainText().replace(' ', ''), self.filePath, self.iconPath, self.button_dict['False'].text()),
+            lambda: self.buttonDict['False'].setText('True' if self.buttonDict['False'].text() == 'False' else 'False'),
+            lambda: self.start(self.comboBox.currentText(), self.addText.toPlainText().replace(' ', ''), self.filePath, self.iconPath, self.buttonDict['False'].text()),
             lambda: self.delete(self.addText.toPlainText().replace(' ', ''))
         ]
 
@@ -81,15 +80,15 @@ class RegeditAddLeftWindow(QWidget):
             if text == '点击文件是否传参':
                 argsLabel = QLabel(text)
                 argsLabel.setStyleSheet("font-size: 32px")
-                self.centeredLayout.addWidget(argsLabel, alignment=Qt.AlignCenter)
+                self.centeredLayout.addWidget(argsLabel, alignment=Qt.AlignmentFlag.AlignCenter)
                 continue
             button = QPushButton(text, self)
             button.setFixedSize(100, 60)
-            button.setCursor(Qt.PointingHandCursor)
-            button.clicked.connect(self.clickEvent[button_texts.index(text)])
+            button.setCursor(Qt.CursorShape.PointingHandCursor)
+            button.clicked.connect(clickEvent[button_texts.index(text)])
             button.setMinimumWidth(int(self.width() * 0.6))
-            self.button_dict[text] = button
-            self.centeredLayout.addWidget(button, alignment=Qt.AlignCenter)
+            self.buttonDict[text] = button
+            self.centeredLayout.addWidget(button, alignment=Qt.AlignmentFlag.AlignCenter)
 
     @staticmethod
     def setButtonStyle(buttonDict: dict):

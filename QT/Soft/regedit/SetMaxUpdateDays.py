@@ -13,7 +13,7 @@ from PySide6.QtCore import Qt
 from PyMyMethods.Method import Regedit
 
 
-class SetWindowsUpdatePauseDays(QWidget):
+class SetMaxUpdateDays(QWidget):
     def __init__(self):
         super().__init__()
         self.setMinimumSize(500, 320)
@@ -28,7 +28,7 @@ class SetWindowsUpdatePauseDays(QWidget):
         self.textEdit.setMinimumWidth(int(self.width() * 0.5))
 
         self.centerLayout.addStretch()
-        self.centerLayout.addWidget(self.textEdit, alignment=Qt.AlignCenter)
+        self.centerLayout.addWidget(self.textEdit, alignment=Qt.AlignmentFlag.AlignCenter)
         self.centerLayout.addStretch()
 
         self.button = QPushButton("确定", self)
@@ -44,11 +44,11 @@ class SetWindowsUpdatePauseDays(QWidget):
                 }
             """
         )
-        self.button.setCursor(Qt.PointingHandCursor)
+        self.button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.button.setMinimumWidth(int(self.width() * 0.5))
         self.button.clicked.connect(self.click)
 
-        self.centerLayout.addWidget(self.button, alignment=Qt.AlignCenter)
+        self.centerLayout.addWidget(self.button, alignment=Qt.AlignmentFlag.AlignCenter)
         self.centerLayout.addStretch()
 
         mainLayout = QVBoxLayout(self)
@@ -71,6 +71,6 @@ class SetWindowsUpdatePauseDays(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    window = RegeditAddBootWindow()
+    window = SetMaxUpdateDays()
     window.show()
     sys.exit(app.exec())

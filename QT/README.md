@@ -1,9 +1,8 @@
 ## QT
 
 ~~~python
-import sys
 from PySide6.QtWidgets import QLabel, QWidget, QComboBox, QVBoxLayout, QPushButton, QLineEdit, QMessageBox, QMainWindow, QPlainTextEdit
-from PySide6.QtCore import QTimer, Qt
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QPalette, QBrush, QPixmap
 
 
@@ -21,7 +20,8 @@ class Window(QWidget):
         # 设置窗口标题
         self.window.setWindowTitle('Title')
         # 设置窗口始终位于前方
-        self.window(Qt.WindowStaysOnTopHint)
+        # self.window(Qt.WindowStaysOnTopHint)
+        self.window(Qt.WindowType.WindowStaysOnTopHint)
         # 设置窗口位于前方
         self.window.raise_()
         # 激活窗口
@@ -57,7 +57,13 @@ class Window(QWidget):
         # 设置按钮
         self.button = QPushButton('Name', self.window)
         # 设置悬停为点击手势
-        self.button.setCursor(Qt.PointingHandCursor)
+        1. Qt.CursorShape.ArrowCursor：标准箭头光标。
+        2. Qt.CursorShape.PointingHandCursor：手形光标。
+        3. Qt.CursorShape.IBeamCursor：文本输入光标。
+        4. Qt.CursorShape.CrossCursor：十字光标。
+        5. Qt.CursorShape.WaitCursor：等待（沙漏）光标。
+        
+        self.button.setCursor(Qt.CursorShape.PointingHandCursor)
         # 设置按钮背景颜色
         self.button.setStyleSheet("background-color: COLOR")
         # 设置按钮背景图片
@@ -131,11 +137,11 @@ class MainWindow(QMainWindow):
     @staticmethod
     def ignoreCloseEvent(event, window):
         event.ignore()
-    # 使用
+    # 使用lambda
     window1 = QWidget()
     window2 = QWidget()
-    window1.closeEvent = lambda event: ignoreCloseEvent(event, window1)
-    window2.closeEvent = lambda event: ignoreCloseEvent(event, window2)
+    window1.closeEvent = lambda event: ignoreCloseEvent(event, window1.hide())
+    window2.closeEvent = lambda event: ignoreCloseEvent(event, window2.hide())
     
 # 系统托盘
 import sys
@@ -181,7 +187,7 @@ class systemIcon(QMainWindow, Window):
     def setBackground(imagePath):
         # 创建调色板
         palette = QPalette()
-        palette.setBrush(QPalette.Window, QBrush(QPixmap(imagePath)))
+        palette.setBrush(QPalette.ColorRole.Window, QBrush(QPixmap(imagePath)))
         return palette
         
     def showWindow(self):
@@ -230,8 +236,8 @@ class MainWindow(QMainWindow):
         button2.setMaximumSize(500, 200)        
     
         # 设置按钮的大小策略，使其在窗口大小改变时调整高度
-        button1.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        button2.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        button1.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        button2.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         h_layout.addWidget(button1)
         h_layout.addWidget(button2)
@@ -262,7 +268,7 @@ class MainWindow(QMainWindow):
             painter.drawPixmap(0, 0, scaled_pixmap)
         
         '''清晰一点'''
-        def paintEvent(self,event):
+        def paintEvent(self, event):
             # 创建 QPainter 对象
             painter = QPainter(self)
     
@@ -272,7 +278,7 @@ class MainWindow(QMainWindow):
     
             # 将背景图片缩放到窗口大小，并使用平滑转换模式
             scaled_pixmap = self.background_pixmap.scaled(
-                window_width, window_height, Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation)
+                window_width, window_height, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
     
             # 在窗口内绘制缩放后的背景图片
             painter.drawPixmap(0, 0, scaled_pixmap)

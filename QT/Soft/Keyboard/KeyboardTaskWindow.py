@@ -22,17 +22,17 @@ class KeyboardTaskWindow(QWidget):
         self.keyboardEdit.setPlaceholderText('请输入按键,多个按键之间用空格隔开')
         self.keyboardEdit.setStyleSheet('font-size:18px;')
         self.keyboardEdit.setMinimumSize(200, 80)
-        self.keyboardEdit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.keyboardEdit.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
         self.keyboardTimeEdit = QLineEdit(self)
         self.keyboardTimeEdit.setPlaceholderText('请输入时间/s,不写默认为0')
         self.keyboardTimeEdit.setStyleSheet('font-size:18px;')
         self.keyboardTimeEdit.setMinimumSize(200, 80)
-        self.keyboardTimeEdit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.keyboardTimeEdit.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
         self.keyboardTaskButton = QPushButton('开始执行', self)
         self.keyboardTaskButton.setFixedSize(150, 50)
-        self.keyboardTaskButton.setCursor(Qt.PointingHandCursor)
+        self.keyboardTaskButton.setCursor(Qt.CursorShape.PointingHandCursor)
         self.keyboardTaskButton.clicked.connect(self.keyboardClick)
 
         layout = QVBoxLayout(self)
@@ -40,7 +40,7 @@ class KeyboardTaskWindow(QWidget):
         layout.addStretch(1)
         layout.addWidget(self.keyboardTimeEdit)
         layout.addStretch(1)
-        layout.addWidget(self.keyboardTaskButton, alignment=Qt.AlignCenter)
+        layout.addWidget(self.keyboardTaskButton, alignment=Qt.AlignmentFlag.AlignCenter)
         layout.addStretch(1)
 
     def keyboardClick(self):

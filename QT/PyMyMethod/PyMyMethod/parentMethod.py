@@ -1,11 +1,54 @@
-class KeyboardControl:
+class MouseControl:
 
-    def __init__(self):
+    def getMousePosition(self) -> list:
+        """
+        获取当前鼠标位置
+        :return: 鼠标位置
+        """
         pass
 
-    def inputText(self, text: str) -> 'KeyboardControl':
+    def moveMouse(self, x: int, y: int, time: int | float = 0.1) -> 'MouseControl':
+        """
+        移动鼠标到指定位置
+        :param x: 距离屏幕左边的位置
+        :param y: 距离屏幕上面的像素
+        :param time: 时间
+        :return: MouseControl
+        """
+        pass
+
+    def moveMouseRelative(self, x: int, y: int, time: int | float = 0.1) -> 'MouseControl':
+        """
+        相对移动鼠标
+        :param x: 距离当前鼠标左边的像素
+        :param y: 距离当前鼠标上面的像素
+        :param time: 时间
+        :return: MouseControl
+        """
+        pass
+
+    def clickMouse(self, position: str = 'left') -> 'MouseControl':
+        """
+        点击鼠标
+        :param position: 左键,右键
+        :return: MouseControl
+        """
+        pass
+
+    def twoClickMouse(self, position: str = 'left') -> 'MouseControl':
+        """
+        双击鼠标
+        :param position: 左键,右键
+        :return: MouseControl
+        """
+        pass
+
+class KeyboardControl:
+
+    def inputText(self, text: str, interval: float = 0.1) -> 'KeyboardControl':
         """
         键盘输入文本
+        :param interval: 间隔
         :param text: 需要输入的文本
         :return: KeyboardControl
         """
@@ -27,9 +70,10 @@ class KeyboardControl:
         """
         pass
 
-    def keyClick(self, keys: str) -> 'KeyboardControl':
+    def keyClick(self, keys: str, interval: float = 0.1) -> 'KeyboardControl':
         """
         按传入的按键,多个按键用空格隔开
+        :param interval: 间隔
         :param keys: 按键
         :return:  KeyboardControl
         """
@@ -45,9 +89,6 @@ class KeyboardControl:
 
 
 class SystemCtl:
-
-    def __init__(self):
-        pass
 
     def getStrToPaste(self, string: str) -> 'SystemCtl':
         """
@@ -218,9 +259,6 @@ class SystemCtl:
 
 class TerminalControl:
 
-    def __init__(self):
-        pass
-
     def createTerminalArgs(
             self,
             args: str,
@@ -255,9 +293,6 @@ class TerminalControl:
 
 
 class FileControl:
-
-    def __init__(self):
-        pass
 
     def getDirFiles(self, path: str) -> list[str]:
         """
@@ -326,9 +361,6 @@ class FileControl:
 
 
 class Regedit:
-
-    def __init__(self):
-        pass
 
     def queryRegeditContent(self, path: str, Boot: bool = False) -> str:
         """

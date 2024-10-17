@@ -139,9 +139,9 @@ class CaliWindow:
             self.text.setPlainText(f'输入有误,表达式不正确')
 
     @staticmethod
-    def ignoreCloseEvent(event, window):
+    def ignoreCloseEvent(event, windows):
         event.ignore()
-        window.hide()
+        windows.hide()
 
 
 if __name__ == '__main__':

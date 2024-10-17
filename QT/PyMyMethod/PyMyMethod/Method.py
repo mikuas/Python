@@ -13,7 +13,8 @@ from ctypes import POINTER, cast
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QMessageBox, QFileDialog
 
-from PyMyMethods.parentMethod import (
+from PyMyMethod.parentMethod import (
+    MouseControl as Mouse,
     KeyboardControl as Keyboard,
     SystemCtl as System,
     TerminalControl as Terminal,
@@ -21,13 +22,32 @@ from PyMyMethods.parentMethod import (
     Regedit as Re
 )
 
+
+class MouseControl(Mouse):
+
+    def getMousePosition(self):
+        return pyautogui.position()
+
+    def moveMouse(self, x, y, time = 0.1):
+        pyautogui.moveTo(x, y, duration=time)
+        return self
+
+    def moveMouseRelative(self, x, y, time = 0.1):
+        pyautogui.moveRel(x, y, duration=time)
+        return self
+
+    def clickMouse(self, position = 'left'):
+        pyautogui.click(button=position)
+        return self
+
+    def twoClickMouse(self, position = 'left'):
+        pyautogui.doubleClick(button=position)
+        return self
+
 class KeyboardControl(Keyboard):
 
-    def __init__(self):
-        pass
-
-    def inputText(self, text):
-        pyautogui.typewrite(text)
+    def inputText(self, text, interval = 0.1):
+        pyautogui.typewrite(text, interval=interval)
 
         return self
 
@@ -55,9 +75,6 @@ class KeyboardControl(Keyboard):
 
 
 class SystemCtl(System):
-
-    def __init__(self):
-        pass
 
     def getStrToPaste(self, string):
         pyperclip.copy(string)
@@ -202,9 +219,6 @@ class SystemCtl(System):
 
 class TerminalControl(Terminal):
 
-    def __init__(self):
-        pass
-
     def createTerminalArgs(
             self,
             args: str,
@@ -244,9 +258,6 @@ class TerminalControl(Terminal):
 
 
 class FileControl(FileCtl):
-
-    def __init__(self):
-        pass
 
     def getDirFiles(self, path, **kwargs):
         return os.listdir(path)
@@ -303,9 +314,6 @@ class FileControl(FileCtl):
 
 
 class Regedit(Re):
-
-    def __init__(self):
-        pass
 
     def queryRegeditContent(self, path, Boot=False):
         if Boot:
@@ -375,4 +383,5 @@ class Regedit(Re):
 
 
 if __name__ == '__main__':
+    print(MouseControl().getMousePosition())
     pass

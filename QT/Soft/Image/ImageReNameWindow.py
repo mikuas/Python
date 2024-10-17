@@ -14,21 +14,23 @@ class ImageRenameWindow(QWidget):
 
         self.filePathButton = QPushButton('选择目录', self)
         self.filePathButton.setFixedSize(200, 80)
+        self.filePathButton.setObjectName("filePathButton")
         self.filePathButton.setCursor(Qt.CursorShape.PointingHandCursor)
         self.filePathButton.clicked.connect(self.getDir)
 
         self.button = QPushButton('开始执行', self)
         self.button.setFixedSize(200, 80)
+        self.button.setObjectName("button")
         self.button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.button.clicked.connect(self.click)
 
         self.setStyleSheet(
             """
-                QPushButton {
+                QPushButton#filePathButton, #button {
                     font-size: 20px;
                 }
                 
-                QPushButton:hover {
+                QPushButton#filePathButton:hover, #button:hover {
                     background-color: pink;
                 }
             """

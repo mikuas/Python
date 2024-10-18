@@ -1,4 +1,4 @@
-from PyMyMethods.Method import KeyboardControl
+from PyMyMethod.Method import KeyboardControl
 
 from PySide6.QtWidgets import (
     QWidget,

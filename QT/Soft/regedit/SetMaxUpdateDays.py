@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt
 
-from PyMyMethods.Method import Regedit
+from PyMyMethod.Method import Regedit
 
 
 class SetMaxUpdateDays(QWidget):

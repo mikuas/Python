@@ -239,7 +239,7 @@ class TerminalControl(Terminal):
                 if default is not None and arg in default:
                     parser.add_argument(f'-{arg}', nargs='?' if types is None else types[i], const=defaultValue[default.index(arg)], help=helpInfos[i], required=False if requireds is None else requireds[i])
                 else:
-                    parser.add_argument(f'-{arg}', type=str if types is None else types[i], required=False if requireds is None else requireds[i])
+                    parser.add_argument(f'-{arg}', type=str if types is None else types[i], help=helpInfos[i], required=False if requireds is None else requireds[i])
             i += 1
         return parser.parse_args()
 

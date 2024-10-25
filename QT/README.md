@@ -1,7 +1,7 @@
 ## QT
 
 ~~~python
-from PySide6.QtWidgets import QLabel, QWidget, QComboBox, QVBoxLayout, QPushButton, QLineEdit, QMessageBox, QMainWindow, QPlainTextEdit
+from PySide6.QtWidgets import QLabel, QMenuBar, QWidget, QComboBox, QVBoxLayout, QPushButton, QLineEdit, QMessageBox, QMainWindow, QPlainTextEdit
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QPalette, QBrush, QPixmap
 
@@ -104,6 +104,246 @@ class Window(QWidget):
         self.button.move(100, 100)
         # 按钮点击事件
         self.button.clicked.connect('function')
+
+        # 创建菜单栏'
+        menuBar = self.menuBar()
+        # menuBar = QMenuBar(self)
+        # window.setMenuBar(menuBar)
+        # 添加菜单
+        fileMenu = menuBar.addMenu("file")
+        # fileMenu = menuBar.addMenu("file")
+        
+        # 添加菜单项
+        newAction = QAction("New", self)
+        fileMenu.addAction(newAction)
+        # newAction = QAction("New", window)
+        # fileMenu.addAction(newAction)
+        
+        # 连接信号与槽
+        newAction.triggered.connect(self.click)
+
+        # 列表空间
+        # 创建 QListWidget
+        self.list_widget = QListWidget()
+        self.list_widget.addItems(["项 1", "项 2", "项 3"])  # 添加项
+        # 获取选中的项
+        result = self.list_widget.selectedItems()
+        
+        # 多个选项卡之间切换的 Qt 小部件
+        # 创建 QTabWidget 实例
+        self.tab_widget = QTabWidget()
+        # 创建不同的标签页
+        self.tab1 = QWidget()
+        self.tab2 = QWidget()
+        # 将标签页添加到 QTabWidget
+        self.tab_widget.addTab(self.tab1, "标签 1")
+        self.tab_widget.addTab(self.tab2, "标签 2")
+        
+        # 数字输入框
+        # 创建 QSpinBox 实例
+        self.spin_box = QSpinBox()
+        self.spin_box.setMinimum(0)  # 设置最小值
+        self.spin_box.setMaximum(100)  # 设置最大值
+        self.spin_box.setValue(50)  # 设置默认值
+        
+        # 获取当前值
+        self.spin_box.value()
+         # 更新标签内容
+        self.label.setText(f"当前值: {self.spin_box.value()}")
+        
+        # 滑动条
+        # 创建 QSlider 实例
+        self.slider = QSlider(Qt.Horizontal)
+        self.slider.setMinimum(0)
+        self.slider.setMaximum(100)
+        self.slider.setValue(50)
+        
+        # 自定义样式表
+        self.slider.setStyleSheet("""
+            QSlider {
+                background: #ddd;  /* 背景颜色 */
+            }
+            QSlider::handle {
+                background: #0078d7; /* 滑块颜色 */
+                border: 2px solid #0056a3; /* 滑块边框 */
+                width: 20px; /* 滑块宽度 */
+                height: 20px; /* 滑块高度 */
+                margin: -10px 0; /* 滑块边距 */
+            }
+            QSlider::groove:horizontal {
+                background: #ccc; /* 导轨颜色 */
+                height: 8px; /* 导轨高度 */
+            }
+            QSlider::groove:horizontal:pressed {
+                background: #aaa; /* 按下时的导轨颜色 */
+            }
+        """)
+        
+        # 进度条
+        # 创建 QProgressBar 实例
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setMinimum(0)
+        self.progress_bar.setMaximum(100)
+        self.progress_bar.setValue(0)
+        # 自定义样式表
+        self.progress_bar.setStyleSheet("""
+            QProgressBar {
+                border: 2px solid #0078d7; /* 边框颜色 */
+                border-radius: 5px; /* 圆角边框 */
+                text-align: center; /* 文本居中 */
+                background-color: #ddd; /* 背景颜色 */
+            }
+            QProgressBar::chunk {
+                background-color: #0078d7; /* 进度条颜色 */
+                border-radius: 5px; /* 圆角 */
+            }
+        """)
+        def start_progress(self):
+            self.progress_bar.setValue(0)  # 重置进度条
+            self.thread = Thread(target=self.run_progress)
+            self.thread.start()
+
+        def run_progress(self):
+            for i in range(101):
+                time.sleep(0.1)  # 模拟长时间操作
+                self.progress_bar.setValue(i)  # 更新进度条的值
+                
+        # 分组相关空间
+        # 创建第一个 QGroupBox
+        group_box1 = QGroupBox("选择你的性别")
+        gender_layout = QVBoxLayout()
+        self.male_radio = QRadioButton("男")
+        self.female_radio = QRadioButton("女")
+        gender_layout.addWidget(self.male_radio)
+        gender_layout.addWidget(self.female_radio)
+        group_box1.setLayout(gender_layout)
+        
+        # 创建第二个 QGroupBox
+        group_box2 = QGroupBox("爱好")
+        hobby_layout = QVBoxLayout()
+        self.sports_checkbox = QCheckBox("运动")
+        self.music_checkbox = QCheckBox("音乐")
+        self.reading_checkbox = QCheckBox("阅读")
+        hobby_layout.addWidget(self.sports_checkbox)
+        hobby_layout.addWidget(self.music_checkbox)
+        hobby_layout.addWidget(self.reading_checkbox)
+        group_box2.setLayout(hobby_layout)
+
+        # 工具栏
+        # 创建工具栏
+        self.tool_bar = QToolBar("工具栏", self)
+        self.addToolBar(self.tool_bar)
+        # 创建工具栏操作
+        self.action1 = QAction("操作 1", self)
+        self.action1.triggered.connect(self.perform_action1)
+        self.tool_bar.addAction(self.action1)
+
+        self.action2 = QAction("操作 2", self)
+        self.action2.triggered.connect(self.perform_action2)
+        self.tool_bar.addAction(self.action2)
+
+        self.tool_bar.addSeparator()  # 添加分隔符
+
+        self.action3 = QAction("退出", self)
+        self.action3.triggered.connect(self.close)
+        self.tool_bar.addAction(self.action3)
+        
+        # 显示层级结构目录
+        # 创建 QTreeWidget
+        self.tree_widget = QTreeWidget(self)
+        self.tree_widget.setHeaderLabel("树形结构")
+         # 添加树节点
+        root_item = QTreeWidgetItem(self.tree_widget, ["根节点"])
+        child_item1 = QTreeWidgetItem(root_item, ["子节点 1"])
+        child_item2 = QTreeWidgetItem(root_item, ["子节点 2"])
+        # 添加更深层次的子节点
+        grandchild_item = QTreeWidgetItem(child_item1, ["孙节点 1"])
+
+        # 展开树节点
+        root_item.setExpanded(True)
+        
+        # 选择框
+        # 创建 QCheckBox
+        self.check_box = QCheckBox("我同意使用条款", self)
+        self.check_box.stateChanged.connect(self.on_check_state_change)  # 连接信号
+        def on_check_state_change(self, state):
+        # 根据复选框的状态更新标签文本
+        if state == 0:  # 复选框未选中
+            self.label.setText("未选中")
+        else:  # 复选框选中
+            self.label.setText("已选中")
+        
+        # 单一选项控件
+        # 创建 QRadioButton
+        self.radio_button1 = QRadioButton("选项 1", self)
+        self.radio_button2 = QRadioButton("选项 2", self)
+        self.radio_button3 = QRadioButton("选项 3", self)
+        # 连接信号
+        self.radio_button1.toggled.connect(self.on_radio_button_toggled)
+        self.radio_button2.toggled.connect(self.on_radio_button_toggled)
+        self.radio_button3.toggled.connect(self.on_radio_button_toggled)
+        # 创建标签用于显示选择的选项
+        self.label = QLabel("未选择任何选项", self)
+            def on_radio_button_toggled(self):
+        # 检查哪个单选按钮被选中并更新标签文本
+        if self.radio_button1.isChecked():
+            self.label.setText("已选择：选项 1")
+        elif self.radio_button2.isChecked():
+            self.label.setText("已选择：选项 2")
+        elif self.radio_button3.isChecked():
+            self.label.setText("已选择：选项 3")
+        else:
+            self.label.setText("未选择任何选项")
+        
+        # 调节窗口大小分隔符
+        # 创建 QSplitter
+        splitter = QSplitter(self)
+        # 创建两个 QTextEdit 控件
+        text_edit1 = QTextEdit("左侧文本编辑器")
+        text_edit2 = QTextEdit("右侧文本编辑器")
+        # 将控件添加到 QSplitter
+        splitter.addWidget(text_edit1)
+        splitter.addWidget(text_edit2)
+    
+        # 选择日期
+        # 创建 QCalendarWidget
+        self.calendar = QCalendarWidget(self)
+        self.calendar.setGridVisible(True)  # 设置网格可见
+        # 创建标签用于显示选择的日期
+        self.label = QLabel("选择的日期将显示在这里", self)
+
+        # 连接信号
+        self.calendar.clicked.connect(self.on_date_selected)
+            def on_date_selected(self, date):
+        # 更新标签显示选择的日期
+        self.label.setText(f"选择的日期：{date.toString()}")
+            
+        # 日期输入控件
+        # 创建中心窗口部件
+        self.central_widget = QWidget(self)
+        self.setCentralWidget(self.central_widget)
+
+        # 创建垂直布局
+        layout = QVBoxLayout(self.central_widget)
+
+        # 创建 QDateTimeEdit 控件
+        self.date_time_edit = QDateTimeEdit(self)
+        self.date_time_edit.setDateTime(QDateTime.currentDateTime())  # 设置当前日期时间
+        self.date_time_edit.setDisplayFormat("yyyy-MM-dd HH:mm:ss")  # 设置显示格式
+
+        # 创建标签用于显示选择的日期时间
+        self.label = QLabel("选择的日期和时间将显示在这里", self)
+        # 连接信号
+        self.date_time_edit.dateTimeChanged.connect(self.on_date_time_changed)
+
+        # 将控件添加到布局
+        layout.addWidget(self.date_time_edit)
+        layout.addWidget(self.label)
+
+        def on_date_time_changed(self, date_time):
+            # 更新标签显示选择的日期和时间
+            self.label.setText(f"选择的日期和时间：{date_time.toString()}")
+   
         
         # 创建布局管理器并设置布局
         layout = QVBoxLayout(self)  # 创建一个垂直布局管理器，并将其绑定到当前窗口（self）上

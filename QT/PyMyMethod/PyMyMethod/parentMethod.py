@@ -351,6 +351,21 @@ class FileControl:
         """
         pass
 
+    def getSavePathQT(
+            self,
+            parent=None,
+            defaultSaveName: str ='result.txt',
+            fileType: str ="所有文件(*);;文本文件(*.txt)",
+    ):
+        """
+        获取文件保存路径
+        :param parent: 父窗口
+        :param defaultSaveName: 默认保存文件名
+        :param fileType: 文件类型
+        :return: 文件路径
+        """
+        pass
+
     def imageReName(self, path: str) -> list:
         """
         图片重命名 展示支持 png, jpg

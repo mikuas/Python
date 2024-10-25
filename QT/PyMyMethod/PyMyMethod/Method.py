@@ -294,13 +294,16 @@ class FileControl(FileCtl):
                 QMessageBox.warning(parent, '警告', '未选择文件')
         return path
 
+    def getSavePathQT(self, parent=None, defaultSaveName='result.txt', fileType="所有文件(*);;文本文件(*.txt)", **kwargs):
+        return QFileDialog.getSaveFileName(parent, "保存文件", defaultSaveName, fileType)
+
     def imageReName(self, path):
         i = 0
         print(self.getDirFiles(path))
         result = []
         for name in self.getDirFiles(path):
             element = self.getSuffixName(name)
-            suffix = ['jpg', 'png']
+            suffix = ['jpg', 'png', 'ogg', 'flac']
             if element in suffix:
                 result.append(name)
                 if os.path.exists(os.path.join(path, f"{str(i)}.{self.getSuffixName(name)}")):
@@ -383,5 +386,5 @@ class Regedit(Re):
 
 
 if __name__ == '__main__':
-    print(MouseControl().getMousePosition())
+    print(SystemCtl().getAudioEndpointVolume()[1])
     pass

@@ -30,38 +30,6 @@ class RegeditAddBootWindow(QWidget):
         self.textEdit.setFixedSize(300, 50)
         self.textEdit.setMinimumWidth(int(self.width() * 0.5))
 
-        self.pathButton = QPushButton('选择启动路径', self)
-        self.pathButton.setFixedSize(100, 60)
-        self.pathButton.setObjectName('pathButton')
-        self.pathButton.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.pathButton.setMinimumWidth(int(self.width() * 0.5))
-        self.pathButton.clicked.connect(self.click)
-        self.pathButton.setStyleSheet("background-color: pink; font-size: 32px")
-
-        self.addButton = QPushButton('添加', self)
-        self.addButton.setFixedSize(100, 60)
-        self.addButton.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.addButton.setObjectName('addButton')
-        self.addButton.setMinimumWidth(int(self.width() * 0.5))
-        self.addButton.clicked.connect(lambda: self.addClick(self.textEdit.toPlainText()))
-
-        self.delButton = QPushButton('删除', self)
-        self.delButton.setFixedSize(100, 60)
-        self.delButton.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.delButton.setObjectName('delButton')
-        self.delButton.setMinimumWidth(int(self.width() * 0.5))
-        self.delButton.clicked.connect(lambda: self.delClick(self.textEdit.toPlainText()))
-
-        self.label = QLabel('为谁添加')
-        self.label.setStyleSheet('font-size: 24px')
-
-        self.queryButton = QPushButton('查询', self)
-        self.queryButton.setFixedSize(100, 60)
-        self.queryButton.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.queryButton.setObjectName('queryButton')
-        self.queryButton.setMinimumWidth(int(self.width() * 0.5))
-        self.queryButton.clicked.connect(lambda: QMessageBox.information(self, '查询结果', Regedit().queryRegeditContent('', True)))
-
         self.comboBox = QComboBox()
         self.comboBox.setMinimumSize(100, 60)
         self.comboBox.setMinimumWidth(int(self.width() * 0.5))
@@ -83,27 +51,61 @@ class RegeditAddBootWindow(QWidget):
         self.comboBox.addItem('当前用户')
         self.comboBox.addItem('所有用户')
 
-        mainLayout = QVBoxLayout(self)
+        self.createObj()
 
-        for i in [self.textEdit, self.pathButton, self.label, self.comboBox, self.queryButton, self.addButton, self.delButton]:
-            self.centerLayout.addWidget(i, alignment=Qt.AlignmentFlag.AlignCenter)
-            self.centerLayout.addStretch()
-
-        mainLayout.addStretch()
-        mainLayout.addLayout(self.centerLayout)  # 将居中的布局加入主布局
-        mainLayout.addStretch()
-
-        self.setStyleSheet(
+    def createObj(self):
+        objDict = ['选择启动路径', '为谁添加', '查询', '添加', '删除']
+        objMethod = [
+            self.click,
+            '',
+            lambda: QMessageBox.information(self, '查询结果', Regedit().queryRegeditContent('', True)),
+            lambda: self.addClick(self.textEdit.toPlainText()),
+            lambda: self.delClick(self.textEdit.toPlainText())
+        ]
+        styles = [
+            "background-color: pink; font-size: 32px",
+            'font-size: 24px',
             """
-                QPushButton#addButton, #delButton, #queryButton {
+                QPushButton {
                     background-color: #00FF7F;
                     font-size: 32px;
                 }
-                QPushButton#addButton:hover, #delButton:hover, #queryButton:hover, #pathButton:hover {
+                QPushButton:hover {
                     background-color: #00BFFF;
                 }
-            """
-        )
+            """,
+            '',
+            ''
+        ]
+
+        mainLayout = QVBoxLayout(self)
+        self.centerLayout.addWidget(self.textEdit, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.centerLayout.addStretch()
+
+        for obj, fc, style in zip(objDict, objMethod, styles):
+            if obj in ['查询', '添加', '删除']:
+                style = styles[2]
+            if fc is None:
+                label = QLabel(obj)
+                label.setStyleSheet(style)
+                self.centerLayout.addWidget(label, alignment=Qt.AlignmentFlag.AlignCenter)
+                continue
+            if obj == '为谁添加':
+                label = QLabel(obj)
+                label.setStyleSheet(style)
+                self.centerLayout.addWidget(label, alignment=Qt.AlignmentFlag.AlignCenter)
+                self.centerLayout.addWidget(self.comboBox, alignment=Qt.AlignmentFlag.AlignCenter)
+                continue
+            button = QPushButton(obj, self)
+            button.setFixedSize(100, 60)
+            button.setCursor(Qt.CursorShape.PointingHandCursor)
+            button.setMinimumWidth(int(self.width() * 0.5))
+            button.setStyleSheet(style)
+            button.clicked.connect(fc)
+            self.centerLayout.addWidget(button, alignment=Qt.AlignmentFlag.AlignCenter)
+        mainLayout.addStretch()
+        mainLayout.addLayout(self.centerLayout)
+        mainLayout.addStretch()
 
     def addClick(self, name):
         text = self.comboBox.currentText()
@@ -123,12 +125,16 @@ class RegeditAddBootWindow(QWidget):
 
     def delClick(self, name):
         text = self.comboBox.currentText()
-        if text == '当前用户':
-            Regedit().delAutoBoot(name, True)
-            QMessageBox.information(self, '提示', '删除成功')
-        elif text == '所有用户':
-            Regedit().delAutoBoot(name)
-            QMessageBox.information(self, '提示', '删除成功')
+        if not name:
+            QMessageBox.warning(self, '提示', '输入有误')
+        else:
+            if text == '当前用户':
+                Regedit().delAutoBoot(name, True)
+                QMessageBox.information(self, '提示', '删除成功')
+            elif text == '所有用户':
+                Regedit().delAutoBoot(name)
+                QMessageBox.information(self, '提示', '删除成功')
+
 
     def click(self):
         self.path = FileControl().getFilePathQT(self, True)

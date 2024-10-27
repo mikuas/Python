@@ -227,7 +227,7 @@ class SystemCtl:
         """
         pass
 
-    def getAudioEndpointVolume(self) -> [float, object]:
+    def getAudioEndpointVolume(self) -> [object, float]:
         """
         获取当前音量
         :return: 当前音量, 音量对象
@@ -282,7 +282,7 @@ class TerminalControl:
         """
         pass
 
-    def runTerminalArgs(self, element: list or str, asynchronous: bool = False):
+    def runTerminalArgs(self, element: list or str, asynchronous: bool = False) -> 'TerminalControl':
         """
         通过终端给要传递的参数的文件传参
         :param element: 执行参数 ['运行方式(bash, cmd, python...)', 'filePath', args...]
@@ -366,11 +366,13 @@ class FileControl:
         """
         pass
 
-    def imageReName(self, path: str) -> list:
+    def fileReName(self, path: str, fileSuffix: list, nameFormat: bool = True) -> list:
         """
-        图片重命名 展示支持 png, jpg
-        :param path: 图片路径
-        :return: 被修改的图片名, 数量
+        文件重命名
+        :param path: 文件夹路径
+        :param fileSuffix: 文件后缀名
+        :param nameFormat: 命名格式, 纯数字, 字母
+        :return: 被修改的文件名, 数量
         """
         pass
 

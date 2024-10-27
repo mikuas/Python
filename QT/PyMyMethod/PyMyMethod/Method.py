@@ -297,21 +297,26 @@ class FileControl(FileCtl):
     def getSavePathQT(self, parent=None, defaultSaveName='result.txt', fileType="所有文件(*);;文本文件(*.txt)", **kwargs):
         return QFileDialog.getSaveFileName(parent, "保存文件", defaultSaveName, fileType)
 
-    def imageReName(self, path):
+    def fileReName(self, path, fileSuffix, nameFormat=True):
+        import string
+        import random
+        a_Z = string.ascii_lowercase + string.ascii_uppercase
+        length = len(a_Z) - 1
         i = 0
         print(self.getDirFiles(path))
         result = []
         for name in self.getDirFiles(path):
             element = self.getSuffixName(name)
-            suffix = ['jpg', 'png', 'ogg', 'flac']
-            if element in suffix:
+            if element in fileSuffix:
                 result.append(name)
                 if os.path.exists(os.path.join(path, f"{str(i)}.{self.getSuffixName(name)}")):
                     i += 1
                     continue
-
                 # 移动并重命名文件
-                shutil.move(os.path.join(path, name), os.path.join(path, f"{str(i)}.{self.getSuffixName(name)}"))
+                if nameFormat:
+                    shutil.move(os.path.join(path, name), os.path.join(path, f"{str(i)}.{self.getSuffixName(name)}"))
+                else:
+                    shutil.move(os.path.join(path, name), os.path.join(path, f"{a_Z[random.randint(0, length)]}.{self.getSuffixName(name)}"))
                 i += 1
         return [result, i]
 

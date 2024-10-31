@@ -81,7 +81,7 @@ class MainWindow(QMainWindow):
         menus = {
             "File": ["新建文件", "打开文件", "保存文件", "关闭"],
             "Util": ["文字大小", "背景颜色", "文字颜色", "重置"],
-            "About": ["About App", "Version"]
+            "About": ["About bin", "Version"]
         }
         fc = [
             lambda: (setattr(self, 'tabs', self.tabs + 1), print(self.tabs), self.createQTab()),

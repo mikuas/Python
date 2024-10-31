@@ -2,12 +2,12 @@ import json
 import time
 import sys
 
-from Icon import IconWidget
+from iconWidget import TrayIconWidget
 
 from PySide6.QtMultimediaWidgets import QVideoWidget
-from PySide6.QtWidgets import QApplication, QPushButton, QListWidget, QMainWindow, QToolButton, QVBoxLayout, QWidget, \
-    QButtonGroup, \
-    QHBoxLayout, QListWidgetItem, QStackedWidget, QSlider, QLabel, QProgressBar, QSizePolicy
+from PySide6.QtWidgets import (
+    QApplication, QPushButton, QListWidget, QMainWindow, QToolButton, QVBoxLayout, QWidget, QButtonGroup, QHBoxLayout,
+    QListWidgetItem, QStackedWidget, QSlider, QLabel, QSizePolicy, QProgressBar, QAbstractItemView)
 from PySide6.QtGui import QIcon
 from PySide6.QtCore import QSize, Qt, QUrl, QTimer
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
@@ -18,33 +18,42 @@ from PyMyMethod.Method import FileControl, SystemCtl
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.utime = None
-        self.timeLabel = None
-        self.media = None
-        self.value = 0
-        self.sumValue = 0
+        # 创建修改时间标签QTimer对象
+        self.videoButton = None
+        self.utime = None  # QTimer()
+        # 创建时间Label对象
+        self.timeLabel = None  # QLabel()
+        # 创建视频播放对象
+        self.media = None  # QMediaPlayer()
+        # 创建进度条QTimer对象
         self.timer = QTimer()
-        self.progressBar = None
-        IconWidget(self, './data/images/icon/icon.png')
+        self.progressBar = None  # QProgressBar()
+        # 创建系统托盘
+        TrayIconWidget(self, './data/images/icon/icon.png')
         self.setWindowTitle("Music")
         self.resize(1100, 600)
-        self.stopThread = False
+        # 暂停 播放按钮对象
         self.stopButton = None
+        self.startIcon = r'./data/images/icon/start.png'
+        self.stopIcon = r'./data/images/icon/stop.png'
         self.flag = True
+        # 创建时间QLabel对象
         self.tLabel = QLabel()
         self.imgButton = QPushButton()
-        self.icons = r'./data/images/icon/stop.png'
 
         # 列表布局
         self.listWidget = QListWidget()
         self.listWidget.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.listWidget.clicked.connect(self.listClick)
+        self.listWidget.clicked.connect(lambda: (self.listClick(), self.startTime()))
 
+        # 创建音频播放对象
         self.player = QMediaPlayer()
+        # 创建音频输出对象
         self.audioOutput = QAudioOutput()
         self.player.setAudioOutput(self.audioOutput)
         self.player.mediaStatusChanged.connect(self.status)
 
+        # 创建窗口叠堆对象
         self.stackedWidget = QStackedWidget()
         self.stackedWidget.addWidget(self.createMainWidget())
         self.stackedWidget.addWidget(self.createMusicWidget())
@@ -65,6 +74,7 @@ class MainWindow(QMainWindow):
 
         self.rightLayout.addWidget(self.stackedWidget)
 
+        # 创建按钮对象
         self.createButton()
 
         # 设置布局对齐
@@ -72,11 +82,7 @@ class MainWindow(QMainWindow):
         self.rightLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.setCentralWidget(self.mainWidget)
 
-    def createTimer(self):
-        timer = QTimer()
-        timer.timeout.connect()
-        self.progressBar.setValue = 0
-
+    # 创建主页对象
     def createMainWidget(self):
         widget = QWidget()
         mainLayout = QVBoxLayout(widget)
@@ -104,9 +110,9 @@ class MainWindow(QMainWindow):
             './data/images/icon/next.png'
         ]
         functions = [
-            lambda: (self.listWidget.setCurrentItem(self.listWidget.item(self.getListIndex() - 1)), self.setIndex()),
+            lambda: (self.startTime(), self.listWidget.setCurrentItem(self.listWidget.item(self.getListIndex() - 1)), self.setIndex()),
             self.updatePlay,
-            lambda: (self.listWidget.setCurrentItem(self.listWidget.item(self.getListIndex() + 1)), self.setIndex()),
+            lambda: (self.startTime(), self.listWidget.setCurrentItem(self.listWidget.item(self.getListIndex() + 1)), self.setIndex()),
         ]
         with open('./data/styles/Button.qss', 'r', encoding='utf-8') as f:
             style = f.read()
@@ -115,10 +121,10 @@ class MainWindow(QMainWindow):
             if bt == '播放':
                 self.stopButton = button
             button.setIcon(QIcon(ico))
+            button.setIconSize(QSize(40, 40))
             button.setStyleSheet(style)
             button.setCursor(Qt.CursorShape.PointingHandCursor)
             button.clicked.connect(fc)
-            button.setIconSize(QSize(40, 40))
             button.setFixedSize(150, 80)
             rightLayout.addWidget(button, alignment=Qt.AlignmentFlag.AlignTop)
         titleLayout.addLayout(rightLayout)
@@ -126,7 +132,7 @@ class MainWindow(QMainWindow):
         downLayout = QHBoxLayout()
         self.timeLabel = QLabel(widget)
         self.timeLabel.setStyleSheet("font-size: 24px")
-        self.timeLabel.setText(f"time: ")
+        self.timeLabel.setText(f"Time: 00:00")
         self.progressBar = QProgressBar(widget)
         self.progressBar.setMinimum(0)
         n = QLabel()
@@ -148,48 +154,50 @@ class MainWindow(QMainWindow):
 
         return widget
 
+    # 创建进度条更新定时器
     def startTime(self):
         if QMediaPlayer.MediaStatus.LoadedMedia:
-            print(f'我是时间{QMediaPlayer.duration(self.player)}')
-            self.progressBar.setMaximum(QMediaPlayer.duration(self.player))
             self.progressBar.setValue(0)
-            self.timer.timeout.connect(lambda: (self.progressBar.setValue(self.player.position())))
-            self.timer.start()
+            time.sleep(0.2)
+            self.timer.timeout.connect(lambda: (print(f'播放位置: {self.player.position()}'), self.progressBar.setValue(self.player.position())))
+            # 更新进度条的值
+            # self.timer.timeout.connect(lambda: self.progressBar.setValue(self.player.position()))
+            self.timer.start(100) # 0.1秒更新一次
+            # 启动时间更新定时器
+            self.startLabTime()
 
-    def updateValue(self):
-        # 获取当前播放的位置, 毫秒
-        self.value = self.player.position()
-        self.progressBar.setValue(self.value)
-        print(f'Value:  {self.value}')
+    # 创建时间更新定时器
+    def startLabTime(self):
+        self.utime = QTimer()
+        # 更新时间的值
+        self.utime.timeout.connect(self.updateTime)
+        self.utime.start(100) # 0.1秒更新一次
 
     def updateTime(self):
-        self.utime = QTimer()
-        self.utime.timeout.connect(self.updateTime)
-        self.utime.start(1)
-        ams = self.sumValue - self.value
+        # 获取总时长
+        ams = QMediaPlayer.duration(self.player) - self.player.position()
+        print(f'总时间: {QMediaPlayer.duration(self.player)}')
+        self.progressBar.setMaximum(QMediaPlayer.duration(self.player) - 2)
         ms = ams / 1000
         MIN = int(ms / 60)
         MS = int(ms - MIN * 60)
+        print(f'时间: {MIN}分钟 {ms}秒')
         if MS < 10:
             MS = "0" + str(MS)
-        self.timeLabel.setText(f"time: {MIN}:{MS}")
+        # 更新时间
+        self.timeLabel.setText(f"Time: {MIN}:{MS}")
 
     def setIndex(self):
         try:
-            self.listWidget.itemChanged.emit(self.listClick())
+            self.listWidget.itemChanged.connect(self.listClick())
             self.tLabel.setText(self.listWidget.selectedItems()[0].text().split('.')[0])
             self.imgButton.setIcon(QIcon(fr'./data/images/musicPictures/{self.getImgPath()[self.getListIndex()]}'))
         except IndexError:
             pass
 
-    def updateProgress(self, value):
-        self.progressBar.setValue(value)
-
     def listClick(self):
         self.flag = True
-        self.startTime()
         self.stopButton.setIcon(QIcon(r'./data/images/icon/start.png'))
-        self.icons = r'./data/images/icon/start.png'
         self.stopButton.setText("暂停")
         self.play()
 
@@ -224,7 +232,7 @@ class MainWindow(QMainWindow):
         slider = QSlider(Qt.Orientation.Horizontal, widget)
         slider.setMinimum(0)
         slider.setMaximum(100)
-        slider.setValue(SystemCtl().getAudioEndpointVolume()[1] * 100)
+        slider.setValue(SystemCtl().getAudioEndpointVolume()[1] * 100 + 0.1)
 
         slider.valueChanged.connect(lambda: (
             objLab[-1].setText(str(f"当前音量: {slider.value()}")),
@@ -262,6 +270,7 @@ class MainWindow(QMainWindow):
             # 获取当前项的索引
             self.listWidget.setCurrentItem(self.listWidget.item(self.getListIndex() + 1))
             self.listWidget.itemClicked.emit(self.listClick())
+            self.startTime()
             print('END')
         # elif status == QMediaPlayer.MediaStatus.LoadedMedia:
 
@@ -305,20 +314,15 @@ class MainWindow(QMainWindow):
             buttonGroup.addButton(button)  # add group
             self.leftLayout.addWidget(button)
 
-    def resetIcon(self):
-        if self.icons.split('/')[-1] == 'start.png':
-            self.stopButton.setIcon(QIcon(r'./data/images/icon/stop.png'))
-            self.icons = r'./data/images/icon/stop.png'
-            self.stopButton.setText("播放")
-        else:
-            self.stopButton.setIcon(QIcon(r'./data/images/icon/start.png'))
-            self.icons = r'./data/images/icon/start.png'
-            self.stopButton.setText("暂停")
-
     def getListIndex(self):
         index = self.listWidget.currentRow()
-        if index > 0 or index < len(self.getImgPath()):
-            return self.listWidget.currentRow()
+        length = len(self.getImgPath())
+        if index == 0:
+            return 0
+        elif index == length - 1:
+            return length - 1
+        elif 0 < index < length:
+            return index
         else:
             return 1
 
@@ -328,18 +332,27 @@ class MainWindow(QMainWindow):
             time.sleep(0.1)
             self.player.stop()
             self.flag = False
-            self.resetIcon()
-            self.timer.stop()
+            self.stopButton.setIcon(QIcon(self.stopIcon))
+            self.stopButton.setText('播放')
+            try:
+                self.timer.stop()
+                self.utime.stop()
+            except Exception:
+                pass
         else:
             with open('position.json', 'r', encoding='utf-8') as f:
                 data = json.load(f)
-            print(data['position'])
             time.sleep(0.1)
             self.player.setPosition(data['position'])
             self.player.play()
-            self.timer.start()
-            self.resetIcon()
+            self.stopButton.setIcon(QIcon(self.startIcon))
+            self.stopButton.setText('暂停')
             self.flag = True
+            try:
+                self.timer.start(100)
+                self.utime.start(100)
+            except Exception:
+                pass
 
     def getImgPath(self):
         return sorted(FileControl().getDirFiles(r'./data/images/musicPictures'), key=self.sort)
@@ -358,25 +371,23 @@ class MainWindow(QMainWindow):
         self.media.setSource(QUrl("./data/videos/0.mp4"))
 
         buttonLayout = QHBoxLayout()
-        btm = ["上一个", "播放", "暂停", "停止", "下一个"]
+        btm = ["上一个", "播放", "下一个"]
         functions = [
-            lambda: self.unVideo(-1),
-            self.media.play,
-            self.media.pause,
-            self.media.stop,
-            lambda: self.unVideo(1)
+            lambda: (self.unVideo(-1), self.updateBIT('暂停', self.startIcon)),
+            self.updateVideoButton,
+            lambda: (self.unVideo(1), self.updateBIT('暂停', self.startIcon))
         ]
         icons = [
             r'./data/images/icon/up.png',
-            r'./data/images/icon/start.png',
             r'./data/images/icon/stop.png',
-            r'./data/images/icon/exit.png',
             r'./data/images/icon/next.png'
         ]
         with open('./data/styles/Button.qss', 'r', encoding='utf-8') as f:
             style = f.read()
         for b, fc, icon in zip(btm, functions, icons):
             button = QPushButton(b)
+            if b == '播放':
+                self.videoButton = button
             button.setIcon(QIcon(icon))
             button.setIconSize(QSize(40, 40))
             button.setStyleSheet(style)
@@ -388,6 +399,18 @@ class MainWindow(QMainWindow):
         mainLayout.addWidget(video)
         mainLayout.addLayout(buttonLayout)
         return widget
+
+    def updateVideoButton(self):
+        if self.videoButton.text() == '播放':
+            self.updateBIT('暂停', self.startIcon)
+            self.media.play()
+        else:
+            self.updateBIT('播放', self.stopIcon)
+            self.media.pause()
+
+    def updateBIT(self, text, icon):
+        self.videoButton.setText(text)
+        self.videoButton.setIcon(QIcon(icon))
 
     def play(self):
         try:
@@ -404,7 +427,7 @@ class MainWindow(QMainWindow):
             pass
 
     def unVideo(self, num):
-        with open('./videoPath.json', 'r', encoding='utf-8') as f:
+        with open('../Test/MusicAppTS/videoPath.json', 'r', encoding='utf-8') as f:
             data = json.load(f)
         self.media.stop()
         time.sleep(0.1)
@@ -424,12 +447,13 @@ class MainWindow(QMainWindow):
         # 关闭所有窗口
         for widget in QApplication.topLevelWidgets():
             widget.close()
-        # 推出软件
+        # 退出软件
         QApplication.quit()
 
     def closeEvent(self, event):
         event.ignore()
         self.hide()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

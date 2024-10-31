@@ -8,7 +8,7 @@ class MainWindow(QMainWindow):
 
         self.button_is_checked = False
 
-        self.setWindowTitle("My App")
+        self.setWindowTitle("My bin")
 
         self.button = QPushButton("Press Me!")
         self.button.setCheckable(True)
@@ -26,7 +26,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("My App")
+        self.setWindowTitle("My bin")
 
         self.button = QPushButton("Press Me!")
         self.button.clicked.connect(self.the_button_was_clicked)
@@ -38,7 +38,7 @@ class MainWindow(QMainWindow):
         self.button.setEnabled(False)
 
         # Also change the window title.
-        self.setWindowTitle("My Oneshot App")
+        self.setWindowTitle("My Oneshot bin")
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

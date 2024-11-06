@@ -1,12 +1,16 @@
 {
-  "path": [
-    "./data/images/playImg/0.jpg",
-    "./data/images/playImg/1.jpg",
-    "./data/images/playImg/2.jpg",
-    "./data/images/playImg/5.jpg",
-    "./data/images/playImg/10.jpg",
-    "./data/images/playImg/12.jpg",
-    "./data/images/playImg/14.jpg",
-    "./data/images/playImg/15.jpg"
+  "path" : [
+    "./data/background/0.jpg",
+    "./data/background/1.jpg",
+    "./data/background/2.jpg",
+    "./data/background/3.jpg",
+    "./data/background/4.jpg",
+    "./data/background/5.jpg",
+    "./data/background/6.jpg",
+    "./data/background/7.jpg",
+    "./data/background/8.jpg",
+    "./data/background/9.jpg",
+    "./data/background/10.jpg",
+    "./data/background/11.jpg"
   ]
 }

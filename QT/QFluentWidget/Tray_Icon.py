@@ -46,9 +46,9 @@ class Demo(QWidget):
         self.layout().addWidget(self.label)
 
         self.resize(500, 500)
-        self.setWindowIcon(QIcon(':/qfluentwidgets/images/logo.png'))
-
+        self.setWindowIcon(Icon(FluentIcon.GITHUB))
         self.systemTrayIcon = SystemTrayIcon(self)
+        self.systemTrayIcon.setToolTip('Ciallo～(∠・ω< )⌒☆')
         self.systemTrayIcon.show()
 
 

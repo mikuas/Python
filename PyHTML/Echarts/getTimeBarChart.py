@@ -3,11 +3,11 @@ from EchartsFc import *
 
 result = []
 
-for i in range(4):
+for i in range(20):
     re = Echarts().getBarChart(
-        Tools().getProvince(['江西省']),
+        Tools().getProvince('keys'),
         Tools().getRandomNumberList(
-            len(Tools().getProvince(['江西省'])),
+            len(Tools().getProvince('keys')),
             2000,
             10000
         ),

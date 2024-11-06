@@ -1,7 +1,5 @@
 import sys
-from symtable import Function
 
-from PySide6.QtCore import QSize, QUrl, QDate
 from PySide6.QtWidgets import QHBoxLayout, QMainWindow, QApplication, QVBoxLayout, QWidget
 from PySide6.QtGui import Qt
 from qfluentwidgets import *
@@ -172,6 +170,104 @@ class SettinsCard(GroupHeaderCardWidget):
             duration=2000,
             parent=self
         )
+
+
+# 组卡片
+class GroupCard(GroupHeaderCardWidget):
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setTitle("系统工具")
+        self.setBorderRadius(8)
+
+        self.initLayout()
+        self.initGroup()
+        self.connectSignalSlots()
+
+    def initGroup(self):
+        self.wifiButton = SwitchButton(self)
+        self.addGroup(
+            FluentIcon.WIFI,
+            "WIFI",
+            "连接wifi网络",
+            self.wifiButton
+        ).setSeparatorVisible(True)
+
+        # 添加底部工具栏
+        self.vBoxLayout.addLayout(self.pauseLayout)
+        self.vBoxLayout.addLayout(self.addBootLayout)
+
+    # 连接信号插槽
+    def connectSignalSlots(self):
+        self.wifiButton.checkedChanged.connect(
+            lambda b: TeachingTip.create(
+                self.wifiButton,
+                'WIFI',
+                "已开启WIFI网络😊" if b else "已关闭WIFI网络😰",
+                InfoBarIcon.SUCCESS,
+                isClosable=False,
+                duration=1500,
+                parent=self
+            )
+        )
+        self.pauseButton.clicked.connect(
+            lambda: (
+                Regedit().setWindowsUpdateDays(int(self.daysEidt.text())),
+                TeachingTip.create(
+                    self.pauseButton,
+                    "暂停天数",
+                    f'成功设置最大暂停天数{self.daysEidt.text()}天🥰',
+                    InfoBarIcon.SUCCESS,
+                    isClosable=False,
+                    duration=1500,
+                    parent=self
+                )
+            )
+        )
+
+    def initLayout(self):
+        self.pauseLayout = QHBoxLayout()
+        self.addBootLayout = QHBoxLayout()
+
+        self.pauseIcon = IconWidget(FluentIcon.UPDATE)
+        self.daysLabel = BodyLabel("设置Windows最大暂停更新天数")
+
+        self.daysEidt = EditableComboBox()
+        self.daysEidt.setPlaceholderText("暂停天数")
+        self.daysEidt.addItems(['100', '500', '1000', '36500'])
+
+        self.pauseButton = PrimaryToolButton()
+        self.pauseButton.setText('确定')
+
+        self.pauseIcon.setFixedSize(20, 20)
+        self.pauseLayout.setSpacing(10)
+        self.pauseLayout.setContentsMargins(24, 15, 24, 20)
+
+        self.pauseLayout.addWidget(self.pauseIcon, 0, Qt.AlignLeft)
+        self.pauseLayout.addWidget(self.daysLabel, 0, Qt.AlignLeft)
+        self.pauseLayout.addStretch(1)
+        self.pauseLayout.addWidget(self.daysEidt, 0, Qt.AlignRight)
+        self.pauseLayout.addWidget(self.pauseButton, 0, Qt.AlignRight)
+        self.pauseLayout.setAlignment(Qt.AlignVCenter)
+        # --------------------------------------------------------------------
+        self.addButton = PrimaryToolButton()
+        self.addButton.setText("确定")
+        self.addIcon = IconWidget(FluentIcon.POWER_BUTTON)
+        self.addLabel = BodyLabel("添加开机自启动项")
+        self.selectButton = PushButton()
+        self.selectButton.setText('选择文件路径')
+        self.selectButton.setIcon(Icon(FluentIcon.FOLDER))
+        self.addIcon.setFixedSize(20, 20)
+
+        self.addBootLayout.setSpacing(10)
+        self.addBootLayout.setContentsMargins(24, 15, 24, 20)
+
+        self.addBootLayout.addWidget(self.addIcon, 0, Qt.AlignLeft)
+        self.addBootLayout.addWidget(self.addLabel, 0, Qt.AlignLeft)
+        self.addBootLayout.addStretch(1)
+        self.addBootLayout.addWidget(self.selectButton, 0, Qt.AlignRight)
+        self.addBootLayout.addWidget(self.addButton, 0, Qt.AlignRight)
+        self.addBootLayout.setAlignment(Qt.AlignVCenter)
 
 
 if __name__ == '__main__':

@@ -366,6 +366,32 @@ class FileControl:
         """
         pass
 
+    def readQssFile(self, path, **kwargs) -> str:
+        """
+        读取Qss文件
+        :param path: 文件路径
+        :return: 文件内容
+        """
+        pass
+
+    def delFileElement(self, path: str, element: str) -> 'FileControl':
+        """
+        删除文件指定内容
+        :param path: 文件夹路径
+        :param element: 要被删除的元素
+        :return: FileControl
+        """
+        pass
+
+    def getImgByMusic(self, path, savePath) -> 'FileControl':
+        """
+        从flag,ogg文件获取图片
+        :param path: 文件夹路径
+        :param savePath: 保存路径
+        :return: FileControl
+        """
+        pass
+
     def fileReName(self, path: str, fileSuffix: list, nameFormat: bool = True) -> list:
         """
         文件重命名

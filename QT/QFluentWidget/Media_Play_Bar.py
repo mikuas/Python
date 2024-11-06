@@ -16,13 +16,13 @@ class Window(QMainWindow):
         mainLayout = QVBoxLayout(centerWindget)
 
         '''媒体'''
-        player = SimpleMediaPlayBar()
-        # 添加按钮
-        player.hBoxLayout.addWidget(MediaPlayBarButton(FluentIcon.FULL_SCREEN))
-
-        # 在线音乐
-        url = QUrl("https://files.cnblogs.com/files/blogs/677826/beat.zip?t=1693900324")
-        player.player.setSource(url)
+        # player = SimpleMediaPlayBar()
+        # # 添加按钮
+        # player.hBoxLayout.addWidget(MediaPlayBarButton(FluentIcon.FULL_SCREEN))
+        #
+        # # 在线音乐
+        # url = QUrl("https://files.cnblogs.com/files/blogs/677826/beat.zip?t=1693900324")
+        # player.player.setSource(url)
         '''
         调用下述方法可以改变播放状态：
 
@@ -39,12 +39,12 @@ class Window(QMainWindow):
 
         # 包含前进后退
         bar = StandardMediaPlayBar()
-        bar.player.setSource(url)
+        # bar.player.setSource(url)
 
-        bar.rightButtonLayout.addLayout(bar.leftButtonLayout)
+        # bar.rightButtonLayout.addLayout()
 
 
-        mainLayout.addWidget(player)
+        # mainLayout.addWidget(player)
         mainLayout.addWidget(bar)
         self.setCentralWidget(centerWindget)
 

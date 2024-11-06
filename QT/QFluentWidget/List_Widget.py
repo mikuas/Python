@@ -36,24 +36,22 @@ class MainWindow(QWidget):
 
         lw.itemClicked.connect(lambda element: print(element.text()))
 
-        lv = ListView()
-        model = QStringListModel()
+        # model = QStringListModel()
 
         # 带图标
+        lv = ListView()
         model = QStandardItemModel()
         items = [
             QStandardItem(Icon(FluentIcon.GITHUB), "GITHUB"),
             QStandardItem(Icon(FluentIcon.HOME), "HOME"),
             QStandardItem(Icon(FluentIcon.PASTE), "PASTE")
         ]
-
         # model.setStringList(items)
         # 将项添加到模型中
         for item in items:
             model.appendRow(item)
         # 将模型设置到ListView
         lv.setModel(model)
-
         # 取消焦点
         lv.setFocusPolicy(Qt.NoFocus)
         lv.setStyleSheet("""
@@ -64,23 +62,19 @@ class MainWindow(QWidget):
             }
         """)
         lv.setIconSize(QSize(24, 24))
-
         # 设置自定义代理
-        lv.setItemDelegate(CustomModel(lv))
-
+        # lv.setItemDelegate(CustomModel(lv))
         lv.setSelectRightClickedRow(True)
-
         # 获取文本
         lv.clicked.connect(lambda element: print(model.data(element)))
-
         # layout.addWidget(lw)
         layout.addWidget(lv)
 
 
 # 重写高度 QStyledItemDelegate
-class CustomModel(ListItemDelegate):
-    def sizeHint(self, option, index):
-        return QSize(0, 100)
+# class CustomModel(ListItemDelegate):
+#     def sizeHint(self, option, index):
+#         return QSize(0, 100)
 
 
 if __name__ == '__main__':

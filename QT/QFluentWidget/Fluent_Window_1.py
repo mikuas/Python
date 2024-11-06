@@ -13,7 +13,6 @@ class Widget(QFrame):
 
     def __init__(self, text: str, widget, parent=None):
         super().__init__(parent=parent)
-        QHBoxLayout(self).addWidget(widget)
         self.setObjectName(text.replace(' ', '-'))
 
 

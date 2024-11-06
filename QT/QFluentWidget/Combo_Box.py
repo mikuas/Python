@@ -21,7 +21,7 @@ class Window(QMainWindow):
             '0d00',
             '美咕噜',
             '朝武芳乃',
-            '常磐诗乃'
+            '常磐华乃'
         ]
         self.comBox = ComboBox(self)
         self.comBox.setPlaceholderText("请选择一个脑婆")

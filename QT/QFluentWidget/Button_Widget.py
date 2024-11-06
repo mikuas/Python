@@ -34,7 +34,7 @@ class Window(QMainWindow):
 
         '''实现链接跳转的按钮'''
         # 带图标
-        self.button4 = HyperlinkButton(self)
+        self.button4 = HyperlinkButton(FluentIcon.LINK, "https://www.github.com/mikuas", "点击跳转", self)
         self.button4.setIcon(FluentIcon.LINK)
         # 不带图标
         self.button5 = HyperlinkButton(self)

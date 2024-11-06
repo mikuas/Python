@@ -1,4 +1,7 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout
+import sys
+
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QApplication
 from PySide6.QtCore import Qt
 
 from qfluentwidgets import SearchLineEdit
@@ -21,6 +24,7 @@ class WebView(QWidget):
     def __init__(self, text, url, parent=None):
         super().__init__(parent)
         self.setWindowTitle("WebView")
+        self.setWindowIcon(QIcon('data/images/icon/chrome.png'))
         self.resize(1200, 700)
         self.qHboxLayout = QVBoxLayout(self)
         self.web_view = FramelessWebEngineView(self)
@@ -41,3 +45,14 @@ class WebView(QWidget):
             return 'https://' + url
         else:
             return url
+
+    # def closeEvent(self, event):
+    #     event.ignore()
+    #     self.hide()
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = WebView("WEBVIEW", "www.baidu.com")
+    window.show()
+    sys.exit(app.exec())

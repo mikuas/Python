@@ -2,7 +2,7 @@ import sys
 from symtable import Function
 
 from PySide6.QtCore import QSize, QUrl, QDate
-from PySide6.QtWidgets import QMainWindow, QApplication, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QMainWindow, QApplication, QVBoxLayout, QWidget, QMenu
 from PySide6.QtGui import Qt, QAction
 from pyautogui import shortcut
 from qfluentwidgets import *
@@ -75,22 +75,27 @@ class Demo(QWidget):
     def __init__(self):
         super().__init__()
 
-    def contextMenuEvent(self, e) -> None:
+    # def contextMenuEvent(self, e):
+    def mousePressEvent(self, e) -> None:
         menu = RoundMenu(parent=self)
 
         # add custom widget
         card = ProfileCard('resource/shoko.png', '硝子酱', 'shokokawaii@outlook.com', menu)
-        menu.addWidget(card, selectable=False)
-
+        menu.addWidget(card, selectable=True)
         menu.addSeparator()
+        at = Action(FluentIcon.PEOPLE, '管理账户和设置')
+        at.triggered.connect(lambda: print(True))
         menu.addActions([
-            Action(FluentIcon.PEOPLE, '管理账户和设置'),
+            at,
             Action(FluentIcon.SHOPPING_CART, '支付方式'),
             Action(FluentIcon.CODE, '兑换代码和礼品卡'),
         ])
         menu.addSeparator()
         menu.addAction(Action(FluentIcon.SETTING, '设置'))
-        menu.exec(e.globalPos())
+        if e.button() == Qt.LeftButton:
+            menu.exec(e.globalPos())
+        # menu.exec(e.globalPos())
+        # print(e.globalPos())
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

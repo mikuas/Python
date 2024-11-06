@@ -5,6 +5,7 @@ import sys
 from PySide6.QtCore import Qt, QLocale, QTranslator, QStandardPaths
 from PySide6.QtGui import QIcon, QColor
 from PySide6.QtWidgets import QApplication, QHBoxLayout, QVBoxLayout
+from qfluentwidgets.components.material import AcrylicComboBox, AcrylicComboBoxSettingCard
 
 from qframelesswindow import FramelessWindow, StandardTitleBar
 from qfluentwidgets import isDarkTheme, FluentTranslator, SettingCard, FluentIcon, ComboBoxSettingCard, \
@@ -200,6 +201,14 @@ class Window(FramelessWindow):
         # 添加到布局
         efsc.addGroupWidget(tcdTS)
 
+        ts = AcrylicComboBoxSettingCard(
+            OptionsConfigItem("ts",' ts', '是', OptionsValidator(['1', '2'])),
+            FluentIcon.INFO,
+            "Titl",
+            'Content',
+            texts=['1', '2']
+        )
+
         # 设置内容边距 setContentsMargins
         '''设置组'''
         sg = SettingCardGroup("Settings")
@@ -213,6 +222,7 @@ class Window(FramelessWindow):
         sg.addSettingCard(btc)
         sg.addSettingCard(tcd)
         sg.addSettingCard(efsc)
+        sg.addSettingCard(ts)
 
 
         self.layout.addWidget(sg)

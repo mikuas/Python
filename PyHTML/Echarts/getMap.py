@@ -10,6 +10,7 @@ print(province)
 Echarts().getMap(
     province,
     '江西省GDP',
-    Tools().getEchartsDict(4, 2000),
     '江西',
+    Tools().getEchartsDict(4, 2000),
+    display_piece=True,
 )

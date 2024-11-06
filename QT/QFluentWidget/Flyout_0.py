@@ -68,16 +68,13 @@ class Demo(QWidget):
             isClosable=True
             # image='resource/yiku.gif',
         )
-
         # add button to view
         button = PushButton('Action')
         button.setFixedWidth(120)
         view.addWidget(button, align=Qt.AlignRight)
-
         # adjust layout (optional)
         view.widgetLayout.insertSpacing(1, 5)
         view.widgetLayout.addSpacing(5)
-
         # show view
         w = Flyout.make(view, self.button2, self)
         view.closed.connect(w.close)

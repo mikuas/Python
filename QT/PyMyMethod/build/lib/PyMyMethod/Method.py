@@ -6,6 +6,8 @@ import pyautogui
 import pyperclip
 import argparse
 
+from mutagen.flac import FLAC
+from mutagen.oggvorbis import OggVorbis
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from ctypes import POINTER, cast
@@ -61,10 +63,10 @@ class KeyboardControl(Keyboard):
 
         return self
 
-    def keyClick(self, keys):
+    def keyClick(self, keys, interval=0.1):
         result = keys.split(' ')
         for i in range(len(result)):
-            pyautogui.press(result[i])
+            pyautogui.press(result[i], interval=interval)
 
         return self
 
@@ -175,6 +177,7 @@ class SystemCtl(System):
     def getAudioEndpointVolume(self, **kwargs):
         try:
             devices = AudioUtilities.GetSpeakers()
+            # noinspection PyProtectedMember
             interface = devices.Activate(
                 IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
             volume = cast(interface, POINTER(IAudioEndpointVolume))
@@ -210,6 +213,7 @@ class SystemCtl(System):
 
     def setAudio(self, audio):
         devices = AudioUtilities.GetSpeakers()
+        # noinspection PyProtectedMember
         interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
         volume_interface = cast(interface, POINTER(IAudioEndpointVolume))
         volume_interface.SetMasterVolumeLevelScalar(audio, None)
@@ -277,7 +281,7 @@ class FileControl(FileCtl):
         return fileName.split('.')[-1]
 
     def getDirPathQT(self, parent=None, message=False, **kwargs):
-        path =  QFileDialog.getExistingDirectory(parent, "选择目录")
+        path = QFileDialog.getExistingDirectory(parent, "选择目录")
         if message:
             if path:
                 QMessageBox.information(parent, '提示', f'选择的目录是:{path}')
@@ -296,6 +300,38 @@ class FileControl(FileCtl):
 
     def getSavePathQT(self, parent=None, defaultSaveName='result.txt', fileType="所有文件(*);;文本文件(*.txt)", **kwargs):
         return QFileDialog.getSaveFileName(parent, "保存文件", defaultSaveName, fileType)
+
+    def readQssFile(self, path, **kwargs):
+        with open(path, 'r', encoding='utf-8') as f:
+            return f.read()
+
+    def delFileElement(self, path, element):
+        files = FileControl().getDirFiles(path)
+        for file in files:
+            newFile = file.split('.')[0]
+            suffix = FileControl().getSuffixName(file)
+            shutil.move(f'{path}/{file}', f'{path}/{newFile.split(element)[0]}.{suffix}')
+        return self
+
+    def getImgByMusic(self, path, savePath):
+        data = [f"{path}/{imgData}" for imgData in self.getDirFiles(path)]
+        for i in data:
+            try:
+                suffix = self.getSuffixName(i)
+                audio = FLAC(i) if suffix == 'flac' else OggVorbis(i)
+                os.makedirs(savePath, exist_ok=True)
+                if audio.pictures:
+                    for picture in audio.pictures:
+                        # 使用音乐文件名作为图片名称
+                        sFileName = f"{savePath}/{os.path.splitext(os.path.basename(i))[0]}.png"
+                        with open(sFileName, 'wb') as f:
+                            f.write(picture.data)
+                        print(f"封面图片已保存为 {sFileName}")
+                else:
+                    print("该文件没有封面图片")
+            except Exception as e:
+                print(e)
+        return self
 
     def fileReName(self, path, fileSuffix, nameFormat=True):
         import string

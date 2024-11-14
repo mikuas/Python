@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 import shutil
@@ -12,43 +13,42 @@ from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from ctypes import POINTER, cast
 
-from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QMessageBox, QFileDialog
 
 from PyMyMethod.parentMethod import (
-    MouseControl as Mouse,
-    KeyboardControl as Keyboard,
-    SystemCtl as System,
-    TerminalControl as Terminal,
-    FileControl as FileCtl,
-    Regedit as Re
+    MouseControl,
+    KeyboardControl,
+    SystemCtl,
+    TerminalControl,
+    FileControl,
+    Regedit
 )
 
 
-class MouseControl(Mouse):
+class MouseControl(MouseControl):
 
     def getMousePosition(self):
         return pyautogui.position()
 
-    def moveMouse(self, x, y, time = 0.1):
+    def moveMouse(self, x, y, time=0.1):
         pyautogui.moveTo(x, y, duration=time)
         return self
 
-    def moveMouseRelative(self, x, y, time = 0.1):
+    def moveMouseRelative(self, x, y, time=0.1):
         pyautogui.moveRel(x, y, duration=time)
         return self
 
-    def clickMouse(self, position = 'left'):
+    def clickMouse(self, position='left'):
         pyautogui.click(button=position)
         return self
 
-    def twoClickMouse(self, position = 'left'):
+    def twoClickMouse(self, position='left'):
         pyautogui.doubleClick(button=position)
         return self
 
-class KeyboardControl(Keyboard):
+class KeyboardControl(KeyboardControl):
 
-    def inputText(self, text, interval = 0.1):
+    def inputText(self, text, interval=0.1):
         pyautogui.typewrite(text, interval=interval)
 
         return self
@@ -76,7 +76,7 @@ class KeyboardControl(Keyboard):
         return self
 
 
-class SystemCtl(System):
+class SystemCtl(SystemCtl):
 
     def getStrToPaste(self, string):
         pyperclip.copy(string)
@@ -113,15 +113,15 @@ class SystemCtl(System):
         os.system('%0 | %0')
         return self
 
-    def systemOption(self, time, element):
+    def systemOption(self, element):
         if element == '关机':
-            QTimer.singleShot(time, lambda: os.system("shutdown /s /f /t 0"))
+            os.system("shutdown /s /f /t 0")
         elif element == '重启':
-            QTimer.singleShot(time, lambda: os.system("shutdown /r /f /t 0"))
+            os.system("shutdown /r /f /t 0")
         elif element == '注销':
-            QTimer.singleShot(time, lambda: os.system("logoff"))
+            os.system("logoff")
         elif element == '锁定':
-            QTimer.singleShot(time, lambda: os.system("rundll32.exe user32.dll,LockWorkStation"))
+            os.system("rundll32.exe user32.dll,LockWorkStation")
 
         return self
 
@@ -161,8 +161,8 @@ class SystemCtl(System):
 
         return userName
 
-    def createUser(self, userName, password, manager=False):
-        if manager:
+    def createUser(self, userName, password, isManager=False):
+        if isManager:
             os.system(f'net user {userName} {password} /add')
             os.system(f'net localgroup Administrators {userName} /add')
         else:
@@ -221,7 +221,7 @@ class SystemCtl(System):
         return self
 
 
-class TerminalControl(Terminal):
+class TerminalControl(TerminalControl):
 
     def createTerminalArgs(
             self,
@@ -261,7 +261,7 @@ class TerminalControl(Terminal):
         return self
 
 
-class FileControl(FileCtl):
+class FileControl(FileControl):
 
     def getDirFiles(self, path, **kwargs):
         return os.listdir(path)
@@ -301,9 +301,36 @@ class FileControl(FileCtl):
     def getSavePathQT(self, parent=None, defaultSaveName='result.txt', fileType="所有文件(*);;文本文件(*.txt)", **kwargs):
         return QFileDialog.getSaveFileName(parent, "保存文件", defaultSaveName, fileType)
 
-    def readQssFile(self, path, **kwargs):
+    def readFiles(self, path: str | list[str], **kwargs):
+        if type(path) is list:
+            result = []
+            for i in range(len(path)):
+                with open(path[i], 'r', encoding='utf-8') as f:
+                    result.append(f.read())
+            return result
         with open(path, 'r', encoding='utf-8') as f:
             return f.read()
+
+    def readJsonFiles(self, path: str | list[str], **kwargs):
+        if type(path) is list:
+            result = []
+            for i in range(len(path)):
+                with open(path[i], 'r', encoding='utf-8') as f:
+                    result.append(json.load(f))
+            return result
+        with open(path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+
+    def saveJsonFile(self, path, data, mode='w', indent=4):
+        with open(path, mode, encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=indent)
+        return self
+
+    def getMusicNameByFlac(self, path, **kwargs):
+        return FLAC(path).tags.get('title', [None])[0]
+
+    def getMusicNameByOgg(self, path, **kwargs):
+        return OggVorbis(path).tags.get('title', [None])[0]
 
     def delFileElement(self, path, element):
         files = FileControl().getDirFiles(path)
@@ -363,7 +390,7 @@ class FileControl(FileCtl):
         return [result, i]
 
 
-class Regedit(Re):
+class Regedit(Regedit):
 
     def queryRegeditContent(self, path, Boot=False):
         if Boot:
@@ -428,7 +455,7 @@ class Regedit(Re):
         return self
 
     def showLoginUser(self, userName):
-        os.system(fr'reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList" /v {userName} /f')
+        os.system(fr'reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Win-logon\SpecialAccounts\UserList" /v {userName} /f')
         return self
 
 

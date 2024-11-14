@@ -144,7 +144,7 @@ class SystemCtl:
         """
         pass
 
-    def blueDesktop(self)  -> 'SystemCtl':
+    def blueDesktop(self) -> 'SystemCtl':
         """
         蓝屏
         :return: SystemCtl
@@ -159,9 +159,8 @@ class SystemCtl:
         """
         pass
 
-    def systemOption(self, time: int | float, element: str) -> 'SystemCtl':
+    def systemOption(self, element: str) -> 'SystemCtl':
         """
-        :param time: 等待时间
         :param element: 电源操作
         :return: SystemCtl
         """
@@ -209,12 +208,12 @@ class SystemCtl:
         """
         pass
 
-    def createUser(self, userName: str, password: str | int, manager: bool = False) -> 'SystemCtl':
+    def createUser(self, userName: str, password: str | int, isManager: bool = False) -> 'SystemCtl':
         """
         创建用户
         :param userName: 用户名
         :param password: 密码
-        :param manager: 是否为管理员
+        :param isManager: 是否为管理员
         :return: SystemCtl
         """
         pass
@@ -354,8 +353,8 @@ class FileControl:
     def getSavePathQT(
             self,
             parent=None,
-            defaultSaveName: str ='result.txt',
-            fileType: str ="所有文件(*);;文本文件(*.txt)",
+            defaultSaveName: str = 'result.txt',
+            fileType: str = "所有文件(*);;文本文件(*.txt)",
     ):
         """
         获取文件保存路径
@@ -366,11 +365,46 @@ class FileControl:
         """
         pass
 
-    def readQssFile(self, path, **kwargs) -> str:
+    def readFiles(self, path: str | list[str], **kwargs) -> str | list[str]:
         """
-        读取Qss文件
+        读取文件
         :param path: 文件路径
         :return: 文件内容
+        """
+        pass
+
+    def readJsonFiles(self, path: str | list[str], **kwargs) -> str | list[str]:
+        """
+        读取json文件
+        :param path: 文件路径
+        :return:  文件内容
+        """
+        pass
+
+    def saveJsonFile(self, path: str, data: dict, mode: str = 'w', indent: int = 4) -> 'FileControl':
+        """
+        写入json文件
+        :param path: 文件路径
+        :param data: 字典
+        :param mode: 写入模式
+        :param indent: 缩进
+        :return: FileControl
+        """
+        pass
+
+    def getMusicNameByFlac(self, path, **kwargs) -> str:
+        """
+        通过flac后缀音乐获取音乐名称
+        :param path: 音乐路径
+        :return: 名称
+        """
+        pass
+
+    def getMusicNameByOgg(self, path, **kwargs) -> str:
+        """
+        通过ogg后缀音乐获取音乐名称
+        :param path: 音乐路径
+        :return: 名称
         """
         pass
 

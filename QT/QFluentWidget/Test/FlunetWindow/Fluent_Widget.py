@@ -8,7 +8,6 @@ from qfluentwidgets import FluentWindow, RoundMenu, setTheme, qconfig, Icon, Flu
 from imageWidget import ImageWidget
 from settingWidget import SettingWidget
 from cardWidget import CardsWidget
-from githubWidget import GitHubWidget
 from profileCard import ProfileNavigationAvatarWidget
 from musicWidget import MusicWidget
 from trayIcon import SystemTrayIcon
@@ -28,7 +27,6 @@ class Window(FluentWindow):
             data = json.load(f)
         self.home = ImageWidget("HOME", data['path'])
         self.music = MusicWidget("MUSIC")
-        self.github = GitHubWidget("GITHUB")
         self.tool = CardsWidget("CARDS")
         self.setting = SettingWidget("SETTINGS", qconfig.themeMode, self)
 
@@ -61,7 +59,6 @@ class Window(FluentWindow):
         self.navigationInterface.setMinimumExpandWidth(1500)
         self.addSubInterface(self.home, FluentIcon.HOME, "主页")
         self.addSubInterface(self.music, FluentIcon.MUSIC, "音乐")
-        self.addSubInterface(self.github, FluentIcon.GITHUB, "GitHub")
         self.addSubInterface(self.tool, FluentIcon.DEVELOPER_TOOLS, "工具")
         # 添加分隔符
         self.navigationInterface.addSeparator()
@@ -90,6 +87,7 @@ class Window(FluentWindow):
     def closeEvent(self, event):
         event.ignore()
         self.hide()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

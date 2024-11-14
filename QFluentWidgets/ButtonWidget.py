@@ -367,6 +367,7 @@ class ButtonWidget(SmoothScrollArea):
 
         self.vLayout.addWidget(self.switchButton, 0, Qt.AlignmentFlag.AlignCenter)
 
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     w = ButtonWidget("BUTTOn")

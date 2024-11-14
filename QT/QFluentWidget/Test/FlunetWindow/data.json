@@ -1,0 +1,12 @@
+{
+    "user1": {
+        "name": "John",
+        "age": 30,
+        "city": "New York"
+    },
+    "user2": {
+        "name": "Alice",
+        "age": 25,
+        "city": "Los Angeles"
+    }
+}

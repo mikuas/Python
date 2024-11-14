@@ -3,11 +3,14 @@ import sys
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QApplication, QWidget
 
-from qfluentwidgets import SettingCardGroup, VBoxLayout, SmoothScrollArea, FluentIcon, setTheme, Theme, InfoBarIcon
+from qfluentwidgets import SettingCardGroup, VBoxLayout, SmoothScrollArea, FluentIcon, setTheme, Theme, InfoBarIcon, \
+    DropDownPushButton, Action
+from qfluentwidgets.components.material import AcrylicMenu
 
 from QFluentWidgets.FluentWidget.FluentCardWidget.ButtonCard.ButtonCard import PushButtonCard, PrimaryButtonCard, \
     TransparentButtonCard, ToolButtonCard, PrimaryToolButtonCard, TransparentToolButtonCard, ComboBoxCard, \
-    EditComboBoxCard, SwitchButtonCard
+    EditComboBoxCard, SwitchButtonCard, DropDownCard, PrimaryDropDownCard, TransparentDropDownCard, DropDownToolCard, \
+    TransparentDropDownToolCard, PrimaryDropDownToolCard, SplitButtonCard
 
 from PyMyMethod.Method import FileControl
 
@@ -39,11 +42,15 @@ class Demo(SmoothScrollArea):
         self.vLayout.addWidget(self.buttonCardGroup)
         self.vLayout.addWidget(self.toolButtonCardGroup)
         self.vLayout.addWidget(self.comboBoxCardGroup)
+        self.vLayout.addWidget(self.dropCardGroup)
+        self.vLayout.addWidget(self.splitCardGroup)
 
     def initCardGroup(self):
         self.buttonCardGroup = SettingCardGroup('标准按钮卡片组', self)
         self.toolButtonCardGroup = SettingCardGroup('工具按钮卡片组', self)
         self.comboBoxCardGroup = SettingCardGroup('下拉框卡片', self)
+        self.dropCardGroup = SettingCardGroup('下拉按钮卡片', self)
+        self.splitCardGroup = SettingCardGroup('拆分按钮', self)
 
         self.buttonCardGroup.addSettingCards([
             self.buttonCard,
@@ -61,6 +68,19 @@ class Demo(SmoothScrollArea):
         self.comboBoxCardGroup.addSettingCards([
             self.comboBoxCard,
             self.editComboBoxCard
+        ])
+
+        self.dropCardGroup.addSettingCards([
+            self.dropCard,
+            self.primaryDropCard,
+            self.tranDropCard,
+            self.toolDropCard,
+            self.priToolDropCard,
+            self.tranToolDropCard
+        ])
+
+        self.splitCardGroup.addSettingCards([
+            self.splitCard
         ])
 
     def initCard(self):
@@ -136,6 +156,87 @@ class Demo(SmoothScrollArea):
             self
         )
         self.editComboBoxCard.titleLabel.setContentsMargins(0, 15, 0, 0)
+        #########################################
+        self.dropCard = DropDownCard(
+            FluentIcon.ALBUM,
+            '下拉按钮',
+            'Content',
+            '',
+            FluentIcon.MORE,
+            ['SEND', 'ADD', 'DELETE'],
+            [FluentIcon.SEND, FluentIcon.ADD, FluentIcon.DELETE],
+            [lambda: print("SEND"), lambda: print("ADD"), lambda: print("DELETE")],
+            self
+        )
+        self.primaryDropCard = PrimaryDropDownCard(
+            FluentIcon.INFO,
+            '主题色下拉按钮',
+            'Content',
+            '确定',
+            None,
+            ['ADD', 'SEND', 'DELETE'],
+            [FluentIcon.ADD, FluentIcon.SEND, FluentIcon.BASKETBALL],
+            [lambda: print('1'), lambda: print('2'), lambda: print('3')],
+            self
+        )
+        self.tranDropCard = TransparentDropDownCard(
+            FluentIcon.CAR,
+            '透明下拉按钮',
+            'Content',
+            '确定',
+            FluentIcon.MORE,
+            ["SEND", "ADD", "DELETE"],
+            [FluentIcon.SEND, FluentIcon.ADD, FluentIcon.DELETE],
+            [lambda: print('SEND'), lambda: print('ADD'), lambda: print('DELETE')],
+            self
+        )
+        self.toolDropCard = DropDownToolCard(
+            FluentIcon.ASTERISK,
+            '下拉工具按钮',
+            'Content',
+            '更多',
+            # None,
+            # FluentIcon.MORE,
+            None,
+            ["SEND", "ADD", "DELETE"],
+            [FluentIcon.SEND, FluentIcon.ADD, FluentIcon.DELETE],
+            [lambda: print('SEND'), lambda: print('ADD'), lambda: print('DELETE')],
+            self
+        )
+        self.priToolDropCard = PrimaryDropDownToolCard(
+            FluentIcon.BLUETOOTH,
+            '主题色下拉工具按钮',
+            'Content',
+            # '确定',
+            None,
+            FluentIcon.ADD,
+            ["SEND", "ADD", "DELETE"],
+            [FluentIcon.SEND, FluentIcon.ADD, FluentIcon.DELETE],
+            [lambda: print('SEND'), lambda: print('ADD'), lambda: print('DELETE')],
+            self
+        )
+        self.tranToolDropCard = TransparentDropDownToolCard(
+            FluentIcon.CHAT,
+            '透明下拉工具按钮',
+            'Content',
+            '确定',
+            InfoBarIcon.INFORMATION,
+            ["SEND", "ADD", "DELETE"],
+            [FluentIcon.SEND, FluentIcon.ADD, FluentIcon.DELETE],
+            [lambda: print('SEND'), lambda: print('ADD'), lambda: print('DELETE')],
+            self
+        )
+        self.splitCard = SplitButtonCard(
+            FluentIcon.HOME,
+            '拆分按钮',
+            'Content',
+            '确定',
+            FluentIcon.SEND,
+            ['添加', '删除', '查找'],
+            [FluentIcon.ADD, FluentIcon.DELETE, FluentIcon.SEARCH],
+            [lambda: print('添加'), lambda: print('删除'), lambda: print('查找')],
+            self
+        )
 
 
 if __name__ == '__main__':

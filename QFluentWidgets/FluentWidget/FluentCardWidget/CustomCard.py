@@ -37,7 +37,7 @@ class CustomCard(CardWidget):
 class CustomButtonCard(CustomCard):
     def __init__(
             self, icon, title, content, buttonText: str = None, buttonIcon: Union[QIcon, str, FluentIconBase] = None,
-            parent=None, __type: Union[type[PushButton], type[ToolButton]] = None
+            parent=None, __type: Union[type[PushButton], type[ToolButton], type[QWidget]] = None
     ):
         super().__init__(icon, title, content, parent)
         self.button = __type(self)
@@ -82,26 +82,34 @@ class HyperLinkButtonCard(CustomCard):
         self.linkButton.setIconSize(QSize(18, 18))
 
 
-class CustomDropDownButtonCard(CustomButtonCard):
+class CustomDropDownCard(CustomButtonCard):
 
     def __init__(
             self,
             icon,
             title,
             content,
-            menuIcon: list[Union[QIcon, str, FluentIconBase]] = None,
+            buttonText=None,
+            buttonIcon=None,
             menuText: list[str] = None,
-            triggered: list = lambda: None,
+            menuIcon: list[Union[QIcon, str, FluentIconBase]] = None,
+            triggered: list = None,
             parent=None,
             __type=None
     ):
-        super().__init__(icon, title, content, parent)
+        super().__init__(icon, title, content, buttonText, buttonIcon, parent, __type)
+        self.addMenu(menuIcon, menuText, triggered)
 
-    def addMenu(self, icon, text, triggered):
+    def addMenu(self, icons, texts, triggered):
         self.menu = AcrylicMenu(self.button)
-        for icon, text, fc in zip(icon, text, triggered):
-            self.menu.addAction(Action(icon, text, fc))
-        self.button.setMenu(self.menu)
+        if texts:
+            if icons:
+                for icon, text in zip(icons, texts):
+                    self.menu.addAction(Action(icon, text, triggered=triggered[texts.index(text)] if triggered else None))
+            else:
+                for text in texts:
+                    self.menu.addAction(Action(text, triggered=triggered[texts.index(text)] if triggered else None))
+
 
 
 #

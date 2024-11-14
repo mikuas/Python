@@ -1,42 +1,43 @@
 from qfluentwidgets import PushButton, PrimaryPushButton, TransparentPushButton, ToolButton, PrimaryToolButton, \
     TransparentToolButton, ComboBox, EditableComboBox, DropDownPushButton, PrimaryDropDownPushButton, \
-    TransparentDropDownPushButton, DropDownToolButton, PrimaryDropDownToolButton, TransparentDropDownToolButton
+    TransparentDropDownPushButton, DropDownToolButton, PrimaryDropDownToolButton, TransparentDropDownToolButton, \
+    SplitPushButton
 
-from ...FluentCardWidget.CustomCard import CustomButtonCard, CustomSwitchButtonCard, CustomDropDownButtonCard
+from ...FluentCardWidget.CustomCard import CustomButtonCard, CustomSwitchButtonCard, CustomDropDownCard
 from ...FluentCardWidget.ComboBoxCard import CustomComboBoxCard
 
 
-class PushButtonC(CustomButtonCard):
+class PushButtonCard(CustomButtonCard):
     """标准按钮卡片"""
     def __init__(self, icon, title, content, buttonText=None, buttonIcon=None, parent=None):
         super().__init__(icon, title, content, buttonText, buttonIcon, parent, PushButton)
 
 
-class PrimaryButtonC(CustomButtonCard):
+class PrimaryButtonCard(CustomButtonCard):
     """主题色按钮卡片"""
     def __init__(self, icon, title, content, buttonText=None, buttonIcon=None, parent=None):
         super().__init__(icon, title, content, buttonText, buttonIcon, parent, PrimaryPushButton)
 
 
-class TransparentButtonC(CustomButtonCard):
+class TransparentButtonCard(CustomButtonCard):
     """透明按钮卡片"""
     def __init__(self, icon, title, content, buttonText=None, buttonIcon=None, parent=None):
         super().__init__(icon, title, content, buttonText, buttonIcon, parent, TransparentPushButton)
 
 
-class ToolButtonC(CustomButtonCard):
+class ToolButtonCard(CustomButtonCard):
     """工具按钮卡片"""
     def __init__(self, icon, title, content, buttonText=None, buttonIcon=None, parent=None):
         super().__init__(icon, title, content, buttonText, buttonIcon, parent, ToolButton)
 
 
-class PrimaryToolButtonC(CustomButtonCard):
+class PrimaryToolButtonCard(CustomButtonCard):
     """主题色工具按钮卡片"""
     def __init__(self, icon, title, content, buttonText=None, buttonIcon=None, parent=None):
         super().__init__(icon, title, content, buttonText, buttonIcon, parent, PrimaryToolButton)
 
 
-class TransparentToolButtonC(CustomButtonCard):
+class TransparentToolButtonCard(CustomButtonCard):
     """透明工具按钮卡片"""
     def __init__(self, icon, title, content, buttonText=None, buttonIcon=None, parent=None):
         super().__init__(icon, title, content, buttonText, buttonIcon, parent, TransparentToolButton)
@@ -60,24 +61,68 @@ class EditComboBoxCard(CustomComboBoxCard):
         super().__init__(icon, title, content, items, noSelected, info, parent, EditableComboBox)
 
 
-class DropDownButtonCard(CustomDropDownButtonCard):
+class DropDownCard(CustomDropDownCard):
     """普通下拉按钮卡片"""
-    def __init__(self, icon, title, content, menuIcon, menuText, triggered, parent=None):
-        super().__init__(icon, title, content, menuIcon, menuText, triggered, parent, DropDownPushButton)
+    def __init__(
+            self, icon, title, content, buttonText=None, buttonIcon=None,
+            menuText=None, menuIcon=None, triggered=None, parent=None
+    ):
+        super().__init__(icon, title, content, buttonText, buttonIcon, menuText, menuIcon, triggered, parent, DropDownPushButton)
+        self.button.setMenu(self.menu)
 
-class PrimaryDropDownButtonCard(CustomDropDownButtonCard):
+
+class PrimaryDropDownCard(CustomDropDownCard):
     """主题色下拉按钮卡片"""
-    def __init__(self, icon, title, content, menuIcon, menuText, triggered, parent=None):
-        super().__init__(icon, title, content, menuIcon, menuText, triggered, parent, PrimaryDropDownPushButton)
+    def __init__(
+            self, icon, title, content, buttonText=None, buttonIcon=None,
+            menuText=None, menuIcon=None, triggered=None, parent=None
+    ):
+        super().__init__(icon, title, content, buttonText, buttonIcon, menuText, menuIcon, triggered, parent, PrimaryDropDownPushButton)
+        self.button.setMenu(self.menu)
 
-
-class TransparentDropDownButtonCard(CustomDropDownButtonCard):
+class TransparentDropDownCard(CustomDropDownCard):
     """透明下拉按钮卡片"""
-    def __init__(self, icon, title, content, menuIcon, menuText, triggered, parent=None):
-        super().__init__(icon, title, content, menuIcon, menuText, triggered, parent, PrimaryDropDownPushButton)
+    def __init__(
+            self, icon, title, content, buttonText=None, buttonIcon=None,
+            menuText=None, menuIcon=None, triggered=None, parent=None
+    ):
+        super().__init__(icon, title, content, buttonText, buttonIcon, menuText, menuIcon, triggered, parent, TransparentDropDownPushButton)
+        self.button.setMenu(self.menu)
 
-
-class DropDownToolButtonCard(CustomDropDownButtonCard):
+class DropDownToolCard(CustomDropDownCard):
     """下拉工具按钮卡片"""
-    def __init__(self, icon, title, content, menuIcon, menuText, triggered, parent=None):
-        super().__init__(icon, title, content, menuIcon, menuText, triggered, parent, PrimaryDropDownPushButton)
+    def __init__(
+            self, icon, title, content, buttonText=None, buttonIcon=None,
+            menuText=None, menuIcon=None, triggered=None, parent=None
+    ):
+        super().__init__(icon, title, content, buttonText, buttonIcon, menuText, menuIcon, triggered, parent, DropDownToolButton)
+        self.button.setMenu(self.menu)
+
+
+class PrimaryDropDownToolCard(CustomDropDownCard):
+    """下拉工具主题色按钮卡片"""
+    def __init__(
+            self, icon, title, content, buttonText=None, buttonIcon=None,
+            menuText=None, menuIcon=None, triggered=None, parent=None
+    ):
+        super().__init__(icon, title, content, buttonText, buttonIcon, menuText, menuIcon, triggered, parent, PrimaryDropDownToolButton)
+        self.button.setMenu(self.menu)
+
+class TransparentDropDownToolCard(CustomDropDownCard):
+    """下拉工具透明按钮卡片"""
+    def __init__(
+            self, icon, title, content, buttonText=None, buttonIcon=None,
+            menuText=None, menuIcon=None, triggered=None, parent=None
+    ):
+        super().__init__(icon, title, content, buttonText, buttonIcon, menuText, menuIcon, triggered, parent, TransparentDropDownToolButton)
+        self.button.setMenu(self.menu)
+
+class SplitButtonCard(CustomDropDownCard):
+    """拆分按钮"""
+    def __init__(
+            self, icon, title, content, buttonText=None, buttonIcon=None,
+            menuText=None, menuIcon=None, triggered=None, parent=None
+    ):
+        super().__init__(icon, title, content, buttonText, buttonIcon, menuText, menuIcon, triggered, parent, SplitPushButton)
+        self.button.setFixedWidth()
+        self.button.setFlyout(self.menu)

@@ -224,6 +224,7 @@ class ButtonWidget(SmoothScrollArea):
         self.splitToolButton = SplitToolButton(self)
         self.splitToolButton.setIcon(FluentIcon.UPDATE)
         self.splitToolButton.setIconSize(QSize(20, 20))
+        self.splitPushButton.setText('拆分工具按钮')
 
         # create sub menu
         menu = RoundMenu(self.splitToolButton)

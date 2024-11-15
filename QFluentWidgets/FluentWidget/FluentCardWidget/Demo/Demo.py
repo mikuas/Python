@@ -3,17 +3,16 @@ import sys
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QApplication, QWidget
 
-from qfluentwidgets import SettingCardGroup, VBoxLayout, SmoothScrollArea, FluentIcon, setTheme, Theme, InfoBarIcon, \
-    DropDownPushButton, Action
-from qfluentwidgets.components.material import AcrylicMenu
-
-from QFluentWidgets.FluentWidget.FluentCardWidget.ButtonCard.ButtonCard import PushButtonCard, PrimaryButtonCard, \
+from qfluentwidgets import SettingCardGroup, VBoxLayout, SmoothScrollArea, FluentIcon, setTheme, Theme, InfoBarIcon
+from QFluentWidgets.FluentWidget.FluentCardWidget.ButtonCard.ButtonCard import ButtonCard, PrimaryButtonCard, \
     TransparentButtonCard, ToolButtonCard, PrimaryToolButtonCard, TransparentToolButtonCard, ComboBoxCard, \
     EditComboBoxCard, SwitchButtonCard, DropDownCard, PrimaryDropDownCard, TransparentDropDownCard, DropDownToolCard, \
-    TransparentDropDownToolCard, PrimaryDropDownToolCard, SplitButtonCard
+    TransparentDropDownToolCard, PrimaryDropDownToolCard, PrimarySplitCard, SplitCard, SplitToolCard, \
+    PrimarySplitToolCard, HyperLinkCard, ExpandGroupCard
 
 from PyMyMethod.Method import FileControl
 
+from QFluentWidgets.FluentWidget.FluentCardWidget.CustomCardWidget import ExpandButtonCard as eb
 
 class Demo(SmoothScrollArea):
     def __init__(self):
@@ -41,6 +40,7 @@ class Demo(SmoothScrollArea):
     def initLayout(self):
         self.vLayout.addWidget(self.buttonCardGroup)
         self.vLayout.addWidget(self.toolButtonCardGroup)
+        self.vLayout.addWidget(self.expandCardGroup)
         self.vLayout.addWidget(self.comboBoxCardGroup)
         self.vLayout.addWidget(self.dropCardGroup)
         self.vLayout.addWidget(self.splitCardGroup)
@@ -52,11 +52,13 @@ class Demo(SmoothScrollArea):
         self.dropCardGroup = SettingCardGroup('下拉按钮卡片', self)
         self.splitCardGroup = SettingCardGroup('拆分按钮', self)
 
+
         self.buttonCardGroup.addSettingCards([
             self.buttonCard,
             self.primaryButtonCard,
             self.transparentButtonCard,
-            self.statusButtonCard
+            self.statusButtonCard,
+            self.linkButtonCard
         ])
 
         self.toolButtonCardGroup.addSettingCards([
@@ -80,11 +82,14 @@ class Demo(SmoothScrollArea):
         ])
 
         self.splitCardGroup.addSettingCards([
-            self.splitCard
+            self.splitCard,
+            self.priSplitCard,
+            self.splitToolCard,
+            self.priSplitToolCard
         ])
 
     def initCard(self):
-        self.buttonCard = PushButtonCard(
+        self.buttonCard = ButtonCard(
             FluentIcon.GITHUB,
             '标准按钮',
             'Content',
@@ -113,26 +118,34 @@ class Demo(SmoothScrollArea):
             False,
             self
         )
+        self.linkButtonCard = HyperLinkCard(
+            'https://www.bilibili.com',
+            FluentIcon.VIDEO,
+            '超链接按钮',
+            'Content',
+            '确定',
+            FluentIcon.MORE,
+            self
+        )
         #####################################################
         self.toolButtonCard = ToolButtonCard(
             FluentIcon.MAIL,
             '标准工具按钮',
             'Content',
-            '确定',
+            FluentIcon.ALBUM,
             parent=self
         )
         self.primaryToolButtonCard = PrimaryToolButtonCard(
             FluentIcon.CLOUD,
             '主题色工具按钮',
             'Content',
-            buttonIcon=FluentIcon.ADD,
-            parent=self
+            FluentIcon.ADD,
+            self
         )
         self.transparentToolButtonCard = TransparentToolButtonCard(
             FluentIcon.DELETE,
             '透明工具按钮',
             'Content',
-            '确定',
             FluentIcon.ADD,
             self
         )
@@ -197,7 +210,6 @@ class Demo(SmoothScrollArea):
             '更多',
             # None,
             # FluentIcon.MORE,
-            None,
             ["SEND", "ADD", "DELETE"],
             [FluentIcon.SEND, FluentIcon.ADD, FluentIcon.DELETE],
             [lambda: print('SEND'), lambda: print('ADD'), lambda: print('DELETE')],
@@ -207,8 +219,6 @@ class Demo(SmoothScrollArea):
             FluentIcon.BLUETOOTH,
             '主题色下拉工具按钮',
             'Content',
-            # '确定',
-            None,
             FluentIcon.ADD,
             ["SEND", "ADD", "DELETE"],
             [FluentIcon.SEND, FluentIcon.ADD, FluentIcon.DELETE],
@@ -219,14 +229,14 @@ class Demo(SmoothScrollArea):
             FluentIcon.CHAT,
             '透明下拉工具按钮',
             'Content',
-            '确定',
             InfoBarIcon.INFORMATION,
             ["SEND", "ADD", "DELETE"],
             [FluentIcon.SEND, FluentIcon.ADD, FluentIcon.DELETE],
             [lambda: print('SEND'), lambda: print('ADD'), lambda: print('DELETE')],
             self
         )
-        self.splitCard = SplitButtonCard(
+        ################################################
+        self.splitCard = SplitCard(
             FluentIcon.HOME,
             '拆分按钮',
             'Content',
@@ -237,7 +247,77 @@ class Demo(SmoothScrollArea):
             [lambda: print('添加'), lambda: print('删除'), lambda: print('查找')],
             self
         )
-
+        self.priSplitCard = PrimarySplitCard(
+            FluentIcon.BLUETOOTH,
+            '主题色拆分按钮',
+            'Content',
+            '更多',
+            FluentIcon.MORE,
+            ["SEND", "ADD", "DELETE"],
+            [FluentIcon.SEND, FluentIcon.ADD, FluentIcon.DELETE],
+            [lambda: print('SEND'), lambda: print('ADD'), lambda: print('DELETE')],
+            self
+        )
+        self.splitToolCard = SplitToolCard(
+            FluentIcon.HOME,
+            '拆分工具按钮',
+            'Content',
+            FluentIcon.MORE,
+            ["SEND", "ADD", "DELETE"],
+            [FluentIcon.SEND, FluentIcon.ADD, FluentIcon.DELETE],
+            [lambda: print('SEND'), lambda: print('ADD'), lambda: print('DELETE')],
+            self
+        )
+        self.priSplitToolCard = PrimarySplitToolCard(
+            FluentIcon.GITHUB,
+            '主题色拆分工具按钮',
+            'Content',
+            # '确定',
+            FluentIcon.SEND,
+            ["SEND", "ADD", "DELETE"],
+            [FluentIcon.SEND, FluentIcon.ADD, FluentIcon.DELETE],
+            [lambda: print('SEND'), lambda: print('ADD'), lambda: print('DELETE')],
+            self
+        )
+        ###########################################################
+        self.expandCardGroup = ExpandGroupCard(
+            FluentIcon.POWER_BUTTON, '展开卡片', 'Content', self
+        )
+        self.expandCardGroup.addGroupWidgets([
+            ButtonCard(
+                FluentIcon.HOME,
+                'ONE',
+                "Content",
+                None,
+                FluentIcon.MORE,
+                self
+            ),
+            ToolButtonCard(
+                FluentIcon.HOME,
+                "TWO",
+                'Content',
+                FluentIcon.MORE,
+                self
+            )
+        ])
+        self.expandCardGroup.addPrimaryButtonCard(
+            '标题',
+            FluentIcon.HOME,
+            '确定'
+        )
+        self.expandCardGroup.addGroupWidget(
+            SplitCard(
+                FluentIcon.HOME,
+                'Split',
+                'Content',
+                '确定',
+                FluentIcon.MORE,
+                ["复制", '粘贴', '撤销'],
+                None,
+                None,
+                self
+            )
+        )
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

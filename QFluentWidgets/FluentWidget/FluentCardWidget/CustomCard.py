@@ -3,7 +3,7 @@ from typing import Union
 from PySide6.QtGui import Qt, QIcon
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
 from qfluentwidgets import CardWidget, IconWidget, BodyLabel, CaptionLabel, PushButton, \
-    FluentIconBase, ToolButton, SwitchButton, HyperlinkButton, RoundMenu, Action
+    FluentIconBase, ToolButton, SwitchButton, HyperlinkButton, Action, ExpandGroupSettingCard
 from qfluentwidgets.components.material import AcrylicMenu
 
 
@@ -20,7 +20,7 @@ class CustomCard(CardWidget):
         self.iconWidget.setFixedSize(24, 24)
         self.contentLabel.setTextColor("#606060", "#d2d2d2")
 
-        self.hBoxLayout.setContentsMargins(20, 11, 30, 11) # left top right bottom
+        self.hBoxLayout.setContentsMargins(20, 11, 48, 11) # left top right bottom
         self.hBoxLayout.setSpacing(15)
         self.hBoxLayout.addWidget(self.iconWidget)
 
@@ -37,12 +37,29 @@ class CustomCard(CardWidget):
 class CustomButtonCard(CustomCard):
     def __init__(
             self, icon, title, content, buttonText: str = None, buttonIcon: Union[QIcon, str, FluentIconBase] = None,
-            parent=None, __type: Union[type[PushButton], type[ToolButton], type[QWidget]] = None
+            parent=None, __type: Union[type[PushButton], type[ToolButton], type[HyperlinkButton], type[QWidget]] = None
     ):
         super().__init__(icon, title, content, parent)
         self.button = __type(self)
         self.button.setFixedWidth(120)
         self.setButtonText(buttonText)
+        self.setButtonIcon(buttonIcon)
+        self.hBoxLayout.addWidget(self.button, 0, Qt.AlignmentFlag.AlignRight)
+
+    def setButtonText(self, text: str):
+        self.button.setText(text)
+
+    def setButtonIcon(self, icon: Union[QIcon, str, FluentIconBase]):
+        self.button.setIcon(icon)
+
+
+class CustomToolCard(CustomCard):
+    def __init__(
+            self, icon, title, content, buttonIcon: Union[QIcon, str, FluentIconBase] = None,
+            parent=None, __type: Union[type[PushButton], type[ToolButton], type[QWidget]] = None
+    ):
+        super().__init__(icon, title, content, parent)
+        self.button = __type(self)
         self.setButtonIcon(buttonIcon)
         self.hBoxLayout.addWidget(self.button, 0, Qt.AlignmentFlag.AlignRight)
 
@@ -68,39 +85,16 @@ class CustomSwitchButtonCard(CustomCard):
         self.hBoxLayout.setContentsMargins(20, 11, 0, 11)
 
 
-class HyperLinkButtonCard(CustomCard):
-    def __init__(self, url: str, icon, title, content, linkIcon: Union[QIcon, str, FluentIconBase] = None, parent=None):
-        super().__init__(icon, title, content, parent)
-        self.linkButton = HyperlinkButton(self)
-        self.initLinkButton(url, linkIcon)
-
-    def initLinkButton(self, url: str, icon):
-        self.linkButton.setUrl(url)
-        self.linkButton.setIcon(icon)
-        self.linkButton.setFixedWidth(100)
-        from PySide6.QtCore import QSize
-        self.linkButton.setIconSize(QSize(18, 18))
-
-
-class CustomDropDownCard(CustomButtonCard):
+class CustomDropDownCard(CustomToolCard):
 
     def __init__(
-            self,
-            icon,
-            title,
-            content,
-            buttonText=None,
-            buttonIcon=None,
-            menuText: list[str] = None,
-            menuIcon: list[Union[QIcon, str, FluentIconBase]] = None,
-            triggered: list = None,
-            parent=None,
-            __type=None
+            self, icon, title, content, buttonText: str = None, buttonIcon=None, menuTexts: list[str] = None,
+            menuIcons: list[Union[QIcon, str, FluentIconBase]] = None, triggered: list = None, parent=None, __type=None
     ):
-        super().__init__(icon, title, content, buttonText, buttonIcon, parent, __type)
-        self.addMenu(menuIcon, menuText, triggered)
+        super().__init__(icon, title, content, buttonIcon, parent, __type)
+        self.addMenu(menuIcons, menuTexts, triggered)
 
-    def addMenu(self, icons, texts, triggered):
+    def addMenu(self, icons: list[Union[QIcon, str, FluentIconBase]], texts: list, triggered: list):
         self.menu = AcrylicMenu(self.button)
         if texts:
             if icons:
@@ -111,38 +105,41 @@ class CustomDropDownCard(CustomButtonCard):
                     self.menu.addAction(Action(text, triggered=triggered[texts.index(text)] if triggered else None))
 
 
+class ExpandGroupCard(ExpandGroupSettingCard):
+    def __init__(self, icon, title, content, parent=None):
+        super().__init__(icon, title, content, parent)
+        self.card.setContentsMargins(0, 0, 20, 0)
+        self.viewLayout.setSpacing(0)
+        self.setCardMinHeight(80)
 
-#
-#
-# # 超链接按钮卡片
-# class HyperLinkButtonCard(__ButtonCard):
-#     def __init__(self, url, icon, title, content, buttonText=None, buttonIcon=None, parent=None):
-#         super().__init__(icon, title, content, parent=parent, button=HyperlinkButton)
-#         self.button.setUrl(url)
-#         if buttonText is not None:
-#             self.button.setText(buttonText)
-#         if buttonIcon is not None:
-#             self.button.setIcon(buttonIcon)
-#
-#
-# # 下拉框
-# class ComboBoxCard(__ButtonCard):
-#     def __init__(self, icon, title, content, items, noSelected: bool = False, info=None, parent=None):
-#         super().__init__(icon, title, content, parent=parent, button=ComboBox)
-#         self.button.addItems(items)
-#         if noSelected:
-#             self.button.setCurrentIndex(-1)
-#             self.button.setPlaceholderText(info)
-#
-#
-# # 可编辑下拉框
-# class EditComboBoxCard(__ButtonCard):
-#     def __init__(self, icon, title, content, items, noSelected: bool = False, info=None, parent=None):
-#         super().__init__(icon, title, content, parent=parent, button=EditableComboBox)
-#         self.button.addItems(items)
-#         if noSelected:
-#             self.button.setCurrentIndex(-1)
-#             self.button.setPlaceholderText(info)
+    def setCardMinHeight(self, height: int):
+        self.card.setFixedHeight(height)
+
+    def addGroupWidgets(self, widgets: list[QWidget]):
+        for widget in widgets:
+            self.addGroupWidget(widget)
+
+    def addButtonCard(self, title: str, icon: Union[QIcon, str, FluentIconBase], text: str, __type: Union[type[PushButton], type[ToolButton]] = None):
+        pass
+
+    def addPrimaryButtonCard(self, title: str, icon: Union[QIcon, str, FluentIconBase], text: str):
+        pass
+
+    def addTransparentButtonCard(self, title: str, icon: Union[QIcon, str, FluentIconBase], text: str):
+        pass
+
+    def addSliderCard(self, title: str, ranges: tuple[int, int], defaultValue: int, orientation: Qt.Orientation = Qt.Orientation.Horizontal):
+        pass
+
+    def _initWidget(self):
+        window = QWidget()
+        window.setFixedHeight(65)
+        hLayout = QHBoxLayout(window)
+        hLayout.setContentsMargins(48, 12, 48, 12)
+        self.addGroupWidget(window)
+
+        return hLayout
+
 #
 #
 # # 下拉框按钮

@@ -15,7 +15,7 @@ from qfluentwidgets import FluentIcon, CardWidget, IconWidget, BodyLabel, Captio
     IndeterminateProgressBar
 
 from PyMyMethod.Method import FileControl, Regedit
-from PyMyMethod.ScreenControl import ScreenControl
+# from PyMyMethod.ScreenControl import ScreenControl
 
 
 class CardsWidget(SmoothScrollArea):
@@ -32,10 +32,10 @@ class CardsWidget(SmoothScrollArea):
         # self.scrollWidget = None
         # self.expandLayout = None
         # self.filePath = None
-        self.message = None
-        self.FileControl = FileControl()
+        # self.message = None
+        self.fc = FileControl()
         self.Regedit = Regedit()
-        self.ScreenControl = ScreenControl()
+        # self.ScreenControl = ScreenControl()
         self.lpData = [
             '绫地宁宁', '因幡爱瑠', '椎叶䌷', '亚托莉', ' 朝武芳乃', '丛雨', '常陆茉子', '上坂茅羽耶', '矢来美羽', '在原七海',
             '三司绫濑', '式部茉优', '二条院羽月', '和泉妃爱', '常盘华乃', '锦明日海', '镰仓诗樱', '结城明日奈', '小鸟游六花',
@@ -187,7 +187,7 @@ class CardsWidget(SmoothScrollArea):
         self.lpCardGroup.addSettingCards([self.l1])
 
     def initStyle(self, theme="LIGHT_CardWidget"):
-        self.setStyleSheet(FileControl().readQssFile(f'./data/styles/{theme}.qss'))
+        self.setStyleSheet(self.fc.readJsonFiles(f'./data/styles/{theme}.qss'))
 
     def applyStyle(self, theme):
         if theme == Theme.DARK:

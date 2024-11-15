@@ -130,11 +130,13 @@ class TwoButtonCard(__ButtonCard):
 class ExpandButtonCard(ExpandGroupSettingCard):
     def __init__(self, icon, title, content, parent=None):
         super().__init__(icon, title, content, parent)
-        self.viewLayout.setContentsMargins(0, 0, 0, 0)
+        self.card.setFixedHeight(80)
+        self.setFixedHeight(self.card.height())
+        self.viewLayout.setContentsMargins(0, self.card.height(), 0, 0)
         self.viewLayout.setSpacing(0)
 
     def addButton(self, labelText, buttonText, label=CaptionLabel, button=PushButton):
-        window, layout = self.initLayout()
+        layout = self.initLayout()
 
         label = label(labelText, self)
         button = button(self)
@@ -148,7 +150,7 @@ class ExpandButtonCard(ExpandGroupSettingCard):
         return button
 
     def addComboBox(self, labelText, items: list[str], label=CaptionLabel, comboBox=ComboBox):
-        window, layout = self.initLayout()
+        layout = self.initLayout()
 
         label = label(labelText, self)
         combox = comboBox(self)
@@ -162,7 +164,7 @@ class ExpandButtonCard(ExpandGroupSettingCard):
         return combox
 
     def addSwitchButton(self, labelText, default: bool = False, label=CaptionLabel):
-        window, layout = self.initLayout()
+        layout = self.initLayout()
 
         label = label(labelText, self)
         switchButton = SwitchButton(self)
@@ -178,7 +180,7 @@ class ExpandButtonCard(ExpandGroupSettingCard):
         return switchButton
 
     def addRangeButton(self, labelText, range: tuple, defaultValue, label=CaptionLabel, position=Qt.Horizontal):
-        window, layout = self.initLayout()
+        layout = self.initLayout()
 
         label = label(labelText, self)
         slider = Slider(position)
@@ -205,4 +207,4 @@ class ExpandButtonCard(ExpandGroupSettingCard):
         layout.setContentsMargins(48, 12, 48, 12)
         self.addGroupWidget(window)
 
-        return window, layout
+        return layout

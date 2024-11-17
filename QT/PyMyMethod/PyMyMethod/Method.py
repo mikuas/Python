@@ -1,20 +1,13 @@
+import argparse
 import json
 import os
-import sys
 import shutil
+import sys
+from ctypes import POINTER, cast
+
 import comtypes
 import pyautogui
 import pyperclip
-import argparse
-
-from mutagen.flac import FLAC
-from mutagen.oggvorbis import OggVorbis
-from comtypes import CLSCTX_ALL
-from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
-from ctypes import POINTER, cast
-
-from PySide6.QtWidgets import QMessageBox, QFileDialog
-
 from PyMyMethod.parentMethod import (
     MouseControl,
     KeyboardControl,
@@ -23,6 +16,11 @@ from PyMyMethod.parentMethod import (
     FileControl,
     Regedit
 )
+from PySide6.QtWidgets import QMessageBox, QFileDialog
+from comtypes import CLSCTX_ALL
+from mutagen.flac import FLAC
+from mutagen.oggvorbis import OggVorbis
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
 
 class MouseControl(MouseControl):

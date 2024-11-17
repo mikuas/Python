@@ -10,7 +10,7 @@ from qfluentwidgets import SmoothScrollArea, VBoxLayout, SettingCardGroup, PushB
     RoundMenu, Action, TransparentDropDownPushButton, DropDownToolButton, TransparentDropDownToolButton, \
     PrimaryDropDownPushButton, PrimaryDropDownToolButton, SplitPushButton, PrimarySplitPushButton, SplitToolButton, \
     PrimarySplitToolButton, PillPushButton, PillToolButton, CheckBox, ComboBox, EditableComboBox, IconWidget, \
-    InfoBarIcon, Slider, SwitchButton, HorizontalSeparator, VerticalSeparator
+    InfoBarIcon, Slider, SwitchButton, HorizontalSeparator, VerticalSeparator, setTheme, Theme
 from qfluentwidgets.components.material import AcrylicComboBox, AcrylicEditableComboBox, AcrylicMenu
 
 
@@ -141,7 +141,7 @@ class ButtonWidget(SmoothScrollArea):
         menu = RoundMenu(self.dropDownToolButton)
         menu.addAction(Action(FluentIcon.BASKETBALL, 'Menu1', triggered=lambda: print('Menu1')))
         menu.addAction(Action(FluentIcon.EMBED, 'Menu2', triggered=lambda: print('Menu2')))
-        menu.addAction(Action(FluentIcon.MAIL, 'Menu3', triggered=lambda: print('Menu3')))
+        menu.addAction (Action(FluentIcon.MAIL, 'Menu3', triggered=lambda: print('Menu3')))
 
         # add menu
         self.dropDownToolButton.setMenu(menu)
@@ -371,7 +371,8 @@ class ButtonWidget(SmoothScrollArea):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    w = ButtonWidget("BUTTOn")
+    w = ButtonWidget("BUTTON")
+    setTheme(Theme.AUTO)
     w.resize(1000, 600)
     w.show()
     sys.exit(app.exec())

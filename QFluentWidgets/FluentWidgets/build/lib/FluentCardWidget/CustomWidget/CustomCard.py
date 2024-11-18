@@ -63,6 +63,9 @@ class CustomButtonCardParent:
     def setButtonIcon(self, icon: Union[QIcon, str, FluentIconBase]) -> 'CustomButtonCardParent':
         pass
 
+    def setButtonFW(self, width: int) -> 'CustomButtonCardParent':
+        pass
+
     def setButtonChecked(self, isChecked: bool = False) -> 'CustomButtonCardParent':
         pass
 
@@ -140,9 +143,7 @@ class SliderCardParent:
 class ExpandGroupCard(ExpandGroupSettingCard):
     def __init__(self, icon, title, content, parent=None):
         super().__init__(icon, title, content, parent)
-        self.card.setContentsMargins(0, 0, 20, 0)
-        self.viewLayout.setSpacing(0)
-        self.setCardMinHeight(80)
+
 
     def setCardMinHeight(self, height: int):
         self.card.setFixedHeight(height)

@@ -10,6 +10,7 @@ setup(
         'pyautogui',
         'easyocr',
         'comtypes',
-        'pycaw'
+        'pycaw',
+        'mutagen'
     ]
 )

@@ -3,13 +3,15 @@ import sys
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QApplication, QWidget
 
-from qfluentwidgets import SettingCardGroup, VBoxLayout, SmoothScrollArea, FluentIcon, setTheme, Theme, InfoBarIcon
+from qfluentwidgets import SettingCardGroup, VBoxLayout, SmoothScrollArea, FluentIcon, setTheme, Theme, InfoBarIcon, \
+    OptionsSettingCard, OptionsConfigItem, OptionsValidator
 
-from FluentCardWidget import ButtonCard, PrimaryButtonCard, TransparentButtonCard, \
-    ToolButtonCard, PrimaryToolButtonCard, TransparentToolButtonCard, SwitchButtonCard, CheckBoxCard, HyperLinkCard, \
-    ComboBoxCard, EditComboBoxCard, DropDownCard, PrimaryDropDownCard, TransparentDropDownCard, DropDownToolCard, \
-    PrimaryDropDownToolCard, TransparentDropDownToolCard, SplitCard, PrimarySplitCard,  SliderCard
-from AcrylicCardWidget import AcrylicComboBoxCard, AcrylicEditComboBoxCard
+from QFluentWidgets.FluentWidgets import ButtonCard, PrimaryButtonCard, TransparentButtonCard, ToolButtonCard, PrimaryToolButtonCard, \
+    TransparentToolButtonCard, SwitchButtonCard, CheckBoxCard, HyperLinkCard, ComboBoxCard, EditComboBoxCard, DropDownCard, \
+    PrimaryDropDownCard, TransparentDropDownCard, DropDownToolCard, PrimaryDropDownToolCard, TransparentDropDownToolCard, \
+    SplitCard, PrimarySplitCard, SliderCard, ExpandGroupCard, OptionsCard
+
+from QFluentWidgets.FluentWidgets.AcrylicCardWidget import AcrylicComboBoxCard, AcrylicEditComboBoxCard
 
 from PyMyMethod.Method import FileControl
 
@@ -23,6 +25,7 @@ class Demo(SmoothScrollArea):
         self.initWindow()
         self.initCard()
         self.initCardGroup()
+        self.initExpandCard()
         self.initLayout()
 
     def initWindow(self):
@@ -43,6 +46,7 @@ class Demo(SmoothScrollArea):
         self.vLayout.addWidget(self.switchBtCardGroup)
         self.vLayout.addWidget(self.comBoCardGroup)
         self.vLayout.addWidget(self.sliderCardGroup)
+        self.vLayout.addWidget(self.expandCardGroup)
 
     def initCardGroup(self):
         self.btCardGroup = SettingCardGroup('标准按钮卡片组', self)
@@ -85,6 +89,18 @@ class Demo(SmoothScrollArea):
         self.sliderCardGroup = SettingCardGroup('滑动条', self)
         self.sliderCardGroup.addSettingCards([
             self.sliderCard
+        ])
+
+        self.expandCardGroup = SettingCardGroup('展开卡片', self)
+        self.expandCard = ExpandGroupCard(
+            FluentIcon.WIFI,
+            "展开卡片",
+            'Content',
+            self
+        )
+        self.expandCardGroup.addSettingCards([
+            self.expandCard,
+            self.optionsCard
         ])
 
     def initCard(self):
@@ -283,7 +299,25 @@ class Demo(SmoothScrollArea):
             24.7,
             parent=self
         )
+        self.optionsCard = OptionsCard(
+            FluentIcon.POWER_BUTTON,
+            '电源选项',
+            '设置当前电源模式',
+            ['省电模式', '正常模式', '性能模式'],
+            '正常模式',
+            self
+        )
+        self.optionsCard.optionChanged.connect(
+            lambda options: print(options.value)
+        )
 
+    def initExpandCard(self):
+        self.expandCard.addGroupWidgets([
+            SliderCard(FluentIcon.VOLUME, '音量', '设置当前音量', (0, 1145), 114, parent=self),
+            ComboBoxCard(FluentIcon.REMOVE, "ComboBoxCard", 'Content', self.girls, parent=self),
+        ])
+        self.expandCard.addPrimaryButtonCard('AddPrimaryButton', FluentIcon.GITHUB, '确定')
+        self.expandCard.addButtonCard("AddButton", FluentIcon.HOME, '确定', self)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

@@ -1,6 +1,7 @@
 from qfluentwidgets.components.material import AcrylicComboBox, AcrylicEditableComboBox
 
-from FluentCardWidget.ComboBoxCard import ComboBoxCard
+from FluentCardWidget import ComboBoxCard
+
 
 class AcrylicComboBoxCard(ComboBoxCard):
     """ 亚力克下拉框卡片 """

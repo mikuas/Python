@@ -1,7 +1,7 @@
 from PySide6.QtGui import Qt
-from qfluentwidgets import ComboBox, EditableComboBox
+from qfluentwidgets import ComboBox, EditableComboBox, OptionsConfigItem, OptionsValidator, OptionsSettingCard
 
-from .CustomWidget.CustomComboBoxCard import CustomComboBoxCard
+from .CustomWidget import CustomComboBoxCard, CustomOptionsCard
 from .ButtonCard import CustomCard
 
 
@@ -35,3 +35,19 @@ class EditComboBoxCard(ComboBoxCard):
     """ 可编辑下拉框卡片 """
     def __init__(self, icon, title, content, items, noSelected=None, info=None, parent=None):
         super().__init__(icon, title, content, items, noSelected, info, parent, EditableComboBox)
+
+
+class OptionsCard(CustomOptionsCard, OptionsSettingCard):
+    def __init__(self, icon, title, content, items, defaultValue, parent=None):
+        OptionsSettingCard.__init__(self, self.__initItems(defaultValue, items), icon, title, content, items, parent)
+        self.setOptionsFixedHeight(80)
+
+    @staticmethod
+    def __initItems(value, items):
+        return OptionsConfigItem('options', 'option', value, OptionsValidator(items))
+
+    def setOptionsFixedHeight(self, height):
+        self.card.setFixedHeight(height)
+        self.setFixedHeight(self.card.height())
+        self.setViewportMargins(0, self.card.height(), 0, 0)
+        return self

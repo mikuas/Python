@@ -1,6 +1,6 @@
 from typing import Union
 
-from PySide6.QtGui import Qt, QIcon
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QWidget
 from qfluentwidgets import ComboBox, EditableComboBox, FluentIconBase
 

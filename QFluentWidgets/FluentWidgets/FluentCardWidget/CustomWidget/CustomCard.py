@@ -54,13 +54,25 @@ class CustomButtonCardParent:
     ):
         pass
 
-    def initButton(self, btType: Union[type[PushButton], type[ToolButton], type[HyperlinkButton], type[QWidget], type[SplitWidgetBase]]) -> 'CustomButtonCardParent':
+    def initButton(
+            self,
+            btType: Union[
+                type[PushButton],
+                type[ToolButton],
+                type[HyperlinkButton],
+                type[QWidget],
+                type[SplitWidgetBase]
+            ]
+    ) -> 'CustomButtonCardParent':
         pass
 
     def setButtonText(self, text: str) -> 'CustomButtonCardParent':
         pass
 
     def setButtonIcon(self, icon: Union[QIcon, str, FluentIconBase]) -> 'CustomButtonCardParent':
+        pass
+
+    def setButtonFW(self, width: int) -> 'CustomButtonCardParent':
         pass
 
     def setButtonChecked(self, isChecked: bool = False) -> 'CustomButtonCardParent':
@@ -130,44 +142,51 @@ class SliderCardParent:
     ):
         pass
 
-    def initSlider(self, ranges: tuple[int, int], value: int | float,orientation: Qt.Orientation = Qt.Orientation.Horizontal):
+    def initSlider(self, ranges: tuple[int, int], value: int | float, orientation: Qt.Orientation = Qt.Orientation.Horizontal):
         pass
 
     def initSliderLabel(self, value: str | int | float):
         pass
 
 
-class ExpandGroupCard(ExpandGroupSettingCard):
+class CustomExpandGroupCard(ExpandGroupSettingCard):
     def __init__(self, icon, title, content, parent=None):
         super().__init__(icon, title, content, parent)
-        self.card.setContentsMargins(0, 0, 20, 0)
-        self.viewLayout.setSpacing(0)
-        self.setCardMinHeight(80)
 
-    def setCardMinHeight(self, height: int):
-        self.card.setFixedHeight(height)
-
-    def addGroupWidgets(self, widgets: list[QWidget]):
-        for widget in widgets:
-            self.addGroupWidget(widget)
-
-    def addButtonCard(self, title: str, icon: Union[QIcon, str, FluentIconBase], text: str, __type: Union[type[PushButton], type[ToolButton]] = None):
+    def __initButton(
+            self,
+            title: str,
+            icon: Union[QIcon, str, FluentIconBase],
+            text: str,
+            parent: QWidget = None,
+            btType: Union[type[PushButton], type[ToolButton]] = None
+    ):
         pass
 
-    def addPrimaryButtonCard(self, title: str, icon: Union[QIcon, str, FluentIconBase], text: str):
+    def setExpandFixedHeight(self, height: int) -> 'CustomExpandGroupCard':
         pass
 
-    def addTransparentButtonCard(self, title: str, icon: Union[QIcon, str, FluentIconBase], text: str):
+    def addGroupWidgets(self, widgets: list[QWidget]) -> 'CustomExpandGroupCard':
         pass
 
-    def addSliderCard(self, title: str, ranges: tuple[int, int], defaultValue: int, orientation: Qt.Orientation = Qt.Orientation.Horizontal):
+    def addButtonCard(self, title: str, icon: Union[QIcon, str, FluentIconBase], text: str, parent: QWidget = None):
         pass
 
-    def _initWidget(self):
-        window = QWidget()
-        window.setFixedHeight(65)
-        hLayout = QHBoxLayout(window)
-        hLayout.setContentsMargins(48, 12, 48, 12)
-        self.addGroupWidget(window)
+    def addPrimaryButtonCard(self, title: str, icon: Union[QIcon, str, FluentIconBase], text: str, parent: QWidget = None):
+        pass
 
-        return hLayout
+    def addTransparentButtonCard(self,  title: str, icon: Union[QIcon, str, FluentIconBase], text: str, parent: QWidget = None):
+        pass
+
+    def addSliderCard(
+            self,
+            title: str,
+            ranges: tuple[int, int],
+            defaultValue: int,
+            orientation: Qt.Orientation = Qt.Orientation.Horizontal,
+            parent: QWidget = None
+    ):
+        pass
+
+    def _initWidget(self) -> QHBoxLayout:
+        pass

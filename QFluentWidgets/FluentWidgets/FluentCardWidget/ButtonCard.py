@@ -3,14 +3,13 @@ from typing import Union
 from PySide6.QtGui import Qt, QIcon
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
 from qfluentwidgets import (
-    PushButton, PrimaryPushButton, TransparentPushButton, ToolButton, PrimaryToolButton, TitleLabel,
-    TransparentToolButton, DropDownPushButton, PrimaryDropDownPushButton, FluentIconBase,
-    TransparentDropDownPushButton, DropDownToolButton, PrimaryDropDownToolButton, TransparentDropDownToolButton,
-    SplitPushButton, PrimarySplitPushButton, HyperlinkButton, CheckBox, RoundMenu, Action, IconWidget, BodyLabel,
-    Slider, CaptionLabel, SwitchButton
+    PushButton, PrimaryPushButton, TransparentPushButton, ToolButton, PrimaryToolButton, TransparentToolButton,
+    DropDownPushButton, PrimaryDropDownPushButton, FluentIconBase, TransparentDropDownPushButton, DropDownToolButton,
+    PrimaryDropDownToolButton, TransparentDropDownToolButton, SplitPushButton, PrimarySplitPushButton, HyperlinkButton,
+    CheckBox, RoundMenu, Action, IconWidget, BodyLabel, CaptionLabel, SwitchButton, IndicatorPosition
 )
 
-from .CustomWidget.CustomCard import (
+from .CustomWidget import (
     CustomSwitchButtonCard, CustomDropDownCard, CustomCardParent, CustomButtonCardParent,
     CustomCheckBoxCard
 )
@@ -67,12 +66,15 @@ class CustomButtonCard(CustomButtonCardParent, CustomCard):
         return self
 
     def setButtonText(self, text: str):
-        self.button.setMinimumWidth(100)
         self.button.setText(text)
         return self
 
     def setButtonIcon(self, icon: Union[QIcon, str, FluentIconBase]):
         self.button.setIcon(icon)
+        return self
+
+    def setButtonFW(self, width):
+        self.button.setFixedWidth(width)
         return self
 
 
@@ -81,21 +83,21 @@ class ButtonCard(CustomButtonCard):
     """ 标准按钮卡片 """
     def __init__(self, icon, title, content, btText=None, btIcon=None, parent=None):
         super().__init__(icon, title, content, parent, PushButton)
-        self.setButtonText(btText).setButtonIcon(btIcon)
+        self.setButtonText(btText).setButtonIcon(btIcon).setButtonFW(120)
 
 
 class PrimaryButtonCard(CustomButtonCard):
     """ 主题色按钮卡片 """
     def __init__(self, icon, title, content, btText=None, btIcon=None, parent=None):
         super().__init__(icon, title, content, parent, PrimaryPushButton)
-        self.setButtonText(btText).setButtonIcon(btIcon)
+        self.setButtonText(btText).setButtonIcon(btIcon).setButtonFW(120)
 
 
 class TransparentButtonCard(CustomButtonCard):
     """ 透明按钮卡片 """
     def __init__(self, icon, title, content, btText=None, btIcon=None, parent=None):
         super().__init__(icon, title, content, parent, TransparentPushButton)
-        self.setButtonText(btText).setButtonIcon(btIcon)
+        self.setButtonText(btText).setButtonIcon(btIcon).setButtonFW(120)
 
 
 # 工具按钮
@@ -131,6 +133,7 @@ class SwitchButtonCard(CustomSwitchButtonCard, CustomButtonCard):
 
     def setButtonChecked(self, isChecked=False):
         self.button.setChecked(isChecked)
+        self.button.setText('开') if isChecked else self.button.setText('关')
 
 
 # 复选框
@@ -150,7 +153,7 @@ class HyperLinkCard(CustomButtonCard):
     """链接按钮"""
     def __init__(self, url: str, icon, title, content, btText=None, btIcon=None, parent=None):
         super().__init__(icon, title, content, parent, HyperlinkButton, btText, btIcon)
-        self.setButtonText(btText).setButtonIcon(btIcon)
+        self.setButtonText(btText).setButtonIcon(btIcon).setButtonFW(120)
         self.setUrl(url)
 
     def setUrl(self, url):

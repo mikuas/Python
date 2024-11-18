@@ -1,7 +1,7 @@
 from PySide6.QtGui import Qt
 from qfluentwidgets import Slider, CaptionLabel
 
-from .CustomWidget.CustomCard import SliderCardParent
+from .CustomWidget import SliderCardParent
 from .ButtonCard import CustomCard
 
 

@@ -1,7 +1,7 @@
 from PySide6.QtGui import Qt
 from qfluentwidgets import ComboBox, EditableComboBox
 
-from .CustomWidget.CustomComboBoxCard import CustomComboBoxCard
+from .CustomWidget import CustomComboBoxCard
 from .ButtonCard import CustomCard
 
 

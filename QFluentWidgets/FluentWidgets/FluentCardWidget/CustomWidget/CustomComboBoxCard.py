@@ -1,11 +1,12 @@
 from typing import Union
 
-from PySide6.QtGui import Qt, QIcon
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QWidget
-from qfluentwidgets import ComboBox, EditableComboBox, FluentIconBase
+from qfluentwidgets import ComboBox, EditableComboBox, FluentIconBase, OptionsSettingCard, OptionsConfigItem, OptionsValidator
 
 
 class CustomComboBoxCard:
+    # noinspection PyUnusedLocal
     def __init__(
             self,
             icon: Union[QIcon, str, FluentIconBase] = None,
@@ -26,4 +27,24 @@ class CustomComboBoxCard:
         pass
 
     def isNoSelected(self) -> bool:
+        pass
+
+
+class CustomOptionsCard:
+    def __init__(
+            self,
+            icon: Union[QIcon, str, FluentIconBase] = None,
+            title: str = None,
+            content: str = None,
+            items: list[str] = None,
+            defaultValue: str = None,
+            parent: QWidget = None
+    ):
+        pass
+
+    @staticmethod
+    def __initItems(value, items) -> 'CustomOptionsCard':
+        pass
+
+    def setOptionsFixedHeight(self, height: int):
         pass

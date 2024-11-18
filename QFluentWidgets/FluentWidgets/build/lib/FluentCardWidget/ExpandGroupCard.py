@@ -1,12 +1,22 @@
 from PySide6.QtGui import Qt
 from qfluentwidgets import TitleLabel, PushButton, PrimaryPushButton, TransparentPushButton, Slider, CaptionLabel
-from .CustomWidget.CustomCard import ExpandGroupCard
+from .CustomWidget import ExpandGroupCard
 
 
 class ExpandGroupCard(ExpandGroupCard):
     """展开按钮卡片"""
     def __init__(self, icon, title, content, parent=None):
         super().__init__(icon, title, content, parent)
+        self.card.setContentsMargins(0, 0, 20, 0)
+        self.viewLayout.setSpacing(0)
+        self.setCardMinHeight(80)
+
+    def setCardMinHeight(self, height):
+        self.card.setFixedHeight(height)
+
+    def addGroupWidgets(self, widgets):
+        for widget in widgets:
+            self.addGroupWidget(widget)
 
     def addButtonCard(self, title, icon, text, __type=None):
         hLayout = self._initWidget()

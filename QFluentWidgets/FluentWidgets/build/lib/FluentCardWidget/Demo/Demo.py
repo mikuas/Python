@@ -5,12 +5,11 @@ from PySide6.QtWidgets import QApplication, QWidget
 
 from qfluentwidgets import SettingCardGroup, VBoxLayout, SmoothScrollArea, FluentIcon, setTheme, Theme, InfoBarIcon
 
-from FluentCardWidget import ButtonCard, PrimaryButtonCard, TransparentButtonCard, \
-    ToolButtonCard, PrimaryToolButtonCard, TransparentToolButtonCard, SwitchButtonCard, CheckBoxCard, HyperLinkCard, \
-    ComboBoxCard, EditComboBoxCard, DropDownCard, PrimaryDropDownCard, TransparentDropDownCard, DropDownToolCard, \
-    PrimaryDropDownToolCard, TransparentDropDownToolCard, SplitCard, PrimarySplitCard,  SliderCard
+from FluentCardWidget import ButtonCard, PrimaryButtonCard, TransparentButtonCard, ToolButtonCard, PrimaryToolButtonCard, \
+    TransparentToolButtonCard, SwitchButtonCard, CheckBoxCard, HyperLinkCard, ComboBoxCard, EditComboBoxCard, DropDownCard, \
+    PrimaryDropDownCard, TransparentDropDownCard, DropDownToolCard, PrimaryDropDownToolCard, TransparentDropDownToolCard, \
+    SplitCard, PrimarySplitCard,  SliderCard
 from AcrylicCardWidget import AcrylicComboBoxCard, AcrylicEditComboBoxCard
-
 from PyMyMethod.Method import FileControl
 
 

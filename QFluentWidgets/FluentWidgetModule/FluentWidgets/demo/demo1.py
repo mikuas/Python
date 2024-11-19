@@ -1,28 +1,35 @@
 import sys
 
-from PySide6.QtGui import Qt
+from PySide6.QtGui import Qt, QColor
 from PySide6.QtWidgets import QApplication, QWidget
 
 from qfluentwidgets import SettingCardGroup, VBoxLayout, SmoothScrollArea, FluentIcon, setTheme, Theme, InfoBarIcon
+from QFluentWidgets.FluentWidgetModule.FluentWidgets import ButtonCard, PrimaryButtonCard, TransparentButtonCard, \
+    ToolButtonCard, PrimaryToolButtonCard, \
+    TransparentToolButtonCard, SwitchButtonCard, CheckBoxCard, HyperLinkCard, ComboBoxCard, EditComboBoxCard, \
+    DropDownCard, \
+    PrimaryDropDownCard, TransparentDropDownCard, DropDownToolCard, PrimaryDropDownToolCard, \
+    TransparentDropDownToolCard, \
+    SplitCard, PrimarySplitCard, SliderCard, ExpandGroupCard, OptionsCard, FolderListCard, MessageBox, ColorDialog
 
-from FluentCardWidget import ButtonCard, PrimaryButtonCard, TransparentButtonCard, ToolButtonCard, PrimaryToolButtonCard, \
-    TransparentToolButtonCard, SwitchButtonCard, CheckBoxCard, HyperLinkCard, ComboBoxCard, EditComboBoxCard, DropDownCard, \
-    PrimaryDropDownCard, TransparentDropDownCard, DropDownToolCard, PrimaryDropDownToolCard, TransparentDropDownToolCard, \
-    SplitCard, PrimarySplitCard,  SliderCard
-from AcrylicCardWidget import AcrylicComboBoxCard, AcrylicEditComboBoxCard
+from QFluentWidgets.FluentWidgetModule.FluentWidgets.widgets.acrylic_cards import AcrylicComboBoxCard, AcrylicEditComboBoxCard
+from QFluentWidgets.FluentWidgetModule.FluentWidgets.customwidgets import Dialog, UrlDialog, SmoothScrollWidget
+
 from PyMyMethod.Method import FileControl
 
 
-class Demo(SmoothScrollArea):
+class Demo(SmoothScrollWidget):
     def __init__(self):
         super().__init__()
         self.fc = FileControl()
         self.girls = dict(self.fc.readJsonFiles(r"C:\Projects\Items\Python\QT\QFluentWidget\Test\FlunetWindow\config\data.json"))['girlName']
 
-        self.initWindow()
+        # self.initWindow()
         self.initCard()
         self.initCardGroup()
+        self.initExpandCard()
         self.initLayout()
+        self.connectSignalSlots()
 
     def initWindow(self):
         self.scrollWidget = QWidget()
@@ -42,6 +49,7 @@ class Demo(SmoothScrollArea):
         self.vLayout.addWidget(self.switchBtCardGroup)
         self.vLayout.addWidget(self.comBoCardGroup)
         self.vLayout.addWidget(self.sliderCardGroup)
+        self.vLayout.addWidget(self.expandCardGroup)
 
     def initCardGroup(self):
         self.btCardGroup = SettingCardGroup('标准按钮卡片组', self)
@@ -86,8 +94,21 @@ class Demo(SmoothScrollArea):
             self.sliderCard
         ])
 
+        self.expandCardGroup = SettingCardGroup('展开卡片', self)
+        self.expandCard = ExpandGroupCard(
+            FluentIcon.WIFI,
+            "展开卡片",
+            'Content',
+            self
+        )
+        self.expandCardGroup.addSettingCards([
+            self.expandCard,
+            self.optionsCard,
+            self.fls
+        ])
+
     def initCard(self):
-        '''普通按钮'''
+        """ 普通按钮 """
         self.btCard = ButtonCard(
             FluentIcon.HOME,
             '标准按钮卡片',
@@ -111,7 +132,7 @@ class Demo(SmoothScrollArea):
             parent=self
         )
         #######################################################
-        '''工具按钮'''
+        """工具按钮"""
         self.tlBtCard = ToolButtonCard(
             FluentIcon.BLUETOOTH,
             '工具按钮',
@@ -282,11 +303,52 @@ class Demo(SmoothScrollArea):
             24.7,
             parent=self
         )
+        self.optionsCard = OptionsCard(
+            FluentIcon.POWER_BUTTON,
+            '电源选项',
+            '设置当前电源模式',
+            ['省电模式', '正常模式', '性能模式'],
+            '正常模式',
+            self
+        )
+        self.optionsCard.optionChanged.connect(
+            lambda options: print(options.value)
+        )
+        self.fls = FolderListCard(
+            "Folders",
+            "Selected Folder",
+            "/root",
+            self
+        )
+
+    def initExpandCard(self):
+        self.expandCard.addGroupWidgets([
+            SliderCard(FluentIcon.VOLUME, '音量', '设置当前音量', (0, 1145), 114, parent=self),
+            ComboBoxCard(FluentIcon.REMOVE, "ComboBoxCard", 'Content', self.girls, parent=self),
+        ])
+        self.expandCard.addPrimaryButtonCard('AddPrimaryButton', FluentIcon.GITHUB, '确定')
+        self.expandCard.addButtonCard("AddButton", FluentIcon.HOME, '确定', self)
+
+    def connectSignalSlots(self):
+        self.btCard.button.clicked.connect(
+            lambda: Dialog('弹出窗口', 'This is View', self).exec()
+        )
+        self.prBtCard.button.clicked.connect(
+            lambda: UrlDialog(self).exec()
+        )
+        self.trBtCard.button.clicked.connect(
+            lambda: MessageBox("弹出窗口", '带遮罩的窗口', self).exec()
+        )
+        ######################################
+        self.tlBtCard.button.clicked.connect(
+            lambda: print(ColorDialog(QColor(255, 255, 255), "Title", self).getColor())
+        )
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = Demo()
+    window.resize(1200, 700)
     setTheme(Theme.DARK)
     window.show()
     sys.exit(app.exec())

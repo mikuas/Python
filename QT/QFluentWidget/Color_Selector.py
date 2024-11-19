@@ -19,12 +19,12 @@ class Window(QMainWindow):
         self.button = ColorPickerButton(QColor("#5012aaa2"), 'Background Color', self, enableAlpha=True)
         self.resize(800, 720)
         self.button.move(352, 312)
-        self.setStyleSheet("Demo{background:white}")
+        self.setStyleSheet("demo{background:white}")
 
         w = ColorDialog(QColor(0, 255, 255), "Select Color", self, enableAlpha=False)
         w.colorChanged.connect(lambda color : print(color.name))
 
-        self.setStyleSheet("Demo{background:white}")
+        self.setStyleSheet("demo{background:white}")
 
         # button = PushButton('Select Color')
         # button.clicked.connect(w.exec)

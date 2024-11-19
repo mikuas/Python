@@ -32,7 +32,7 @@ class Demo(QWidget):
     def __init__(self):
         super().__init__()
         # setTheme(Theme.DARK)
-        # self.setStyleSheet("Demo{background: rgb(32, 32, 32)}")
+        # self.setStyleSheet("demo{background: rgb(32, 32, 32)}")
 
         self.hBoxLayout = QHBoxLayout(self)
         self.button1 = PushButton('Top', self)

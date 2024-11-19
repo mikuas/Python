@@ -17,7 +17,7 @@ class Demo(QWidget):
         self.layout().addWidget(self.label)
         self.resize(400, 400)
 
-        self.setStyleSheet('Demo{background: white} QLabel{font-size: 20px}')
+        self.setStyleSheet('demo{background: white} QLabel{font-size: 20px}')
 
         # setTheme(Theme.DARK)
 

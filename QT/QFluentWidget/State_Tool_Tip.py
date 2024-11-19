@@ -18,7 +18,7 @@ class Demo(QWidget):
         self.btn.clicked.connect(self.onButtonClicked)
         self.stateTooltip = None
 
-        self.setStyleSheet('Demo{background:white}')
+        self.setStyleSheet('demo{background:white}')
 
     def onButtonClicked(self):
         if self.stateTooltip:

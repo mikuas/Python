@@ -1,7 +1,5 @@
 import sys
-from typing import Union
 
-from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon, Qt, QPainter, QColor, QFont
 from PySide6.QtWidgets import QWidget, QTableWidgetItem, QApplication, QListWidgetItem, QStyledItemDelegate, QMainWindow
 from qfluentwidgets import TableWidget as Table, setTheme, Theme, ListWidget, FluentIcon, Icon

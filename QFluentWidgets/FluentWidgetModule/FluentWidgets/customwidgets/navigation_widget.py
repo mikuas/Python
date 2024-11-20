@@ -1,8 +1,10 @@
+import sys
 from typing import Union
 
 from PySide6.QtGui import Qt, QIcon
-from PySide6.QtWidgets import QWidget, QStackedWidget, QHBoxLayout, QVBoxLayout
-from qfluentwidgets import Pivot, SegmentedWidget, SegmentedToolWidget, SegmentedToggleToolWidget, FluentIconBase
+from PySide6.QtWidgets import QWidget, QStackedWidget, QHBoxLayout, QVBoxLayout, QApplication
+from qfluentwidgets import Pivot, SegmentedWidget, SegmentedToolWidget, SegmentedToggleToolWidget, FluentIconBase, \
+    TabBar, FluentIcon, setTheme, Theme
 
 
 class PivotNav(QWidget):
@@ -70,3 +72,39 @@ class SegmentedToggleToolNav(SegmentedToolNav):
     def __init__(self, parent=None):
         """ 主题色选中导航 """
         super().__init__(parent, SegmentedToggleToolWidget)
+
+
+class LabelBarWidget(TabBar):
+    """ 标签页组件 """
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setTabShadowEnabled(True)
+        self.setMovable(True)
+        self.setScrollable(True)
+
+        self.addButton.clicked.connect(
+            lambda: print(True)
+        )
+
+    def addTabs(self):
+        pass
+
+class Demo(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.resize(600, 380)
+        lb = LabelBarWidget(self)
+        lb.addTab(
+            "T1",
+            "Hello",
+            FluentIcon.GITHUB,
+            lambda: print(True)
+        )
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    w = Demo()
+    setTheme(Theme.AUTO)
+    w.show()
+    sys.exit(app.exec())

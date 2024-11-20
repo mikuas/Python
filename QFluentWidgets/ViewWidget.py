@@ -57,7 +57,7 @@ class ViewWidget(SmoothScrollArea):
         self.flipView.setItemSize(QSize(640, 320))
         self.flipView.setFixedSize(QSize(640, 320))
         # 设置间距
-        # self.flipView.setSpacing(15)
+        self.flipView.setSpacing(15)
         # 启用圆角
         self.flipView.setBorderRadius(15)
 

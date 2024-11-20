@@ -8,7 +8,7 @@ from PySide6.QtGui import Qt, QColor, QAction, QPainter, QFont, QStandardItemMod
 
 from qfluentwidgets import SmoothScrollArea, VBoxLayout, FluentLabelBase, CaptionLabel, BodyLabel, StrongBodyLabel, \
     FlipView, HorizontalFlipView, VerticalFlipView, FlipImageDelegate, getFont, ListWidget, ListView, setFont, \
-    TableWidget, SmoothMode, TreeWidget, TreeView, TabBar, FluentIcon
+    TableWidget, SmoothMode, TreeWidget, TreeView, TabBar, FluentIcon, TabCloseButtonDisplayMode
 
 
 class ViewWidget(SmoothScrollArea):
@@ -80,11 +80,14 @@ class ViewWidget(SmoothScrollArea):
         # item = QListWidgetItem('name')
         # item.setIcon('icon')
         # self.listWidget.addItem()
-        self.listWidget.addItems([
-            '绫地宁宁', '因幡爱瑠', '椎叶䌷', '亚托莉', ' 朝武芳乃', '丛雨', '常陆茉子', '上坂茅羽耶', '矢来美羽', '在原七海',
-            '三司绫濑', '式部茉优', '二条院羽月', '和泉妃爱', '常盘华乃', '锦明日海', '镰仓诗樱', '结城明日奈', '小鸟游六花',
-            '御坂美琴', '佐天泪子', '后藤一里', '山田凉', '伊地知虹夏', '喜多郁代'
-        ])
+        # self.listWidget.addItems([
+        #     '绫地宁宁', '因幡爱瑠', '椎叶䌷', '亚托莉', ' 朝武芳乃', '丛雨', '常陆茉子', '上坂茅羽耶', '矢来美羽', '在原七海',
+        #     '三司绫濑', '式部茉优', '二条院羽月', '和泉妃爱', '常盘华乃', '锦明日海', '镰仓诗樱', '结城明日奈', '小鸟游六花',
+        #     '御坂美琴', '佐天泪子', '后藤一里', '山田凉', '伊地知虹夏', '喜多郁代'
+        # ])
+        self.listWidget.addItem(
+            QListWidgetItem("Hello")
+        )
         self.listWidget.setFixedHeight(500)
         # 默认情况下，右键单击某个列表项时不会更新该列的选中状态，如需立即选中可调用下述方法
         self.listWidget.setSelectRightClickedRow(True)
@@ -97,6 +100,7 @@ class ViewWidget(SmoothScrollArea):
         self.listWidget.setStyleSheet("""
             ListWidget::item {
                 font-size: 24px;
+                background-color: red;
                 height: 50px;
             }
             ListWidget::item:selected {
@@ -231,7 +235,11 @@ class ViewWidget(SmoothScrollArea):
         # 设置标签页可关闭
         # self.tabBar.setTabsClosable(False)
         # 设置可拖拽
-        # self.tabBar
+        self.tabBar.setMovable(True)
+        # 设置可滚动
+        self.tabBar.setScrollable(True)
+        # 设置关闭按钮显示模式
+        self.tabBar.setCloseButtonDisplayMode(TabCloseButtonDisplayMode.ON_HOVER)
         # 设置添加按钮可见
         self.tabBar.setAddButtonVisible(True)
 

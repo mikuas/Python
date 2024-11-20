@@ -57,7 +57,7 @@ class FolderListSettingCard(ExpandSettingCard):
     def __showConfirmDialog(self, item: FolderItem):
         """ show confirm dialog """
         title = self.tr('是否确实要删除该文件夹?')
-        content = self.tr("如果删除, 文件夹将从其从列表中删除，则该文件夹将不会出现在列表中")
+        content = self.tr("如果删除, 文件夹将从其列表中删除，则该文件夹将不会出现在列表中")
         w = Dialog(title, content, self.window())
         w.yesSignal.connect(lambda: self.__removeFolder(item))
         w.exec()

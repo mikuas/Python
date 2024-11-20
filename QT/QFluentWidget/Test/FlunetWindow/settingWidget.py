@@ -5,7 +5,7 @@ from qfluentwidgets import SettingCardGroup, OptionsSettingCard, FluentIcon, Pri
     CustomColorSettingCard, ColorConfigItem, setThemeColor, themeColor, RangeSettingCard, RangeValidator, \
     RangeConfigItem, SwitchSettingCard, HyperlinkCard, ScrollArea, ExpandLayout, Flyout, FlyoutAnimationType, \
     ExpandGroupSettingCard, ConfigItem, BoolValidator, InfoBar, InfoBarPosition, OptionsValidator, ComboBoxSettingCard, \
-    OptionsConfigItem, qconfig, Theme, VBoxLayout, setTheme
+    OptionsConfigItem, qconfig, Theme, setTheme
 
 from PyMyMethod.Method import SystemCtl, FileControl
 from qfluentwidgets.components.material import AcrylicComboBoxSettingCard
@@ -117,9 +117,9 @@ class SettingWidget(ScrollArea):
             'Give Me Money'
         )
 
-        self.initStyle()
+        # self.initStyle()
         self.initGroup()
-        self.connectSignalSlots()
+        # self.connectSignalSlots()
         self.setObjectName(text.replace(' ', '_'))
 
     def connectSignalSlots(self):

@@ -45,7 +45,7 @@ class CardsWidget(SmoothScrollArea):
         self.initWindow()
         self.initCard()
         self.connectSignalSlots()
-        self.initStyle()
+        # self.initStyle()
         self.setObjectName(text.replace(' ', '_'))
 
     # --------------------------------------------------------------------------
@@ -189,15 +189,15 @@ class CardsWidget(SmoothScrollArea):
     def initStyle(self, theme="LIGHT_CardWidget"):
         self.setStyleSheet(self.fc.readJsonFiles(f'./data/styles/{theme}.qss'))
 
-    def applyStyle(self, theme):
-        if theme == Theme.DARK:
-            theme = 'DARK_CardWidget'
-        else:
-            theme = 'LIGHT_CardWidget'
-        self.initStyle(theme)
+    # def applyStyle(self, theme):
+    #     if theme == Theme.DARK:
+    #         theme = 'DARK_CardWidget'
+    #     else:
+    #         theme = 'LIGHT_CardWidget'
+    #     self.initStyle(theme)
 
     def connectSignalSlots(self):
-        qconfig.themeChanged.connect(lambda theme: self.applyStyle(theme))
+        qconfig.themeChanged.connect(lambda theme: None)#self.applyStyle(theme))
         self.switchCard.checkedChanged.connect(
             lambda b: (
                 InfoBar.success(
@@ -240,7 +240,7 @@ class CardsWidget(SmoothScrollArea):
         )
         self.addCard.rightButton_.clicked.connect(
             lambda: (
-                self.updateFilePath(self.FileControl.getFilePathQT()),
+                self.updateFilePath(self.fc.getFilePathQT()),
                 InfoBar.info(
                     '',
                     f'选择的目录是{self.filePath}',
@@ -265,7 +265,7 @@ class CardsWidget(SmoothScrollArea):
         )
         self.selectDir.clicked.connect(
             lambda: (
-                self.updateFilePath(self.FileControl.getDirPathQT()),
+                self.updateFilePath(self.fc.getDirPathQT()),
                 InfoBar.info(
                     '',
                     f'选择的目录是{self.filePath}',
@@ -278,7 +278,7 @@ class CardsWidget(SmoothScrollArea):
         )
         self.reNameCard.rightButton.clicked.connect(
             lambda: (
-                self.FileControl.fileReName(
+                self.fc.fileReName(
                     self.filePath,
                     self.reNameCard.comBox.text().split(' '),
                     True if self.format.text() == '纯数字命名(从0开始)' else False
@@ -293,18 +293,18 @@ class CardsWidget(SmoothScrollArea):
                 )
             )
         )
-        self.screenCard.button.clicked.connect(
-            lambda: (
-                self.showMessage(),
-                threading.Thread(
-                    target=lambda: (
-                        self.textEdit.setPlainText(self.ScreenControl.getScreenFullText()),
-                        self.textEdit.show(),
-                        self.message.yesButton.show(),
-                    )
-                ).start()
-            )
-        )
+        # self.screenCard.button.clicked.connect(
+        #     lambda: (
+        #         self.showMessage(),
+        #         threading.Thread(
+        #             target=lambda: (
+        #                 self.textEdit.setPlainText(self.fc.getScreenFullText()),
+        #                 self.textEdit.show(),
+        #                 self.message.yesButton.show(),
+        #             )
+        #         ).start()
+        #     )
+        # )
 
     def showKK(self):
         view = FlyoutView(

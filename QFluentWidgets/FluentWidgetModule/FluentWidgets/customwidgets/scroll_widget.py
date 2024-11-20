@@ -5,7 +5,7 @@ from qfluentwidgets import VBoxLayout, SingleDirectionScrollArea, SmoothScrollAr
 
 class OneWayScrollWidget(SingleDirectionScrollArea):
     """ 单向滚动部件 """
-    def __init__(self, parent=None, orient=Qt.Orientation.Horizontal):
+    def __init__(self, parent=None, orient=Qt.Orientation.Vertical):
         super().__init__(parent, orient)
         self.__initWidget(orient)
 

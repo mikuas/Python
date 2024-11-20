@@ -25,6 +25,9 @@ class CustomExpandGroupCard(ExpandGroupSettingCard):
     def addGroupWidgets(self, widgets: list[QWidget]) -> 'CustomExpandGroupCard':
         pass
 
+    def setIconSize(self, width: int, height: int) -> 'CustomExpandGroupCard':
+        pass
+
     def addButtonCard(self, title: str, icon: Union[QIcon, str, FluentIconBase], text: str, parent: QWidget = None):
         pass
 

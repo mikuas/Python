@@ -4,3 +4,5 @@ from .scroll_widget import *
 from .navigation_widget import *
 from .system_tray_icon import *
 from .context_menu_widget import *
+from .table_widget import *
+from .custom_fluent_icon import *

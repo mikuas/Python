@@ -3,7 +3,7 @@ from typing import Union
 
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon, Qt, QPainter, QColor, QFont
-from PySide6.QtWidgets import QWidget, QTableWidgetItem, QApplication, QListWidgetItem, QStyledItemDelegate, QStyle
+from PySide6.QtWidgets import QWidget, QTableWidgetItem, QApplication, QListWidgetItem, QStyledItemDelegate, QMainWindow
 from qfluentwidgets import TableWidget as Table, setTheme, Theme, ListWidget, FluentIcon, Icon
 
 
@@ -56,67 +56,56 @@ class TableWidget(Table):
         return self
 
 
-class ListWidgets(ListWidget):
-    def __init__(self, parent: QWidget = None):
-        super().__init__(parent)
-        self.setFocusPolicy(Qt.NoFocus)
+# class ListWidgets(ListWidget):
+#     def __init__(self, parent: QWidget = None):
+#         super().__init__(parent)
+#         self.setFocusPolicy(Qt.NoFocus)
+#
+#     def addIconItem(
+#             self,
+#             icons: list[Union[QIcon, str, FluentIcon]],
+#             items: list[str],
+#             itemHeight: int = 45,
+#             alignFlag: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignVertical_Mask
+#     ):
+#         for icon, item in zip(icons, items):
+#             item = QListWidgetItem(item)
+#             if isinstance(icon, FluentIcon):
+#                 item.setIcon(Icon(icon))
+#             else:
+#                 item.setIcon(QIcon(icon))
+#             item.setTextAlignment(alignFlag)
+#             item.setSizeHint(QSize(self.width(), itemHeight))
+#             self.addItem(item)
+#         return self
 
-    def addIconItem(
-            self,
-            icons: list[Union[QIcon, str, FluentIcon]],
-            items: list[str],
-            itemHeight: int = 45,
-            alignFlag: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignVertical_Mask
-    ):
-        for icon, item in zip(icons, items):
-            item = QListWidgetItem(item)
-            if isinstance(icon, FluentIcon):
-                item.setIcon(Icon(icon))
-            else:
-                item.setIcon(QIcon(icon))
-            item.setTextAlignment(alignFlag)
-            item.setSizeHint(QSize(self.width(), itemHeight))
-            self.addItem(item)
-        return self
 
-
-class Demo(QWidget):
+class Demo(QMainWindow):
     def __init__(self):
         super().__init__()
         self.resize(1200, 700)
-        # lw = ListWidget(self)
-        # data = [
-        #     '白金之星', '绿色法皇', "天堂制造", "绯红之王",
-        #     '银色战车', '疯狂钻石', "壮烈成仁", "败者食尘",
-        #     "隐者之紫", "黄金体验", "虚无之王", "纸月之王",
-        #     "骇人恶兽", "男子领域", "华丽挚爱", "牙 Act 4",
-        #     "铁球破坏者", "性感手枪", 'D4C • 爱之列车', "天生完美",
-        #     "软又湿", "佩斯利公园", "奇迹于你", "行走的心",
-        #     "护霜旅行者", "十一月雨", "调情圣手", "片刻静候"
-        # ]
-        # lw.setFixedSize(self.width(), self.height())
-        # lw.addItems(data)
-        # lw.clicked.connect(
-        #     lambda v: print(lw.model().data(v))
-        # )
-        # lw.setSelectRightClickedRow(True)
-        # lw.setStyleSheet(
-        #     """
-        #         ListWidget::item {
-        #             font-size: 24px;
-        #             height: 50px;
-        #         }
-        #         ListWidget::item:selected {
-        #             border: none;
-        #         }
-        #     """
-        # )
-        l = ListWidgets(self).addIconItem(
-            [FluentIcon.GITHUB, FluentIcon.MORE, FluentIcon.CLOSE],
-            ["FluentIcon.GITHUB", "FluentIcon.MORE", "FluentIcon.CLOSE"]
+        self.listWidget = ListWidget(self)
+        data = [
+            '白金之星', '绿色法皇', "天堂制造", "绯红之王",
+            '银色战车', '疯狂钻石', "壮烈成仁", "败者食尘",
+            "隐者之紫", "黄金体验", "虚无之王", "纸月之王",
+            "骇人恶兽", "男子领域", "华丽挚爱", "牙 Act 4",
+            "铁球破坏者", "性感手枪", 'D4C • 爱之列车', "天生完美",
+            "软又湿", "佩斯利公园", "奇迹于你", "行走的心",
+            "护霜旅行者", "十一月雨", "调情圣手", "片刻静候"
+        ]
+
+        self.listWidget.addItems(data)
+        self.listWidget.setFixedHeight(500)
+        # 默认情况下，右键单击某个列表项时不会更新该列的选中状态，如需立即选中可调用下述方法
+        self.listWidget.setSelectRightClickedRow(True)
+        # 连接信号插槽
+        self.listWidget.clicked.connect(
+            lambda value: print(self.listWidget.model().data(value))
         )
-        l.setFixedSize(self.width(), self.height())
-        l.setStyleSheet("""
+        # 取消焦点
+        self.listWidget.setFocusPolicy(Qt.NoFocus)
+        self.listWidget.setStyleSheet("""
             ListWidget::item {
                 font-size: 24px;
                 background-color: red;

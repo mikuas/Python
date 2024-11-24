@@ -1,6 +1,6 @@
-from qfluentwidgets.components.material import AcrylicComboBox, AcrylicEditableComboBox, AcrylicComboBoxSettingCard
+from qfluentwidgets.components.material import AcrylicComboBox, AcrylicEditableComboBox
 
-from ..cards.combo_box_card import ComboBoxCard
+from ..cards import ComboBoxCard
 
 
 class AcrylicComboBoxCard(ComboBoxCard):

@@ -6,7 +6,7 @@ from PySide6.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout
 from qfluentwidgets import Icon, FluentIcon, BodyLabel, ListView, qconfig, Theme, TransparentToolButton, ToolTipFilter, \
     theme
 
-from PyMyMethod.Method import FileControl
+from PyMyMethod import FileControl
 from qfluentwidgets.multimedia import StandardMediaPlayBar, MediaPlayer
 
 

@@ -4,7 +4,7 @@ from PySide6.QtCore import QPoint
 from PySide6.QtGui import QColor, QActionGroup, QIcon, QShortcut, QKeySequence
 from PySide6.QtWidgets import QWidget
 from qfluentwidgets import RoundMenu, Action, AvatarWidget, BodyLabel, CaptionLabel, setFont, HyperlinkButton, \
-    CheckableMenu, MenuIndicatorType, FluentIconBase, CommandBar
+    CheckableMenu, MenuIndicatorType, FluentIconBase
 
 
 class Menu(QWidget):
@@ -45,6 +45,10 @@ class Menu(QWidget):
     def exec(self, position: QPoint):
         self.menu.exec(position)
 
+    def execWidget(self, widget: QWidget):
+        """ 在指定组件中心执行 """
+        self.menu.exec(widget.mapToGlobal(widget.rect().center()))
+
     def addSeparator(self):
         self.menu.addSeparator()
         return self
@@ -70,6 +74,7 @@ class Menu(QWidget):
         menu.setFixedWidth(width)
         menu.view.setFixedWidth(width - 20)
         return self
+
 
 class ProfileCardMenu(Menu):
     """ 个人信息卡片组件 """
@@ -193,7 +198,6 @@ class CheckedMenuWidget(QWidget):
 
     @staticmethod
     def setTriggered(actions: Action | list[Action], func: callable):
-        """ 设置"""
         if type(actions) is list:
             for action, fc in zip(actions, func):
                 action.triggered.connect(fc)
@@ -215,6 +219,9 @@ class CheckedMenuWidget(QWidget):
         """ run """
         self.checkedMenu.exec(position)
 
+    def execWidget(self, widget: QWidget):
+        """ 在指定组件中心执行 """
+        self.checkedMenu.exec(widget.mapToGlobal(widget.rect().center()))
 
 class Shortcut:
     """ 设置快捷键 """

@@ -50,5 +50,8 @@ class CustomOptionsCard:
     def __initConfItems(self, value: str) -> ConfigItem:
         pass
 
+    def setIconSize(self, width: int, height: int) -> 'CustomOptionsCard':
+        pass
+
     def setOptionsFixedHeight(self, height: int, parent):
         pass

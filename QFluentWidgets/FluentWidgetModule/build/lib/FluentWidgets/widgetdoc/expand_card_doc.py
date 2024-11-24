@@ -6,7 +6,7 @@ from qfluentwidgets import ExpandGroupSettingCard, FluentIconBase, PushButton, T
 
 
 class CustomExpandGroupCard(ExpandGroupSettingCard):
-    def __init__(self, icon, title, content, parent=None):
+    def __init__(self, icon: Union[QIcon, str, FluentIconBase], title, content, parent=None):
         super().__init__(icon, title, content, parent)
 
     def __initButton(
@@ -23,6 +23,9 @@ class CustomExpandGroupCard(ExpandGroupSettingCard):
         pass
 
     def addGroupWidgets(self, widgets: list[QWidget]) -> 'CustomExpandGroupCard':
+        pass
+
+    def setIconSize(self, width: int, height: int) -> 'CustomExpandGroupCard':
         pass
 
     def addButtonCard(self, title: str, icon: Union[QIcon, str, FluentIconBase], text: str, parent: QWidget = None):

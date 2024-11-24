@@ -1,11 +1,9 @@
-import sys
 from typing import Union
 
 from PySide6.QtCore import QSize
-from PySide6.QtGui import QIcon, Qt, QPainter, QColor, QFont
-from PySide6.QtWidgets import QWidget, QTableWidgetItem, QApplication, QListWidgetItem, QStyledItemDelegate, QMainWindow
-from qfluentwidgets import TableWidget as Table, setTheme, Theme, ListWidget as List, FluentIcon, Icon, FluentLabelBase, \
-    FluentIconBase
+from PySide6.QtGui import QIcon, Qt
+from PySide6.QtWidgets import QWidget, QTableWidgetItem, QListWidgetItem
+from qfluentwidgets import TableWidget as Table, ListWidget as List, FluentIcon, Icon, FluentIconBase
 
 
 class TableWidget(Table):
@@ -61,11 +59,11 @@ class ListWidget(List):
     """ 列表组件 """
     def __init__(self, parent: QWidget = None):
         super().__init__(parent)
-        self.setFocusPolicy(Qt.NoFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
     def addIconItem(
             self,
-            icons: list[Union[QIcon, str, FluentIconBase]],
+            icons: list[Union[QIcon, str, FluentIconBase, FluentIcon]],
             items: list[str],
             itemHeight: int = 45,
             alignFlag: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignVertical_Mask

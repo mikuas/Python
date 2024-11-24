@@ -1,4 +1,3 @@
-from PySide6.QtCore import QSize
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QWidget, QHBoxLayout
 from qfluentwidgets import TitleLabel, PushButton, PrimaryPushButton, TransparentPushButton, Slider, CaptionLabel
@@ -36,6 +35,7 @@ class ExpandGroupCard(CustomExpandGroupCard):
         button.setFixedWidth(120)
         hLayout.addStretch(1)
         hLayout.addWidget(button, 0, Qt.AlignmentFlag.AlignRight)
+        return button
 
     def addButtonCard(self, title, icon, text, parent=None):
         return self.__initButton(title, icon, text, parent, PushButton)
@@ -54,7 +54,7 @@ class ExpandGroupCard(CustomExpandGroupCard):
         label = CaptionLabel(str(slider.value()), parent)
 
         hLayout = self._initWidget()
-        hLayout.addWidget(label)
+        hLayout.addWidget(TitleLabel(title, parent))
         hLayout.addStretch(1)
         hLayout.addWidget(label, 0, Qt.AlignmentFlag.AlignRight)
         hLayout.addWidget(slider, 0, Qt.AlignmentFlag.AlignRight)
@@ -64,6 +64,12 @@ class ExpandGroupCard(CustomExpandGroupCard):
         )
 
         return slider
+
+    def addCustomCard(self, title, parent):
+        hLayout = self._initWidget()
+        hLayout.addWidget(TitleLabel(title, parent))
+        hLayout.addStretch(1)
+        return hLayout
 
     def _initWidget(self):
         window = QWidget()

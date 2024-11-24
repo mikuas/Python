@@ -1,20 +1,19 @@
-import sys
-import random
 from typing import Union
 
 from PySide6.QtGui import Qt, QIcon
-from PySide6.QtWidgets import QWidget, QStackedWidget, QHBoxLayout, QVBoxLayout, QApplication
+from PySide6.QtWidgets import QWidget, QStackedWidget, QHBoxLayout, QVBoxLayout
 from qfluentwidgets import Pivot, SegmentedWidget, SegmentedToolWidget, SegmentedToggleToolWidget, FluentIconBase, \
-    TabBar, FluentIcon, setTheme, Theme, TabCloseButtonDisplayMode, TitleLabel
+    TabBar, TabCloseButtonDisplayMode
 
 
 class PivotNav(QWidget):
     """ 导航栏 """
 
-    def __init__(self, parent: QWidget = None, nav: type[Pivot] = Pivot):
+    def __init__(self, text: str, parent: QWidget = None, nav: type[Pivot] = Pivot):
         super().__init__(parent)
         self.stackedWidget = QStackedWidget(self)
         self.__initNavigation(nav)
+        self.setObjectName(text)
 
     def __initNavigation(self, nav: type[Pivot]):
         self.navigation = nav(self)
@@ -36,6 +35,10 @@ class PivotNav(QWidget):
             self.addItem(key, text, widget, icons[texts.index(text)] if icons else None)
         return self
 
+    def setCurrentItem(self, routeKey: str):
+        self.navigation.setCurrentItem(routeKey)
+        return self
+
     def setNavHeight(self, height: int):
         self.navigation.setFixedHeight(height)
         return self
@@ -48,15 +51,15 @@ class PivotNav(QWidget):
 class SegmentedNav(PivotNav):
     """ 分段导航 """
 
-    def __init__(self, parent=None):
-        super().__init__(parent, SegmentedWidget)
+    def __init__(self, text, parent=None):
+        super().__init__(text, parent, SegmentedWidget)
 
 
 class SegmentedToolNav(PivotNav):
     """ 工具导航 """
 
-    def __init__(self, parent=None, nav: type[Pivot] = SegmentedToolWidget):
-        super().__init__(parent, nav)
+    def __init__(self, text: str,  parent=None, nav: type[Pivot] = SegmentedToolWidget):
+        super().__init__(text, parent, nav)
         self.setNavWidth(0)
 
     def addToolItem(self, routeKey: str, icon: Union[QIcon, str, FluentIconBase], widget: QWidget):
@@ -72,9 +75,9 @@ class SegmentedToolNav(PivotNav):
 
 
 class SegmentedToggleToolNav(SegmentedToolNav):
-    def __init__(self, parent=None):
+    def __init__(self, text: str, parent=None):
         """ 主题色选中导航 """
-        super().__init__(parent, SegmentedToggleToolWidget)
+        super().__init__(text, parent, SegmentedToggleToolWidget)
 
 
 class LabelBarWidget(QWidget):
@@ -122,47 +125,3 @@ class LabelBarWidget(QWidget):
         for key, text, icon, widget in zip(routeKeys, texts, icons, widgets):
             self.addTabWidget(key, text, icon, widget)
         return self
-
-
-class Demo(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.resize(600, 380)
-        self.tab = LabelBarWidget(self)
-        self.tab.setFixedSize(self.width(), self.height())
-
-
-        w1 = QWidget()
-        t1 = TitleLabel("HOME", w1)
-        l1 = QHBoxLayout(w1)
-        l1.addWidget(t1)
-        w1.setStyleSheet("background-color: red;")
-
-        w2 = QWidget()
-        t2 = TitleLabel("Music", w2)
-        l2 = QHBoxLayout(w2)
-        l2.addWidget(t2)
-        w2.setStyleSheet("background-color: red;")
-
-        self.tab.addTabWidget(
-            'Home',
-            "Home",
-            FluentIcon.HOME,
-            w1
-        ).addTabWidget(
-            "Music",
-            "Music",
-            FluentIcon.MUSIC,
-            w2
-        ).hideCloseButton().hideAddButton()
-
-    def resizeEvent(self, event):
-        self.tab.setFixedSize(self.width(), self.height())
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    w = Demo()
-    setTheme(Theme.AUTO)
-    w.show()
-    sys.exit(app.exec())

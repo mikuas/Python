@@ -20,10 +20,10 @@ class CustomComboBoxCard:
     ):
         pass
 
-    def initComboBox(self, boxType: Union[type[ComboBox], type[EditableComboBox]], items: list[str]) -> 'CustomComboBoxCard':
+    def initComboBox(self, boxType: Union[type[ComboBox], type[EditableComboBox]], items: list[str]):
         pass
 
-    def setPlaceholderText(self, text: str) -> 'CustomComboBoxCard':
+    def setPlaceholderText(self, text: str):
         pass
 
     def isNoSelected(self) -> bool:
@@ -44,10 +44,13 @@ class CustomOptionsCard:
         pass
 
     @staticmethod
-    def __initOptItems(value: str, items: list) -> 'OptionsConfigItem':
+    def __initOptItems(value: str, items: list) -> OptionsConfigItem:
         pass
 
     def __initConfItems(self, value: str) -> ConfigItem:
+        pass
+
+    def setIconSize(self, width: int, height: int):
         pass
 
     def setOptionsFixedHeight(self, height: int, parent):

@@ -7,7 +7,7 @@ from qfluentwidgets import SettingCardGroup, OptionsSettingCard, FluentIcon, Pri
     ExpandGroupSettingCard, ConfigItem, BoolValidator, InfoBar, InfoBarPosition, OptionsValidator, ComboBoxSettingCard, \
     OptionsConfigItem, qconfig, Theme, setTheme
 
-from PyMyMethod.Method import SystemCtl, FileControl
+from PyMyMethod import SystemCtl, FileControl
 from qfluentwidgets.components.material import AcrylicComboBoxSettingCard
 
 

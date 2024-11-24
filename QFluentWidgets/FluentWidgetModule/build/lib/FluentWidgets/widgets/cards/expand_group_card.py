@@ -6,12 +6,12 @@ from ...widgetdoc import CustomExpandGroupCard
 
 
 class ExpandGroupCard(CustomExpandGroupCard):
-    """展开按钮卡片"""
+    """ 展开按钮卡片 """
     def __init__(self, icon, title, content, parent=None):
         super().__init__(icon, title, content, parent)
         self.card.setContentsMargins(0, 0, 20, 0)
         self.viewLayout.setSpacing(0)
-        self.setExpandFixedHeight(80)
+        self.setExpandFixedHeight(80).setIconSize(32, 32)
 
     def setExpandFixedHeight(self, height):
         self.card.setFixedHeight(height)
@@ -24,6 +24,10 @@ class ExpandGroupCard(CustomExpandGroupCard):
             self.addGroupWidget(widget)
         return self
 
+    def setIconSize(self, width, height):
+        self.card.setIconSize(width, height)
+        return self
+
     def __initButton(self, title, icon, text, parent=None, btType=None):
         hLayout = self._initWidget()
         hLayout.addWidget(TitleLabel(title, parent))
@@ -31,6 +35,7 @@ class ExpandGroupCard(CustomExpandGroupCard):
         button.setFixedWidth(120)
         hLayout.addStretch(1)
         hLayout.addWidget(button, 0, Qt.AlignmentFlag.AlignRight)
+        return button
 
     def addButtonCard(self, title, icon, text, parent=None):
         return self.__initButton(title, icon, text, parent, PushButton)

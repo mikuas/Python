@@ -2,9 +2,8 @@ from typing import Union
 
 from PySide6.QtGui import Qt, QIcon
 from PySide6.QtCore import QUrl
-from PySide6.QtWidgets import QHBoxLayout, QWidget
-from qfluentwidgets import PushButton, FluentIconBase, ToolButton, HyperlinkButton, \
-     SplitWidgetBase
+from PySide6.QtWidgets import QWidget
+from qfluentwidgets import PushButton, FluentIconBase, ToolButton, HyperlinkButton, SplitWidgetBase, FolderListValidator
 
 
 class CustomButtonCardParent:
@@ -30,22 +29,34 @@ class CustomButtonCardParent:
                 type[QWidget],
                 type[SplitWidgetBase]
             ]
-    ) -> 'CustomButtonCardParent':
+    ):
         pass
 
-    def setButtonText(self, text: str) -> 'CustomButtonCardParent':
+    def insertWidget(self, index: int, widget: QWidget, stretch: int, alignment: Qt.AlignmentFlag):
         pass
 
-    def setButtonIcon(self, icon: Union[QIcon, str, FluentIconBase]) -> 'CustomButtonCardParent':
+    def setButtonText(self, text: str):
         pass
 
-    def setButtonFW(self, width: int) -> 'CustomButtonCardParent':
+    def setButtonIcon(self, icon: Union[QIcon, str, FluentIconBase]):
         pass
 
-    def setButtonChecked(self, isChecked: bool = False) -> 'CustomButtonCardParent':
+    def setButtonIconSize(self, width: int, height: int):
         pass
 
-    def setUrl(self, url: QUrl | str) -> 'CustomButtonCardParent':
+    def setButtonFixedWidth(self, width: int):
+        pass
+
+    def setButtonFixedHeight(self, height: int):
+        pass
+
+    def setButtonFixedSize(self, width: int, height: int):
+        pass
+
+    def setButtonChecked(self, isChecked: bool = False):
+        pass
+
+    def setUrl(self, url: QUrl | str):
         pass
 
 

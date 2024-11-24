@@ -1,43 +1,32 @@
+import json
 import sys
 
-from PySide6.QtGui import Qt, QColor
-from PySide6.QtWidgets import QApplication, QWidget
+from PySide6.QtGui import QColor
+from PySide6.QtWidgets import QApplication
 
-from qfluentwidgets import SettingCardGroup, VBoxLayout, SmoothScrollArea, FluentIcon, setTheme, Theme, InfoBarIcon
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import ButtonCard, PrimaryButtonCard, TransparentButtonCard, \
-    ToolButtonCard, PrimaryToolButtonCard, \
-    TransparentToolButtonCard, SwitchButtonCard, CheckBoxCard, HyperLinkCard, ComboBoxCard, EditComboBoxCard, \
-    DropDownCard, \
-    PrimaryDropDownCard, TransparentDropDownCard, DropDownToolCard, PrimaryDropDownToolCard, \
-    TransparentDropDownToolCard, \
+from qfluentwidgets import SettingCardGroup, FluentIcon, setTheme, Theme, InfoBarIcon
+
+from FluentWidgets import (
+    ButtonCard, PrimaryButtonCard, TransparentButtonCard, ToolButtonCard, PrimaryToolButtonCard, TransparentToolButtonCard,
+    SwitchButtonCard, CheckBoxCard, HyperLinkCard, ComboBoxCard, EditComboBoxCard, DropDownCard, WinFluentIcon as WFI,
+    PrimaryDropDownCard, TransparentDropDownCard, DropDownToolCard, PrimaryDropDownToolCard, TransparentDropDownToolCard,
     SplitCard, PrimarySplitCard, SliderCard, ExpandGroupCard, OptionsCard, FolderListCard, MessageBox, ColorDialog
-
-from QFluentWidgets.FluentWidgetModule.FluentWidgets.widgets.acrylic_cards import AcrylicComboBoxCard, AcrylicEditComboBoxCard
-from QFluentWidgets.FluentWidgetModule.FluentWidgets.customwidgets import Dialog, UrlDialog, SmoothScrollWidget
-
-from PyMyMethod.Method import FileControl
+)
+from FluentWidgets.widgets.acrylic_cards import AcrylicComboBoxCard, AcrylicEditComboBoxCard
+from FluentWidgets import UrlDialog, VerticalScrollWidget
 
 
-class Demo(SmoothScrollWidget):
+class Demo(VerticalScrollWidget):
     def __init__(self):
         super().__init__()
-        self.fc = FileControl()
-        self.girls = dict(self.fc.readJsonFiles(r"C:\Projects\Items\Python\QT\QFluentWidget\Test\FlunetWindow\config\data.json"))['girlName']
-
-        # self.initWindow()
+        with open("./data/json/data.json", 'r', encoding='utf-8') as f:
+            self.girls = json.load(f)["GirlName"]
         self.initCard()
         self.initCardGroup()
-        self.initExpandCard()
         self.initLayout()
+        self.initExpandCard()
         self.connectSignalSlots()
 
-    def initWindow(self):
-        self.scrollWidget = QWidget()
-        self.vLayout = VBoxLayout(self.scrollWidget)
-        self.vLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
-
-        self.setWidget(self.scrollWidget)
-        self.setWidgetResizable(True)
         self.resize(1200, 700)
         desktop = QApplication.primaryScreen().availableGeometry()
         w, h = desktop.width(), desktop.height()
@@ -54,7 +43,14 @@ class Demo(SmoothScrollWidget):
     def initCardGroup(self):
         self.btCardGroup = SettingCardGroup('标准按钮卡片组', self)
         self.btCardGroup.addSettingCards([
-            self.btCard,
+            ButtonCard(
+                WFI.HOME,
+                '标准按钮卡片',
+                'Content',
+                '确定',
+                FluentIcon.SEND,
+                self
+            ),
             self.prBtCard,
             self.trBtCard
         ])
@@ -96,7 +92,7 @@ class Demo(SmoothScrollWidget):
 
         self.expandCardGroup = SettingCardGroup('展开卡片', self)
         self.expandCard = ExpandGroupCard(
-            FluentIcon.WIFI,
+            WFI.MENU,
             "展开卡片",
             'Content',
             self
@@ -109,46 +105,39 @@ class Demo(SmoothScrollWidget):
 
     def initCard(self):
         """ 普通按钮 """
-        self.btCard = ButtonCard(
-            FluentIcon.HOME,
-            '标准按钮卡片',
-            'Content',
-            '确定',
-            FluentIcon.SEND,
-            self
-        )
+
         self.prBtCard = PrimaryButtonCard(
-            FluentIcon.GITHUB,
+            WFI.COMMENT,
             '主题色按钮卡片',
             'Content',
             '确定',
             parent=self
         )
         self.trBtCard = TransparentButtonCard(
-            FluentIcon.MOVE,
+            WFI.PAINT,
             '透明按钮卡片',
             'Content',
-            btIcon=FluentIcon.MORE,
+            btIcon=WFI.MORE.colored(QColor(1, 2, 3), QColor('pink')),
             parent=self
         )
         #######################################################
         """工具按钮"""
         self.tlBtCard = ToolButtonCard(
-            FluentIcon.BLUETOOTH,
+            WFI.FOLDER,
             '工具按钮',
             'Content',
-            FluentIcon.MORE,
+            WFI.MUSIC_FOLDER,
             self
         )
         self.prTlBtCard = PrimaryToolButtonCard(
-            FluentIcon.INFO,
+            WFI.RECYCLE_BIN,
             '主题色工具按钮',
             'Content',
             InfoBarIcon.SUCCESS,
             self
         )
         self.trTlBtCard = TransparentToolButtonCard(
-            FluentIcon.MAIL,
+            WFI.WIFI,
             '透明工具按钮',
             'Content',
             parent=self
@@ -156,14 +145,14 @@ class Demo(SmoothScrollWidget):
         self.trTlBtCard.setButtonText('确定')
         #######################################################
         self.switchBtCard = SwitchButtonCard(
-            FluentIcon.WIFI,
+            WFI.SEND,
             '状态开关按钮',
             'Content',
             parent=self
 
         )
         self.checkCard = CheckBoxCard(
-            FluentIcon.MAIL,
+            WFI.SETTING,
             '复选框按钮',
             'Content',
             True,
@@ -172,7 +161,7 @@ class Demo(SmoothScrollWidget):
         )
         self.linkBtCard = HyperLinkCard(
             'https://www.bilibili.com',
-            FluentIcon.VIDEO,
+            WFI.PLAY,
             '超链接按钮',
             "Content",
             'BiliBili',
@@ -181,14 +170,14 @@ class Demo(SmoothScrollWidget):
         )
         #######################################################
         self.comBoCard = ComboBoxCard(
-            FluentIcon.LEAF,
+            WFI.DEL_FOLDER,
             "下拉框",
             'Content',
             self.girls,
             parent=self
         )
         self.edComBoCard = EditComboBoxCard(
-            FluentIcon.PIN,
+            WFI.LEFT,
             '可编辑下拉框',
             'Content',
             self.girls,
@@ -197,7 +186,7 @@ class Demo(SmoothScrollWidget):
             self
         )
         self.alcComBtCard = AcrylicComboBoxCard(
-            FluentIcon.MOVE,
+            WFI.DROP_UP,
             '亚力克下拉框',
             'Content',
             self.girls,
@@ -206,14 +195,14 @@ class Demo(SmoothScrollWidget):
             self
         )
         self.alcEditComBtCard = AcrylicEditComboBoxCard(
-            FluentIcon.CUT,
+            WFI.DROP_LEFT,
             '亚力克可编辑下拉框',
             'Content',
             self.girls,
             parent=self
         )
         self.dnCard = DropDownCard(
-            FluentIcon.BASKETBALL,
+            WFI.SORT_LEFT,
             '下拉按钮卡片',
             "Content",
             '更多',
@@ -224,37 +213,37 @@ class Demo(SmoothScrollWidget):
         )
         self.dnCard.button.setMenu(self.dnCard.menu)
         self.prDnCard = PrimaryDropDownCard(
-            FluentIcon.MAIL,
+            FluentIcon.GITHUB,
             '主题色下拉按钮卡片',
             'Content',
-            btIcon=FluentIcon.MORE,
+            btIcon=WFI.NEWS,
             menuTexts=['复制', '粘贴', '撤销'],
             menuIcons=[FluentIcon.COPY, FluentIcon.PASTE, FluentIcon.RETURN],
             triggered=[lambda: print('复制'), lambda: print('粘贴'), lambda: print('撤销')],
             parent=self
         )
         self.trDnCard = TransparentDropDownCard(
-            FluentIcon.CARE_LEFT_SOLID,
+            WFI.MENU.colored(QColor(1, 5, 5), QColor('pink')),
             '透明下拉按钮卡片',
             'Content',
             '发送',
-            FluentIcon.SEND,
+            WFI.ZIP_FOLDER,
             ['复制', '粘贴', '撤销'],
             [FluentIcon.COPY, FluentIcon.PASTE, FluentIcon.RETURN],
             [lambda: print('复制'), lambda: print('粘贴'), lambda: print('撤销')],
             self
         )
         self.dnTlCard = DropDownToolCard(
-            FluentIcon.QRCODE,
+            WFI.MUSIC_FOLDER,
             '下拉工具按钮卡片',
             'Content',
-            FluentIcon.MORE,
+            WFI.RETURN,
             ['复制', '粘贴', '撤销'],
             [FluentIcon.COPY, FluentIcon.PASTE, FluentIcon.RETURN],
             parent=self
-        )
+        ).setButtonIconSize(24, 24).setButtonFixedSize(80, 35)
         self.prDnTlCard = PrimaryDropDownToolCard(
-            FluentIcon.GITHUB,
+            WFI.MAN_USER,
             '主题色下拉工具按钮卡片',
             'Content',
             FluentIcon.MORE,
@@ -264,7 +253,7 @@ class Demo(SmoothScrollWidget):
             self
         )
         self.trDnTlCard = TransparentDropDownToolCard(
-            FluentIcon.MAIL,
+            WFI.CODE_FOLDER,
             '透明下拉工具按钮卡片',
             "Content",
             FluentIcon.MORE,
@@ -274,7 +263,7 @@ class Demo(SmoothScrollWidget):
             self
         )
         self.spCard = SplitCard(
-            FluentIcon.MAIL,
+            WFI.FEMAIL_USER,
             '拆分下拉按钮',
             "Content",
             '确定',
@@ -285,7 +274,7 @@ class Demo(SmoothScrollWidget):
             self
         )
         self.prSpCard = PrimarySplitCard(
-            FluentIcon.MAIL,
+            WFI.EMAILO_MESSAGE,
             '主题色拆分下拉按钮',
             "Content",
             '确定',
@@ -296,7 +285,7 @@ class Demo(SmoothScrollWidget):
             self
         )
         self.sliderCard = SliderCard(
-            FluentIcon.VOLUME,
+            FluentIcon.VOLUME.colored(QColor(114, 51, 4), QColor(11, 222, 194)),
             '滑动条卡片',
             'Content',
             (0.1, 114.5),
@@ -304,7 +293,7 @@ class Demo(SmoothScrollWidget):
             parent=self
         )
         self.optionsCard = OptionsCard(
-            FluentIcon.POWER_BUTTON,
+            WFI.SETTING,
             '电源选项',
             '设置当前电源模式',
             ['省电模式', '正常模式', '性能模式'],
@@ -318,7 +307,9 @@ class Demo(SmoothScrollWidget):
             "Folders",
             "Selected Folder",
             "/root",
-            self
+            self,
+            WFI.DOWNLOAD_FOLDER,
+            WFI.FOLDER
         )
 
     def initExpandCard(self):
@@ -330,9 +321,9 @@ class Demo(SmoothScrollWidget):
         self.expandCard.addButtonCard("AddButton", FluentIcon.HOME, '确定', self)
 
     def connectSignalSlots(self):
-        self.btCard.button.clicked.connect(
-            lambda: Dialog('弹出窗口', 'This is View', self).exec()
-        )
+        # self.btCard.button.clicked.connect(
+        #     lambda: Dialog('弹出窗口', 'This is View', self).exec()
+        # )
         self.prBtCard.button.clicked.connect(
             lambda: UrlDialog(self).exec()
         )
@@ -348,7 +339,6 @@ class Demo(SmoothScrollWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = Demo()
-    window.resize(1200, 700)
-    setTheme(Theme.DARK)
+    setTheme(Theme.AUTO)
     window.show()
     sys.exit(app.exec())

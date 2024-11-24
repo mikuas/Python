@@ -1,5 +1,6 @@
 from typing import Union
 
+from PySide6.QtCore import QSize
 from PySide6.QtGui import Qt, QIcon
 from qfluentwidgets import (
     PushButton, PrimaryPushButton, TransparentPushButton, ToolButton, PrimaryToolButton, TransparentToolButton,
@@ -32,8 +33,20 @@ class CustomButtonCard(CustomButtonCardParent, CustomCard):
         self.button.setIcon(icon)
         return self
 
-    def setButtonFW(self, width):
+    def setButtonIconSize(self, width, height):
+        self.button.setIconSize(QSize(width, height))
+        return self
+
+    def setButtonFixedWidth(self, width):
         self.button.setFixedWidth(width)
+        return self
+
+    def setButtonFixedHeight(self, height):
+        self.button.setFixedHeight(height)
+        return self
+
+    def setButtonFixedSize(self, width, height):
+        self.button.setFixedSize(width, height)
         return self
 
 
@@ -42,21 +55,21 @@ class ButtonCard(CustomButtonCard):
     """ 标准按钮卡片 """
     def __init__(self, icon, title, content, btText=None, btIcon=None, parent=None):
         super().__init__(icon, title, content, parent, PushButton)
-        self.setButtonText(btText).setButtonIcon(btIcon).setButtonFW(120)
+        self.setButtonText(btText).setButtonIcon(btIcon)
 
 
 class PrimaryButtonCard(CustomButtonCard):
     """ 主题色按钮卡片 """
     def __init__(self, icon, title, content, btText=None, btIcon=None, parent=None):
         super().__init__(icon, title, content, parent, PrimaryPushButton)
-        self.setButtonText(btText).setButtonIcon(btIcon).setButtonFW(120)
+        self.setButtonText(btText).setButtonIcon(btIcon)
 
 
 class TransparentButtonCard(CustomButtonCard):
     """ 透明按钮卡片 """
     def __init__(self, icon, title, content, btText=None, btIcon=None, parent=None):
         super().__init__(icon, title, content, parent, TransparentPushButton)
-        self.setButtonText(btText).setButtonIcon(btIcon).setButtonFW(120)
+        self.setButtonText(btText).setButtonIcon(btIcon)
 
 
 # 工具按钮
@@ -112,7 +125,7 @@ class HyperLinkCard(CustomButtonCard):
     """链接按钮"""
     def __init__(self, url: str, icon, title, content, btText=None, btIcon=None, parent=None):
         super().__init__(icon, title, content, parent, HyperlinkButton, btText, btIcon)
-        self.setButtonText(btText).setButtonIcon(btIcon).setButtonFW(120)
+        self.setButtonText(btText).setButtonIcon(btIcon)
         self.setUrl(url)
 
     def setUrl(self, url):

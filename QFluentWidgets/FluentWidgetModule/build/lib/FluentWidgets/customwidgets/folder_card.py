@@ -1,8 +1,13 @@
+from pathlib import Path
+from typing import Union
+
 from PySide6.QtCore import Signal
-from PySide6.QtGui import Qt
+from PySide6.QtGui import Qt, QIcon
 from PySide6.QtWidgets import QFileDialog
-from qfluentwidgets import ExpandSettingCard, ConfigItem, FluentIcon, PushButton, qconfig, Dialog
+from qfluentwidgets import ExpandSettingCard, ConfigItem, FluentIcon, PushButton, qconfig, FluentIconBase
 from qfluentwidgets.components.settings.folder_list_setting_card import FolderItem
+
+from .view_widget import Dialog
 
 
 class FolderListSettingCard(ExpandSettingCard):
@@ -10,11 +15,20 @@ class FolderListSettingCard(ExpandSettingCard):
 
     folderChanged = Signal(list)
 
-    def __init__(self, configItem: ConfigItem, title: str, content: str = None, directory="./", parent=None):
-        super().__init__(FluentIcon.FOLDER, title, content, parent)
+    def __init__(
+            self,
+            configItem: ConfigItem,
+            title: str,
+            content: str = None,
+            directory="./",
+            parent=None,
+            icon: Union[str, QIcon, FluentIconBase] = FluentIcon.FOLDER,
+            btIcon: Union[str, QIcon, FluentIconBase] = FluentIcon.FOLDER_ADD
+    ):
+        super().__init__(icon, title, content, parent)
         self.configItem = configItem
         self._dialogDirectory = directory
-        self.addFolderButton = PushButton(self.tr('添加文件夹'), self, FluentIcon.FOLDER_ADD)
+        self.addFolderButton = PushButton(self.tr('添加文件夹'), self, btIcon)
 
         self.folders = qconfig.get(configItem).copy()
         self.__initWidget()
@@ -34,7 +48,8 @@ class FolderListSettingCard(ExpandSettingCard):
     def __showFolderDialog(self):
         """ show folder dialog """
         folder = QFileDialog.getExistingDirectory(
-            self, self.tr("选择文件夹"), self._dialogDirectory)
+            self, self.tr("选择文件夹"), self._dialogDirectory
+        )
 
         if not folder or folder in self.folders:
             return
@@ -55,7 +70,7 @@ class FolderListSettingCard(ExpandSettingCard):
     def __showConfirmDialog(self, item: FolderItem):
         """ show confirm dialog """
         title = self.tr('是否确实要删除该文件夹?')
-        content = self.tr("如果删除, 文件夹将从其从列表中删除，则该文件夹将不会出现在列表中")
+        content = self.tr(f"如果删除, {Path(item.folder).name}文件夹将从其列表中删除，则该文件夹将不会出现在列表中")
         w = Dialog(title, content, self.window())
         w.yesSignal.connect(lambda: self.__removeFolder(item))
         w.exec()

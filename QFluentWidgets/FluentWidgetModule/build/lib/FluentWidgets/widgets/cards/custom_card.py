@@ -30,7 +30,7 @@ class CustomCard(CustomCardParent):
     def initIcon(self, icon):
         # set card icon
         self.iconWidget = IconWidget(icon)
-        self.iconWidget.setFixedSize(24, 24)
+        self.iconWidget.setFixedSize(32, 32)
         return self
 
     def initTitle(self, title):

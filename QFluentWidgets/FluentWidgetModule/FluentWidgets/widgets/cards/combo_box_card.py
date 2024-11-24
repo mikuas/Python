@@ -1,10 +1,10 @@
 from PySide6.QtGui import Qt
 from qfluentwidgets import ComboBox, EditableComboBox, OptionsConfigItem, OptionsValidator, OptionsSettingCard, \
-    ConfigItem
+    ConfigItem, FluentIcon
 
 from ...widgetdoc import CustomComboBoxCard, CustomOptionsCard
 from ...customwidgets import FolderListSettingCard
-from ..cards import CustomCard
+from .custom_card import CustomCard
 
 
 class CustomOptionsCard(CustomOptionsCard):
@@ -53,7 +53,11 @@ class OptionsCard(CustomOptionsCard, OptionsSettingCard):
     """ 选项卡 """
     def __init__(self, icon, title, content, items, defaultValue, parent=None):
         OptionsSettingCard.__init__(self, self.__initOptItems(defaultValue, items), icon, title, content, items, parent)
-        self.setOptionsFixedHeight(80, self)
+        self.setOptionsFixedHeight(80, self).setIconSize(32, 32)
+
+    def setIconSize(self, width, height):
+        self.card.setIconSize(width, height)
+        return self
 
     @staticmethod
     def __initOptItems(value, items):
@@ -61,9 +65,13 @@ class OptionsCard(CustomOptionsCard, OptionsSettingCard):
 
 
 class FolderListCard(CustomOptionsCard, FolderListSettingCard):
-    def __init__(self, title, content, defaultValue, parent=None):
-        FolderListSettingCard.__init__(self, self.__initConfItems(defaultValue), title, content, parent=parent)
-        self.setOptionsFixedHeight(80, self)
+    def __init__(self, title, content, defaultValue, parent=None, icon=FluentIcon.FOLDER, btIcon=FluentIcon.FOLDER_ADD):
+        FolderListSettingCard.__init__(self, self.__initConfItems(defaultValue), title, content, parent=parent, icon=icon, btIcon=btIcon)
+        self.setOptionsFixedHeight(80, self).setIconSize(32, 32)
+
+    def setIconSize(self, width, height):
+        self.card.setIconSize(width, height)
+        return self
 
     def __initConfItems(self, defaultValue: str):
         from qfluentwidgets import FolderListValidator

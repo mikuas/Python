@@ -14,7 +14,7 @@ from qfluentwidgets import FluentIcon, CardWidget, IconWidget, BodyLabel, Captio
     PushSettingCard, PlainTextEdit, MessageBox, IndeterminateProgressRing, ProgressRing, FluentIconBase, SettingCard, \
     IndeterminateProgressBar
 
-from PyMyMethod.Method import FileControl, Regedit
+from PyMyMethod import FileControl, Regedit
 # from PyMyMethod.ScreenControl import ScreenControl
 
 

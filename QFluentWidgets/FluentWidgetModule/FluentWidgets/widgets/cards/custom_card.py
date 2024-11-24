@@ -1,6 +1,7 @@
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
-from qfluentwidgets import IconWidget, BodyLabel, CaptionLabel
+from qfluentwidgets import IconWidget, BodyLabel, CaptionLabel, CustomColorSettingCard, ColorConfigItem, themeColor, \
+    FluentIcon, setThemeColor
 
 from ...widgetdoc import CustomCardParent
 
@@ -43,3 +44,18 @@ class CustomCard(CustomCardParent):
         self.contentLabel = CaptionLabel(content, self)
         # self.contentLabel.setTextColor("#606060", "#d2d2d2")
         return self
+    
+
+class CustomColorCard(CustomColorSettingCard):
+    """ 自定义颜色选择卡 """
+    def __init__(self, title, content, parent=None, icon=FluentIcon.PALETTE, enableAlpha=False):
+        super().__init__(ColorConfigItem("Color", "select", themeColor()), icon, title, content, parent, enableAlpha)
+        self.__initCard()
+
+    def __initCard(self):
+        self.chooseColorButton.setText("选择")
+        self.defaultRadioButton.setText("默认颜色")
+        self.customRadioButton.setText("自定义颜色")
+        self.choiceLabel.setText('默认颜色')
+        self.customLabel.setText('选择颜色')
+        self.colorChanged.connect(lambda color: setThemeColor(color))

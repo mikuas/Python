@@ -2,9 +2,8 @@ from typing import Union
 
 from PySide6.QtGui import Qt, QIcon
 from PySide6.QtCore import QUrl
-from PySide6.QtWidgets import QHBoxLayout, QWidget
-from qfluentwidgets import PushButton, FluentIconBase, ToolButton, HyperlinkButton, \
-     SplitWidgetBase
+from PySide6.QtWidgets import QWidget
+from qfluentwidgets import PushButton, FluentIconBase, ToolButton, HyperlinkButton, SplitWidgetBase, FolderListValidator
 
 
 class CustomButtonCardParent:
@@ -39,7 +38,16 @@ class CustomButtonCardParent:
     def setButtonIcon(self, icon: Union[QIcon, str, FluentIconBase]) -> 'CustomButtonCardParent':
         pass
 
-    def setButtonFW(self, width: int) -> 'CustomButtonCardParent':
+    def setButtonIconSize(self, width: int, height: int) -> 'CustomButtonCardParent':
+        pass
+
+    def setButtonFixedWidth(self, width: int) -> 'CustomButtonCardParent':
+        pass
+
+    def setButtonFixedHeight(self, height: int) -> 'CustomButtonCardParent':
+        pass
+
+    def setButtonFixedSize(self, width: int, height: int) -> 'CustomButtonCardParent':
         pass
 
     def setButtonChecked(self, isChecked: bool = False) -> 'CustomButtonCardParent':

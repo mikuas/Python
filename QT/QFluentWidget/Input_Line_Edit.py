@@ -6,8 +6,6 @@ from PySide6.QtGui import Qt, QAction
 from pyecharts.charts import Bar
 from pyecharts import options as opts
 
-from QT.QFluentWidget.Test.QECharts import create_chart
-
 
 class Window(QWidget):
     def __init__(self):

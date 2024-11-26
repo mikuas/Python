@@ -1,5 +1,6 @@
 from enum import Enum
 
+from PySide6.QtGui import QIcon
 from qfluentwidgets import Theme, FluentIconBase
 from .._rc import resources
 
@@ -105,3 +106,10 @@ class WinFluentIcon(FluentIconBase, Enum):
 
     def path(self, theme=Theme.AUTO):
         return fr":\images\icons\{self.value}.svg"
+
+
+class Icon(QIcon):
+
+    def __init__(self, fluentIcon: WinFluentIcon):
+        super().__init__(fluentIcon.path())
+        self.fluentIcon = fluentIcon

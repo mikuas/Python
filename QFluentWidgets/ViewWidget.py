@@ -97,16 +97,6 @@ class ViewWidget(SmoothScrollArea):
         )
         # 取消焦点
         self.listWidget.setFocusPolicy(Qt.NoFocus)
-        self.listWidget.setStyleSheet("""
-            ListWidget::item {
-                font-size: 24px;
-                background-color: red;
-                height: 50px;
-            }
-            ListWidget::item:selected {
-                border: none;
-            }
-        """)
 
         '''表格部件'''
         self.tableWidget = TableWidget(self)    # TableView 表格视图

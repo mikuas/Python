@@ -126,5 +126,6 @@ if __name__ == '__main__':
     # setTheme(Theme.DARK)
     app = QApplication(sys.argv)
     w = Window()
+    w.resize(1200, 700)
     w.show()
     app.exec()

@@ -19,13 +19,13 @@ class CustomExpandGroupCard(ExpandGroupSettingCard):
     ):
         pass
 
-    def setExpandFixedHeight(self, height: int) -> 'CustomExpandGroupCard':
+    def setExpandFixedHeight(self, height: int):
         pass
 
-    def addGroupWidgets(self, widgets: list[QWidget]) -> 'CustomExpandGroupCard':
+    def addGroupWidgets(self, widgets: list[QWidget]):
         pass
 
-    def setIconSize(self, width: int, height: int) -> 'CustomExpandGroupCard':
+    def setIconSize(self, width: int, height: int):
         pass
 
     def addButtonCard(self, title: str, icon: Union[QIcon, str, FluentIconBase], text: str, parent: QWidget = None):
@@ -45,6 +45,9 @@ class CustomExpandGroupCard(ExpandGroupSettingCard):
             orientation: Qt.Orientation = Qt.Orientation.Horizontal,
             parent: QWidget = None
     ):
+        pass
+
+    def addCustomCard(self, title: str, parent: QWidget):
         pass
 
     def _initWidget(self) -> QHBoxLayout:

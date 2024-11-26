@@ -2,6 +2,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QMenuBar, QMenu
 from PySide6.QtGui import QAction
 from PySide6.QtCore import Qt, QTimer
 
+
 class HoverMenuBarDemo(QMainWindow):
     def __init__(self):
         super().__init__()

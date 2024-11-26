@@ -54,7 +54,7 @@ class ExpandGroupCard(CustomExpandGroupCard):
         label = CaptionLabel(str(slider.value()), parent)
 
         hLayout = self._initWidget()
-        hLayout.addWidget(label)
+        hLayout.addWidget(TitleLabel(title, parent))
         hLayout.addStretch(1)
         hLayout.addWidget(label, 0, Qt.AlignmentFlag.AlignRight)
         hLayout.addWidget(slider, 0, Qt.AlignmentFlag.AlignRight)
@@ -64,6 +64,12 @@ class ExpandGroupCard(CustomExpandGroupCard):
         )
 
         return slider
+
+    def addCustomCard(self, title, parent):
+        hLayout = self._initWidget()
+        hLayout.addWidget(TitleLabel(title, parent))
+        hLayout.addStretch(1)
+        return hLayout
 
     def _initWidget(self):
         window = QWidget()

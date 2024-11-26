@@ -10,6 +10,7 @@ from QFluentWidgets.FluentWidgetModule.FluentWidgets.customwidgets import (
 
 from demo3 import CardWidget, ExpandCardWidget, ComboBoxCardWidget, MenuWidget
 
+
 class Window(FluentWindow):
     def __init__(self):
         super().__init__()

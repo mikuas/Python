@@ -1,7 +1,7 @@
 import sys
 
 from PySide6.QtWidgets import QApplication
-from qfluentwidgets import MSFluentWindow, FluentIcon, Icon
+from qfluentwidgets import MSFluentWindow, FluentIcon, Icon, setTheme, Theme
 
 from ButtonWidget import ButtonWidget
 from DateTimeWidget import DateTimeWidget
@@ -12,6 +12,7 @@ from NavWidget import NavWidget
 from ScrollWidget import ScrollWidget
 from StatusInfoWidget import StatusInfoWidget
 from TextWidget import TextWidget
+
 
 class Window(MSFluentWindow):
     def __init__(self):
@@ -88,5 +89,6 @@ class Window(MSFluentWindow):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = Window()
+    setTheme(Theme.AUTO)
     window.show()
     sys.exit(app.exec())

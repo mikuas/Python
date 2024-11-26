@@ -43,6 +43,7 @@ class UrlDialog(MessageBoxBase):
 
 
 class ColorDialog(ColorD):
+    """ 颜色选择器对话框 """
     def __init__(self, color, title, parent=None, enableAlpha=False):
         super().__init__(color, title, parent, enableAlpha)
         setButtonText(self.yesButton, self.cancelButton)
@@ -50,6 +51,26 @@ class ColorDialog(ColorD):
     def getColor(self):
         self.exec()
         return self.color.name()
+
+
+class CustomDialog(MessageBoxBase):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.hide()
+        self.widget.setMinimumSize(400, 250)
+        setButtonText(self.yesButton, self.cancelButton)
+
+    def addWidget(self, widget: QWidget,  stretch: int = 0, alignment: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter):
+        self.viewLayout.addWidget(widget, stretch, alignment)
+        return self
+
+    def setFixedWidth(self, w):
+        self.widget.setFixedWidth(w)
+        return self
+
+    def setFixedHeight(self, h):
+        self.widget.setFixedHeight(h)
+        return self
 
 
 class FlowLayoutWidget(SmoothScrollWidget):

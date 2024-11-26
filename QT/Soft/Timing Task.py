@@ -2,7 +2,7 @@ import os
 import sys
 
 from Calc import CaliWindow
-from PyMyMethod.Method import FileControl, SystemCtl
+from PyMyMethod import FileControl, SystemCtl
 from Keyboard.MainWindow import KeyboardMainWindow
 from Image.MainWindow import ImageMainWindow
 from regedit.MainWindow import RegeditMainWindow

@@ -3,7 +3,7 @@ from typing import Union
 from PySide6.QtGui import Qt, QIcon
 from PySide6.QtCore import QUrl
 from PySide6.QtWidgets import QWidget
-from qfluentwidgets import PushButton, FluentIconBase, ToolButton, HyperlinkButton, SplitWidgetBase, FolderListValidator
+from qfluentwidgets import PushButton, FluentIconBase, ToolButton, HyperlinkButton, SplitWidgetBase
 
 
 class CustomButtonCardParent:

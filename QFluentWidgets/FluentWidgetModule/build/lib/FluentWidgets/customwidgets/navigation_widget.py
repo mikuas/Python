@@ -9,10 +9,11 @@ from qfluentwidgets import Pivot, SegmentedWidget, SegmentedToolWidget, Segmente
 class PivotNav(QWidget):
     """ 导航栏 """
 
-    def __init__(self, parent: QWidget = None, nav: type[Pivot] = Pivot):
+    def __init__(self, text: str, parent: QWidget = None, nav: type[Pivot] = Pivot):
         super().__init__(parent)
         self.stackedWidget = QStackedWidget(self)
         self.__initNavigation(nav)
+        self.setObjectName(text)
 
     def __initNavigation(self, nav: type[Pivot]):
         self.navigation = nav(self)
@@ -34,6 +35,10 @@ class PivotNav(QWidget):
             self.addItem(key, text, widget, icons[texts.index(text)] if icons else None)
         return self
 
+    def setCurrentItem(self, routeKey: str):
+        self.navigation.setCurrentItem(routeKey)
+        return self
+
     def setNavHeight(self, height: int):
         self.navigation.setFixedHeight(height)
         return self
@@ -46,15 +51,15 @@ class PivotNav(QWidget):
 class SegmentedNav(PivotNav):
     """ 分段导航 """
 
-    def __init__(self, parent=None):
-        super().__init__(parent, SegmentedWidget)
+    def __init__(self, text, parent=None):
+        super().__init__(text, parent, SegmentedWidget)
 
 
 class SegmentedToolNav(PivotNav):
     """ 工具导航 """
 
-    def __init__(self, parent=None, nav: type[Pivot] = SegmentedToolWidget):
-        super().__init__(parent, nav)
+    def __init__(self, text: str,  parent=None, nav: type[Pivot] = SegmentedToolWidget):
+        super().__init__(text, parent, nav)
         self.setNavWidth(0)
 
     def addToolItem(self, routeKey: str, icon: Union[QIcon, str, FluentIconBase], widget: QWidget):
@@ -70,9 +75,9 @@ class SegmentedToolNav(PivotNav):
 
 
 class SegmentedToggleToolNav(SegmentedToolNav):
-    def __init__(self, parent=None):
+    def __init__(self, text: str, parent=None):
         """ 主题色选中导航 """
-        super().__init__(parent, SegmentedToggleToolWidget)
+        super().__init__(text, parent, SegmentedToggleToolWidget)
 
 
 class LabelBarWidget(QWidget):

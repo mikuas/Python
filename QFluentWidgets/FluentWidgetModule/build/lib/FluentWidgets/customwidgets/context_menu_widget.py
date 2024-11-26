@@ -45,6 +45,10 @@ class Menu(QWidget):
     def exec(self, position: QPoint):
         self.menu.exec(position)
 
+    def execWidget(self, widget: QWidget):
+        """ 在指定组件中心执行 """
+        self.menu.exec(widget.mapToGlobal(widget.rect().center()))
+
     def addSeparator(self):
         self.menu.addSeparator()
         return self
@@ -215,6 +219,9 @@ class CheckedMenuWidget(QWidget):
         """ run """
         self.checkedMenu.exec(position)
 
+    def execWidget(self, widget: QWidget):
+        """ 在指定组件中心执行 """
+        self.checkedMenu.exec(widget.mapToGlobal(widget.rect().center()))
 
 class Shortcut:
     """ 设置快捷键 """

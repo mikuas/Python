@@ -7,7 +7,6 @@ class VerticalScrollWidget(SingleDirectionScrollArea):
     """ 平滑垂直滚动小部件 """
     def __init__(self, parent: QWidget = None):
         super().__init__(parent)
-        self.vLayout = None
         self.__initWidget()
 
     def __initWidget(self):
@@ -22,7 +21,6 @@ class HorizontalScrollWidget(SingleDirectionScrollArea):
     """ 平滑水平滚动小部件 """
     def __int__(self, parent: QWidget = None):
         super().__init__(parent, Qt.Orientation.Horizontal)
-        self.hLayout = None
         self.__initWidget()
 
     def __initWidget(self):

@@ -1,3 +1,4 @@
+import json
 import sys
 
 from PySide6.QtGui import QColor
@@ -14,28 +15,22 @@ from FluentWidgets import (
 from FluentWidgets.widgets.acrylic_cards import AcrylicComboBoxCard, AcrylicEditComboBoxCard
 from FluentWidgets import UrlDialog, VerticalScrollWidget
 
-from PyMyMethod.Method import FileControl
-
 
 class Demo(VerticalScrollWidget):
     def __init__(self):
         super().__init__()
-        self.fc = FileControl()
-        self.girls = [
-            "绫地宁宁", "因幡爱瑠", "椎叶䌷", "亚托莉", "朝武芳乃", "丛雨", "常陆茉子", "上坂茅羽耶", "矢来美羽", "在原七海",
-            "三司绫濑", "式部茉优", "二条院羽月", "和泉妃爱", "常盘华乃", "锦明日海", "镰仓诗樱", "结城明日奈", "小鸟游六花",
-            "御坂美琴", "佐天泪子", "后藤一里", "山田凉", "伊地知虹夏", "喜多郁代"
-        ]
+        with open("./data/json/data.json", 'r', encoding='utf-8') as f:
+            self.girls = json.load(f)["GirlName"]
         self.initCard()
         self.initCardGroup()
         self.initLayout()
         self.initExpandCard()
         self.connectSignalSlots()
 
-        # self.resize(1200, 700)
-        # desktop = QApplication.primaryScreen().availableGeometry()
-        # w, h = desktop.width(), desktop.height()
-        # self.move(w // 2 - self.width() // 2, h // 2 - self.height() // 2)
+        self.resize(1200, 700)
+        desktop = QApplication.primaryScreen().availableGeometry()
+        w, h = desktop.width(), desktop.height()
+        self.move(w // 2 - self.width() // 2, h // 2 - self.height() // 2)
 
     def initLayout(self):
         self.vLayout.addWidget(self.btCardGroup)
@@ -344,7 +339,6 @@ class Demo(VerticalScrollWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = Demo()
-    window.resize(1200, 700)
     setTheme(Theme.AUTO)
     window.show()
     sys.exit(app.exec())

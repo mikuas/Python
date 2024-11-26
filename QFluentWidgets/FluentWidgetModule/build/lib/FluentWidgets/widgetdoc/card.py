@@ -27,14 +27,14 @@ class CustomCardParent(CardWidget):
         self.slider = None
         self.sliderLabel = None
 
-    def initLayout(self) -> 'CustomCardParent':
+    def initLayout(self):
         pass
 
-    def initIcon(self, icon: Union[QIcon, str, FluentIconBase, QWidget]) -> 'CustomCardParent':
+    def initIcon(self, icon: Union[QIcon, str, FluentIconBase, QWidget]):
         pass
 
-    def initTitle(self, title: str) -> 'CustomCardParent':
+    def initTitle(self, title: str):
         pass
 
-    def initContent(self, content: str) -> 'CustomCardParent':
+    def initContent(self, content: str):
         pass

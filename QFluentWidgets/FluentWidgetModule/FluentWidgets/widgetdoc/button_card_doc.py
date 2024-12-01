@@ -3,7 +3,7 @@ from typing import Union
 from PySide6.QtGui import Qt, QIcon
 from PySide6.QtCore import QUrl
 from PySide6.QtWidgets import QWidget
-from qfluentwidgets import PushButton, FluentIconBase, ToolButton, HyperlinkButton, SplitWidgetBase
+from qfluentwidgets import PushButton, FluentIconBase, ToolButton, HyperlinkButton, SplitWidgetBase, SwitchButton
 
 
 class CustomButtonCardParent:
@@ -16,20 +16,11 @@ class CustomButtonCardParent:
             btText: str = None,
             btIcon: Union[QIcon, str, FluentIconBase] = None,
             parent: QWidget = None,
-            btType: Union[type[PushButton], type[ToolButton], type[HyperlinkButton], type[QWidget], type[SplitWidgetBase]] = None
+            btType: Union[type[PushButton], type[ToolButton], type[HyperlinkButton], type[QWidget], type[SwitchButton], type[SplitWidgetBase]] = None
     ):
         pass
 
-    def initButton(
-            self,
-            btType: Union[
-                type[PushButton],
-                type[ToolButton],
-                type[HyperlinkButton],
-                type[QWidget],
-                type[SplitWidgetBase]
-            ]
-    ):
+    def initButton(self, btType: Union[type[PushButton], type[ToolButton], type[HyperlinkButton], type[QWidget], type[SwitchButton], type[SplitWidgetBase]]):
         pass
 
     def insertWidget(self, index: int, widget: QWidget, stretch: int, alignment: Qt.AlignmentFlag):

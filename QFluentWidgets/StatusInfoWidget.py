@@ -221,7 +221,7 @@ class StatusInfoWidget(SmoothScrollArea):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    w = MediaWidget("MEDIA")
+    w = StatusInfoWidget("MEDIA")
     w.resize(1000, 600)
     w.show()
     sys.exit(app.exec())

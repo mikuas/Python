@@ -1,34 +1,39 @@
-import argparse
+scores = [
+    68,
+    456,
+    572,
+    587,
+    540,
+    501,
+    354,
+    150,
+    543,
+    392,
+    267,
+    127,
+    259,
+    547,
+    786,
+    543,
+    654,
+    56,
+    242,
+    298,
+    689,
+    778,
+    534,
+    529,
+    408,
+    495,
+    674,
+    245,
+    763,
+    691,
+    102,
+    525
+]
+result = sorted(scores, reverse=True)
+print(f"{result[:3]}\n{result[3:9]}\n{result[9:18]}\n{result[18:]}")
 
-def createTerminalArgs(
-        args: str,
-        helpInfos: str | list,
-        requireds: list[bool] = None,
-        types: list = None,
-        isList: list[bool] = None,
-        default: list = None,
-        defaultValue: list = None,
-):
-    parser = argparse.ArgumentParser(description='getArgs')
-    i = 0
-    helpInfos = helpInfos.split(' ') if type(helpInfos) is str else helpInfos
-    for arg in args.split(' '):
-        if isList and isList[i]:
-            parser.add_argument(f'-{arg}', type=str if types is None else types[i], nargs="+", help=helpInfos[i], required=False if requireds is None else requireds[i])
-        else:
-            if default is not None and arg in default:
-                parser.add_argument(f'-{arg}', nargs='?' if types is None else types[i], const=defaultValue[default.index(arg)], help=helpInfos[i], required=False if requireds is None else requireds[i])
-            else:
-                parser.add_argument(f'-{arg}', type=str if types is None else types[i], required=False if requireds is None else requireds[i])
-        i += 1
-    return parser.parse_args()
 
-result = createTerminalArgs(
-    'c p',
-    'Content Path',
-    isList=[False, True],
-    default=['c', 'p'],
-    defaultValue=['Result1', 'Result2']
-)
 
-print(result.c, result.p)

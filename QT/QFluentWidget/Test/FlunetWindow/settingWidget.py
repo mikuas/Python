@@ -1,6 +1,8 @@
+import sys
+
 from PySide6.QtCore import QTimer
 from PySide6.QtGui import QFont, Qt
-from PySide6.QtWidgets import QWidget, QLabel
+from PySide6.QtWidgets import QWidget, QLabel, QApplication
 from qfluentwidgets import SettingCardGroup, OptionsSettingCard, FluentIcon, PrimaryPushSettingCard, \
     CustomColorSettingCard, ColorConfigItem, setThemeColor, themeColor, RangeSettingCard, RangeValidator, \
     RangeConfigItem, SwitchSettingCard, HyperlinkCard, ScrollArea, ExpandLayout, Flyout, FlyoutAnimationType, \
@@ -259,3 +261,11 @@ class SettingWidget(ScrollArea):
 
     def resizeEvent(self, event):
         self.scrollWidget.resize(self.width(), self.height())
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = SettingWidget("SETTING", qconfig.themeMode)
+    setTheme(Theme.AUTO)
+    window.show()
+    sys.exit(app.exec())

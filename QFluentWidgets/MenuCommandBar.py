@@ -7,6 +7,7 @@ from pyautogui import shortcut
 from qfluentwidgets import SmoothScrollArea, VBoxLayout, RoundMenu, PrimaryPushButton, Action, FluentIcon, AvatarWidget, \
     BodyLabel, HyperlinkLabel, setFont, HyperlinkButton, CheckableMenu, SystemTrayMenu, LineEdit, LineEditMenu, \
     CommandButton, CommandBar, CommandBarView
+from qfluentwidgets.components.widgets.combo_box import ComboBoxMenu
 from qfluentwidgets.components.widgets.line_edit import CompleterMenu
 
 
@@ -90,6 +91,14 @@ class MenuCommandBar(SmoothScrollArea):
         '''多行编辑框菜单'''
         # TextEditMenu()
 
+        '''下拉框菜单'''
+        self.cbm = ComboBoxMenu(self)
+        self.cbm.addActions([
+            Action("Copy", self),
+            Action("Paste", self),
+            Action("Setting", self)
+        ])
+
         '''补全菜单'''
         self.lineEdit = LineEdit(self)
         self.completerMenu = CompleterMenu(self.lineEdit)
@@ -136,6 +145,7 @@ class MenuCommandBar(SmoothScrollArea):
         self.vLayout.addWidget(self.commandButton)
         self.vLayout.addWidget(self.commandBar)
         self.vLayout.addWidget(self.barViewButton)
+        self.vLayout.addWidget(self.cbm)
 
     def mouseDoubleClickEvent(self, event):
         if event.button() == Qt.LeftButton:

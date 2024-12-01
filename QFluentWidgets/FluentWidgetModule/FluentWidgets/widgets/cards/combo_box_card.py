@@ -28,7 +28,7 @@ class ComboBoxCard(CustomComboBoxCard, CustomCard):
     def initComboBox(self, boxType, items):
         self.comboBox = boxType(self)
         self.comboBox.addItems(items)
-        self.comboBox.setFixedWidth(150)
+        self.comboBox.setMinimumWidth(150)
         self.hBoxLayout.addWidget(self.comboBox, 0, Qt.AlignmentFlag.AlignRight)
         return self
 

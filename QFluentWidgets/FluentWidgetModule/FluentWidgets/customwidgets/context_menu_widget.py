@@ -5,6 +5,7 @@ from PySide6.QtGui import QColor, QActionGroup, QIcon, QShortcut, QKeySequence
 from PySide6.QtWidgets import QWidget
 from qfluentwidgets import RoundMenu, Action, AvatarWidget, BodyLabel, CaptionLabel, setFont, HyperlinkButton, \
     CheckableMenu, MenuIndicatorType, FluentIconBase
+from qfluentwidgets.components.material import AcrylicMenu as AM
 
 
 class Menu(QWidget):
@@ -74,6 +75,13 @@ class Menu(QWidget):
         menu.setFixedWidth(width)
         menu.view.setFixedWidth(width - 20)
         return self
+
+
+class AcrylicMenu(Menu):
+    """ 亚力克菜单 """
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.menu = AM(self)
 
 
 class ProfileCardMenu(Menu):
@@ -222,6 +230,7 @@ class CheckedMenuWidget(QWidget):
     def execWidget(self, widget: QWidget):
         """ 在指定组件中心执行 """
         self.checkedMenu.exec(widget.mapToGlobal(widget.rect().center()))
+
 
 class Shortcut:
     """ 设置快捷键 """

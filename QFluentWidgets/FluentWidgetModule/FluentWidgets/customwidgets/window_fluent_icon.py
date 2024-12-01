@@ -110,6 +110,6 @@ class WinFluentIcon(FluentIconBase, Enum):
 
 class Icon(QIcon):
 
-    def __init__(self, fluentIcon: WinFluentIcon):
+    def __init__(self, fluentIcon: WinFluentIcon | FluentIconBase):
         super().__init__(fluentIcon.path())
         self.fluentIcon = fluentIcon

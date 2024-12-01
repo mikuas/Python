@@ -11,7 +11,7 @@ class ExpandGroupCard(CustomExpandGroupCard):
         super().__init__(icon, title, content, parent)
         self.card.setContentsMargins(0, 0, 20, 0)
         self.viewLayout.setSpacing(0)
-        self.setExpandFixedHeight(80).setIconSize(32, 32)
+        self.setExpandFixedHeight(70).setIconSize(32, 32)
 
     def setExpandFixedHeight(self, height):
         self.card.setFixedHeight(height)

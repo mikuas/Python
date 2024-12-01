@@ -11,7 +11,9 @@ class HBoxLayout(QHBoxLayout):
             self.addWidget(widget, stretch, alignment)
         return self
 
-    def addWidgets(self, widgets: list[QWidget], stretch: list[int], alignment: list[Qt.AlignmentFlag] = Qt.AlignmentFlag.AlignCenter):
+    def addWidgets(self, widgets: list[QWidget], stretch: list[int] | int, alignment: list[Qt.AlignmentFlag] | Qt.AlignmentFlag):
+        stretch = [stretch for _ in range(len(widgets))] if type(stretch) is int else stretch
+        alignment = [alignment for _ in range(len(widgets))] if type(alignment) is int else alignment
         for w, s, a in zip(widgets, stretch, alignment):
             self.addWidget(w, s, a)
         return self
@@ -21,7 +23,8 @@ class HBoxLayout(QHBoxLayout):
             self.addLayout(layout, stretches)
         return self
 
-    def addLayouts(self, layouts: list[QLayout], stretches: list[int]):
+    def addLayouts(self, layouts: list[QLayout], stretches: list[int] | int):
+        stretches = [stretches for _ in range(len(layouts))] if type(stretches) is int else stretches
         for l, s in zip(layouts, stretches):
             self.addLayout(l, s)
         return self

@@ -11,7 +11,7 @@ class SettingWidget(VerticalScrollWidget):
     def __init__(self, text: str, parent: FluentWindow = None):
         super().__init__(parent)
         self.parent = parent
-        self.parent.closeEvent = self.closeEvent
+        # self.parent.closeEvent = self.closeEvent
         self.setObjectName(text.replace(' ', '_'))
         self.styleCardGroup = SettingCardGroup("个性化", self)
         self.sysCardGroup = SettingCardGroup("系统设置", self)
@@ -67,7 +67,7 @@ class SettingWidget(VerticalScrollWidget):
     def __connectSignalSlot(self):
         self.micaEffectCard.button.checkedChanged.connect(lambda b: self.parent.setMicaEffectEnabled(b))
         self.sysTrayCard.comboBox.currentIndexChanged.connect(lambda index: self.setTray(index))
-        self.bt.clicked.connect(
+        self.bt.button.clicked.connect(
             lambda: os.system(r"start D:\DownloadMusic\小汪音乐.exe")
         )
 

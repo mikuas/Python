@@ -1,6 +1,8 @@
 from PySide6.QtGui import Qt
-from PySide6.QtWidgets import QWidget, QHBoxLayout
-from qfluentwidgets import VBoxLayout, SingleDirectionScrollArea, SmoothScrollArea
+from PySide6.QtWidgets import QWidget
+from qfluentwidgets import SingleDirectionScrollArea, SmoothScrollArea, ScrollArea
+
+from .layout import VBoxLayout, HBoxLayout
 
 
 class VerticalScrollWidget(SingleDirectionScrollArea):
@@ -31,13 +33,13 @@ class HorizontalScrollWidget(SingleDirectionScrollArea):
         self.setWidgetResizable(True)
 
 
-class SmoothScrollWidget(SmoothScrollArea):
+class ScrollWidget(ScrollArea):
     """ 平滑双向滚动小部件 """
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.__initWidget()
+        self._initWidget()
 
-    def __initWidget(self):
+    def _initWidget(self):
         self.__widget = QWidget()
         self.setWidget(self.__widget)
         self.setWidgetResizable(True)
@@ -46,4 +48,11 @@ class SmoothScrollWidget(SmoothScrollArea):
         return VBoxLayout(self.__widget)
 
     def createHBoxLayout(self):
-        return QHBoxLayout(self.__widget)
+        return HBoxLayout(self.__widget)
+
+
+class SmoothScrollWidget(SmoothScrollArea, ScrollWidget):
+    """ 靠动画实现的平滑双向滚动小部件 """
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._initWidget()

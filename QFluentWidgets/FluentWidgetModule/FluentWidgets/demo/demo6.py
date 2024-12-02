@@ -3,11 +3,12 @@ import sys
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QWidget, QApplication, QStackedWidget
 from qfluentwidgets import PipsPager, setTheme, Theme, PipsScrollButtonDisplayMode, TitleLabel, PrimaryPushButton, \
-    LineEdit, Slider, NavigationPanel, FluentIcon
+    LineEdit, Slider, NavigationPanel, FluentIcon, NavigationWidget, Action, NavigationInterface, NavigationBar, \
+    NavigationItemPosition
+from qfluentwidgets.components.navigation.navigation_widget import NavigationFlyoutMenu
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import VBoxLayout, HBoxLayout, VerticalScrollWidget, CBoxWidget, \
-    SmoothScrollWidget, setToolTipInfo
-from QFluentWidgets.FluentWidgetModule.App import SettingWidget
+from QFluentWidgets.FluentWidgetModule.FluentWidgets import VBoxLayout, HBoxLayout, SmoothScrollWidget, \
+    NavigationPanelWidget, WinFluentIcon
 
 
 class HorizontalPager(PipsPager):
@@ -126,24 +127,23 @@ class VerticalPagerWidget(QWidget):
         )
 
 
-class Demo(SmoothScrollWidget):
+class Demo(NavigationPanelWidget):
     def __init__(self):
         super().__init__()
-        self.resize(800, 600)
-        self.setWindowTitle('Demo')
-        nav = NavigationPanel(self)
-        # nav.addWidget()
-        nav.setMinimumHeight(self.height() - 50)
-        nav.adjustSize()
-        # nav.setFixedSize(300, self.height() - 50)
-        nav.setAcrylicEnabled(True)
-        nav.addItem(
-            'st1',
-            FluentIcon.HOME,
-            'text',
-            lambda: print(True),
-
+        # self.resize(800, 600)
+        self.addSubInterface(
+            's1',
+            WinFluentIcon.HOME,
+            'Home',
+            TitleLabel("HomeInterface", self),
+        ).addSeparator().addSubInterface(
+            's2',
+            WinFluentIcon.SETTING,
+            "Setting",
+            TitleLabel("SettingInterface", self),
+            position=NavigationItemPosition.BOTTOM
         )
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

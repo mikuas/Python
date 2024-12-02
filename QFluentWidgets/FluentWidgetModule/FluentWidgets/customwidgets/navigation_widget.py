@@ -1,9 +1,11 @@
 from typing import Union
 
-from PySide6.QtGui import Qt, QIcon
-from PySide6.QtWidgets import QWidget, QStackedWidget, QHBoxLayout, QVBoxLayout
+from PySide6.QtGui import Qt, QIcon, QColor
+from PySide6.QtWidgets import QWidget, QStackedWidget, QHBoxLayout, QVBoxLayout, QApplication
 from qfluentwidgets import Pivot, SegmentedWidget, SegmentedToolWidget, SegmentedToggleToolWidget, FluentIconBase, \
-    TabBar, TabCloseButtonDisplayMode
+    TabBar, TabCloseButtonDisplayMode, NavigationInterface, qconfig, ThemeColor, Theme, NavigationItemPosition
+
+from .layout import VBoxLayout, HBoxLayout
 
 
 class PivotNav(QWidget):
@@ -58,7 +60,7 @@ class SegmentedNav(PivotNav):
 class SegmentedToolNav(PivotNav):
     """ 工具导航 """
 
-    def __init__(self, text: str,  parent=None, nav: type[Pivot] = SegmentedToolWidget):
+    def __init__(self, text: str, parent=None, nav: type[Pivot] = SegmentedToolWidget):
         super().__init__(text, parent, nav)
         self.setNavWidth(0)
 
@@ -82,6 +84,7 @@ class SegmentedToggleToolNav(SegmentedToolNav):
 
 class LabelBarWidget(QWidget):
     """ 标签页组件 """
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.titleBar = TabBar(self)
@@ -120,8 +123,69 @@ class LabelBarWidget(QWidget):
     def __addWidget(self, widget: QWidget):
         self.stackedWidget.addWidget(widget)
 
-    def addTabWidgets(self, routeKeys: list[str], texts: list[str], icons: list[Union[QIcon, str, FluentIconBase]] = None, widgets: list[QWidget] = None):
+    def addTabWidgets(
+            self, routeKeys: list[str], texts: list[str],
+                      icons: list[Union[QIcon, str, FluentIconBase]] = None, widgets: list[QWidget] = None):
         if icons is None: icons = [None for _ in range(len(routeKeys))]
         for key, text, icon, widget in zip(routeKeys, texts, icons, widgets):
             self.addTabWidget(key, text, icon, widget)
         return self
+
+
+class NavigationPanelWidget(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.mainLayout = HBoxLayout(self)
+        self.navLayout = VBoxLayout()
+        self.widgetLayout = VBoxLayout()
+        self.__initNavigation()
+        self.__initWindow()
+        self.__initStackedWidget()
+        qconfig.themeChanged.connect(lambda: self.__themeChange(qconfig.theme))
+
+    def __initNavigation(self):
+        self.navigation = NavigationInterface(self)
+        self.navigation.setAcrylicEnabled(True)
+        self.navigation.setReturnButtonVisible(True)
+        self.navigation.setExpandWidth(250)
+        self.navigation.setMinimumExpandWidth(1500)
+
+    def __initWindow(self):
+        self.mainLayout.addLayouts([self.navLayout, self.widgetLayout])
+        desktop = QApplication.primaryScreen().availableGeometry()
+        w, h = desktop.width(), desktop.height()
+        self.move(w // 2 - self.width() // 2, h // 2 - self.height() // 2)
+
+    def __initStackedWidget(self):
+        self.stackedWidget = QStackedWidget(self)
+        self.navLayout.addWidget(self.navigation)
+        self.widgetLayout.addWidget(self.stackedWidget)
+        self.setRadius(8)
+
+    def setRadius(self, radius):
+        self.stackedWidget.setStyleSheet(f"{self.stackedWidget.styleSheet()} border-radius: {radius}px;")
+        return self
+
+    def addSubInterface(
+            self,
+            routeKey: str,
+            icon: Union[QIcon, str, FluentIconBase],
+            text: str,
+            widget: QWidget,
+            selectable: bool = True,
+            position: NavigationItemPosition = NavigationItemPosition.TOP,
+    ):
+        self.stackedWidget.addWidget(widget)
+        self.navigation.addItem(routeKey, icon, text, lambda: self.stackedWidget.setCurrentWidget(widget), selectable, position, text)
+        return self
+
+    def addSeparator(self):
+        self.navigation.addSeparator()
+        return self
+
+    def __themeChange(self, value):
+        style = self.stackedWidget.styleSheet()
+        if value == Theme.LIGHT:
+            self.stackedWidget.setStyleSheet(f"{style} background-color: rgb(255, 250, 250);")
+        elif value == Theme.DARK:
+            self.stackedWidget.setStyleSheet(f"{style} background-color: rgb(44, 43, 43);")

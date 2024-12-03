@@ -3,7 +3,7 @@ import json
 
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets import FluentWindow, RoundMenu, setTheme, qconfig, Icon, FluentIcon, NavigationItemPosition, \
-    InfoBarPosition, InfoBar, Theme
+    InfoBarPosition, InfoBar, Theme, NavigationAvatarWidget
 
 from imageWidget import ImageWidget
 from settingWidget import SettingWidget
@@ -59,12 +59,12 @@ class Window(FluentWindow):
         self.addSubInterface(self.tool, FluentIcon.DEVELOPER_TOOLS, "工具")
         # 添加分隔符
         self.navigationInterface.addSeparator()
-        # self.navigationInterface.addWidget(
-        #     'author',
-        #     ProfileNavigationAvatarWidget(self),
-        #     onClick=lambda: self.menu,
-        #     position=NavigationItemPosition.BOTTOM
-        # )
+        self.navigationInterface.addWidget(
+            'author',
+            NavigationAvatarWidget('name', r"C:\Users\Administrator\OneDrive\FORZA\9.png", self),
+            onClick=lambda: self.menu,
+            position=NavigationItemPosition.BOTTOM
+        )
         self.addSubInterface(self.setting, FluentIcon.SETTING, "设置", NavigationItemPosition.BOTTOM)
         self.navigationInterface.setAcrylicEnabled(True)
 

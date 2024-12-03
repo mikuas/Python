@@ -4,11 +4,12 @@ from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QWidget, QApplication, QStackedWidget
 from qfluentwidgets import PipsPager, setTheme, Theme, PipsScrollButtonDisplayMode, TitleLabel, PrimaryPushButton, \
     LineEdit, Slider, NavigationPanel, FluentIcon, NavigationWidget, Action, NavigationInterface, NavigationBar, \
-    NavigationItemPosition
-from qfluentwidgets.components.navigation.navigation_widget import NavigationFlyoutMenu
+    NavigationItemPosition, NavigationTreeWidgetBase
+from qfluentwidgets.components.navigation.navigation_widget import NavigationFlyoutMenu, NavigationTreeWidget
 
 from QFluentWidgets.FluentWidgetModule.FluentWidgets import VBoxLayout, HBoxLayout, SmoothScrollWidget, \
-    NavigationPanelWidget, WinFluentIcon
+    NavigationWidget, WinFluentIcon, NavigationBarWidget
+from QFluentWidgets.FluentWidgetModule.App import SettingWidget
 
 
 class HorizontalPager(PipsPager):
@@ -127,21 +128,34 @@ class VerticalPagerWidget(QWidget):
         )
 
 
-class Demo(NavigationPanelWidget):
+class Demo(NavigationWidget):
+# class Demo(NavigationBarWidget):
     def __init__(self):
         super().__init__()
+        tree = NavigationTreeWidget(FluentIcon.GITHUB, 'Tree', True, self)
+        tree.addChild()
+        self.navigation.addWidget(
+            'rot',
+            tree,
+            lambda: print("Tree"),
+        )
         # self.resize(800, 600)
         self.addSubInterface(
             's1',
-            WinFluentIcon.HOME,
+            FluentIcon.HOME,
             'Home',
             TitleLabel("HomeInterface", self),
-        ).addSeparator().addSubInterface(
+            # FluentIcon.HOME_FILL
+        ).addSubInterface(
             's2',
             WinFluentIcon.SETTING,
             "Setting",
             TitleLabel("SettingInterface", self),
-            position=NavigationItemPosition.BOTTOM
+        ).addSubInterface(
+            's3',
+            WinFluentIcon.MENU,
+            "Menu",
+            SettingWidget("SETTING", self)
         )
 
 

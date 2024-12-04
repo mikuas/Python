@@ -1,8 +1,5 @@
-import sys
-
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QLayout, QApplication
-from qfluentwidgets import TitleLabel, setTheme, Theme
+from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QLayout
 
 
 class HBoxLayout(QHBoxLayout):

@@ -1,80 +1,39 @@
 import sys
 
-from PySide6.QtWidgets import QWidget, QApplication
-from qfluentwidgets import NavigationBar, FluentIcon, setTheme, Theme, Action, TitleLabel, PrimaryPushButton
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import Menu, ProfileCardMenu, AcrylicMenu, VBoxLayout, HBoxLayout, \
-    CheckedMenu, Shortcut, MenuIndicatorType, WinFluentIcon, CheckableMenu
+from PySide6.QtWidgets import QWidget, QApplication, QMenuBar
+from qfluentwidgets import setTheme, Theme, CommandBar, Action, FluentIcon, PushButton, TransparentDropDownPushButton
+from qfluentwidgets.components.widgets.command_bar import CommandMenu, RoundMenu
 
 
 class Window(QWidget):
     def __init__(self):
         super().__init__()
         self.resize(800, 500)
-        self.vLayout = VBoxLayout(self)
-        self.hLayout = HBoxLayout()
-        self.vLayout.addLayout(self.vLayout)
-        self.button = PrimaryPushButton("Profile Card", self)
-        self.vLayout.addWidget(self.button)
+        commandBar = CommandBar(self)
+        commandBar.setMinimumWidth(500)
 
-        self.cm = CheckedMenu(self, MenuIndicatorType.CHECK)
+        button = TransparentDropDownPushButton("文件")
+        button2 = TransparentDropDownPushButton("工具")
+        button3 = TransparentDropDownPushButton("更多")
+        button.setFixedHeight(34)
+        menu = RoundMenu(parent=self)
+        menu.addActions([
+            Action(FluentIcon.COPY, '文件', self),
+            Action(FluentIcon.SAVE, '设置', self),
+            Action(FluentIcon.SAVE, '工具', self),
+        ])
+        button.setMenu(menu)
+        button2.setMenu(menu)
+        button3.setMenu(menu)
 
-        self.menu = AcrylicMenu(self)
-        self.menu.addActions([
-            Action(FluentIcon.GITHUB, "GITHUB", self, triggered=lambda: print("Github")),
-            Action(FluentIcon.SETTING, "SETTING", self, triggered=lambda: print("Setting")),
-            Action(FluentIcon.SEND, "SEND", self, triggered=lambda: print("Send")),
-        ]).addSubActions(
-            FluentIcon.MENU,
-            'Sub',
-            [Action(FluentIcon.HOME, "HOME", self, triggered=lambda: print("Home"))],
-        )
-
-        group = self.cm.createGroup()
-        self.cm.setShortcuts(
-            self.cm.addMenuToGroups(
-                self.cm.createGroup(),
-                self.cm.addCheckItems(
-                    [FluentIcon.GITHUB, FluentIcon.SETTING, FluentIcon.SEND],
-                    ["GITHUB", "SETTING", "SEND"]
-                )
-            ),
-            ["Ctrl+U", "Ctrl+I", "Ctrl+T"]
-        ).setShortcut(
-            self.cm.setClicked(
-                self.cm.addCheckItem(
-                    FluentIcon.HOME,
-                    "HOME",
-                ),
-                lambda: print('HOME')
-            ),
-            "Ctrl+P"
-        ).setClickeds(
-            self.cm.addMenuToGroups(
-                group,
-                self.cm.addSubCheckItems(
-                    'Sub',
-                    WinFluentIcon.WIN_11_LOG,
-                    ["Item1", "Item2", "Item3"],
-                    [WinFluentIcon.SEND, WinFluentIcon.FOLDER, WinFluentIcon.MORE],
-                    indicatorType=MenuIndicatorType.CHECK
-                )
-            ),
-            [
-                lambda: print(self.cm.getCheckedAction(group)),
-                lambda: print(self.cm.getCheckedAction(group)),
-                lambda: print(self.cm.getCheckedAction(group))
-            ]
-        )
-
-        self.button.clicked.connect(
-            lambda: self.cm.execWidget(self.button)
-        )
+        commandBar.addWidget(button)
+        commandBar.addSeparator()
+        commandBar.addWidget(button2)
+        commandBar.addWidget(button3)
 
     def contextMenuEvent(self, event):
         super().contextMenuEvent(event)
-        # self.menu.exec(event.globalPos())
-        # self.pm.exec(event.globalPos())
-        pass
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

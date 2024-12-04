@@ -153,6 +153,13 @@ class ProfileCardMenu(Menu):
         self.avatar.setRadius(radius)
 
 
+class AcrylicProfileCardMenu(ProfileCardMenu):
+    """ 亚力克个人信息卡片组件 """
+    def __init__(self, avatarPath, name, email, parent=None, buttonText="主页", url=''):
+        super().__init__(avatarPath, name, email, parent, buttonText, url)
+        self.menu = AcrylicMenu(self)
+
+
 class CheckedMenu(MenuBase):
     """ 可选中菜单栏 """
     def __init__(self, parent=None, indicatorType: MenuIndicatorType = MenuIndicatorType.RADIO):

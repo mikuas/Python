@@ -1,10 +1,10 @@
 from typing import Union
 
 from PySide6.QtGui import Qt, QIcon
-from PySide6.QtWidgets import QWidget, QStackedWidget, QHBoxLayout, QVBoxLayout, QApplication
+from PySide6.QtWidgets import QWidget, QStackedWidget, QHBoxLayout, QVBoxLayout, QApplication, QFrame
 from qfluentwidgets import Pivot, SegmentedWidget, SegmentedToolWidget, SegmentedToggleToolWidget, FluentIconBase, \
-    TabBar, TabCloseButtonDisplayMode, NavigationInterface, qconfig, Theme, NavigationItemPosition, NavigationBar
-from qfluentwidgets.components import navigation
+    TabBar, TabCloseButtonDisplayMode, NavigationInterface, qconfig, Theme, NavigationItemPosition, NavigationBar, \
+    qrouter, NavigationPanel
 
 from .layout import VBoxLayout, HBoxLayout
 
@@ -106,8 +106,6 @@ class LabelBarWidget(QWidget):
         self.titleBar.setScrollable(True)
         self.titleBar.setCloseButtonDisplayMode(TabCloseButtonDisplayMode.ON_HOVER)
 
-        # self.tabCloseRequested.connect()
-
     def hideAddButton(self):
         self.titleBar.addButton.hide()
         return self
@@ -136,17 +134,19 @@ class LabelBarWidget(QWidget):
         return self
 
 
-class NavigationWidgetBase(QWidget):
+class NavigationWidgetBase(QFrame):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.navigation = None
         self.mainLayout = HBoxLayout(self)
         self.navLayout = VBoxLayout()
         self.widgetLayout = VBoxLayout()
+        self.stackedWidget = QStackedWidget(self)
+        self.setRadius(8)
         self.__initWindow()
-        self.__initStackedWidget()
         self.widgetLayout.addWidget(self.stackedWidget)
         self.mainLayout.addLayouts_([self.navLayout, self.widgetLayout], [0, 1])
+        self.__themeChange(qconfig.theme)
         qconfig.themeChanged.connect(lambda: self.__themeChange(qconfig.theme))
 
     def __initWindow(self):
@@ -154,10 +154,6 @@ class NavigationWidgetBase(QWidget):
         self.resize(1000, 650)
         w, h = desktop.width(), desktop.height()
         self.move(w // 2 - self.width() // 2, h // 2 - self.height() // 2)
-
-    def __initStackedWidget(self):
-        self.stackedWidget = QStackedWidget(self)
-        self.setRadius(8)
 
     def setRadius(self, radius):
         self.stackedWidget.setStyleSheet(f"{self.stackedWidget.styleSheet()} border-radius: {radius}px;")
@@ -183,9 +179,11 @@ class NavigationWidgetBase(QWidget):
     def __themeChange(self, value):
         style = self.stackedWidget.styleSheet()
         if value == Theme.LIGHT:
-            self.stackedWidget.setStyleSheet(f"{style} background-color: rgb(255, 250, 250);")
+            self.stackedWidget.setStyleSheet(f"{style} background-color: rgb(245, 245, 245);")
+            self.setStyleSheet('background-color: white; color: black;')
         elif value == Theme.DARK:
             self.stackedWidget.setStyleSheet(f"{style} background-color: rgb(44, 43, 43);")
+            self.setStyleSheet('background-color: black; color: white;')
 
 
 class NavigationWidget(NavigationWidgetBase):
@@ -197,7 +195,7 @@ class NavigationWidget(NavigationWidgetBase):
 
     def __initNavigation(self):
         self.navigation.setAcrylicEnabled(True)
-        self.navigation.setReturnButtonVisible(True)
+        # self.navigation.setReturnButtonVisible(True)
         self.navigation.setExpandWidth(250)
         self.navigation.setMinimumExpandWidth(1500)
         self.navLayout.addWidget(self.navigation)
@@ -206,8 +204,11 @@ class NavigationWidget(NavigationWidgetBase):
         self.navigation.addSeparator()
         return self
 
+    def expandNavigation(self):
+        self.navigation.expand(False)
 
-class NavigationBarWidget(NavigationWidgetBase):
+
+class MSNavigationWidget(NavigationWidgetBase):
     """ 微软商店风格侧边导航栏 """
     def __init__(self, parent=None):
         super().__init__(parent)

@@ -6,7 +6,8 @@ from .system_tray_icon import *
 from .context_menu_widget import *
 from .table_widget import *
 from .window_fluent_icon import *
-from .center_widget import *
+from .widget import *
 from .font import *
 from .layout import *
 from .tool_info import *
+from .page_widget import *

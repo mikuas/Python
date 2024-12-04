@@ -64,12 +64,12 @@ class CustomDialog(MessageBoxBase):
         self.viewLayout.addWidget(widget, stretch, alignment)
         return self
 
-    def setFixedWidth(self, w):
-        self.widget.setFixedWidth(w)
+    def setFixedWidth(self, width: int):
+        self.widget.setFixedWidth(width)
         return self
 
-    def setFixedHeight(self, h):
-        self.widget.setFixedHeight(h)
+    def setFixedHeight(self, height: int):
+        self.widget.setFixedHeight(height)
         return self
 
 
@@ -80,7 +80,7 @@ class FlowLayoutWidget(SmoothScrollWidget):
         # OutBack
         super().__init__(parent)
         self.__initLayout(duration, ease)
-        self.__widgets = []
+        self.__widgets = [] # type: [QWidget]
 
     def __initLayout(self, duration: int, ease: QEasingCurve):
         self.__flowLayout = FlowLayout(self, True)

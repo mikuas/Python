@@ -2,7 +2,7 @@ import os
 
 from FluentWidgets import VerticalScrollWidget, SwitchButtonCard, CustomColorCard
 from PySide6.QtWidgets import QSystemTrayIcon
-from qfluentwidgets import FluentWindow, SettingCardGroup, FluentIcon
+from qfluentwidgets import FluentWindow, SettingCardGroup, FluentIcon, OptionsSettingCard, qconfig
 
 from QFluentWidgets.FluentWidgetModule.FluentWidgets import ComboBoxCard, PrimaryButtonCard
 
@@ -53,11 +53,20 @@ class SettingWidget(VerticalScrollWidget):
             '打开',
             parent=self
         )
+        self.themeCard = OptionsSettingCard(
+            qconfig.themeMode,
+            FluentIcon.BRUSH,
+            "应用主题色",
+            "调整你的主题外观",
+            ["浅色", '深色', '跟随系统设置'],
+            self.parent
+        )
 
     def __initCardGroup(self):
         self.styleCardGroup.addSettingCards([
             self.micaEffectCard,
-            self.colorCard
+            self.colorCard,
+            self.themeCard
         ])
         self.sysCardGroup.addSettingCards([
             self.sysTrayCard,

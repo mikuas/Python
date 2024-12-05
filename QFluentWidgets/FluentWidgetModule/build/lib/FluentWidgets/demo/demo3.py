@@ -301,7 +301,7 @@ class MenuWidget(VerticalScrollWidget):
 
     def initMenu(self):
         self.menu = Menu(self)
-        self.menu.addMenus([
+        self.menu.addActions([
             Action(FluentIcon.COPY, "Copy"),
             Action(FluentIcon.PASTE, "Paste"),
             Action(FluentIcon.CUT, "Cut"),

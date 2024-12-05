@@ -2,7 +2,7 @@ import PySide6
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
 
-
+# ################################### !!!!!!
 class CBoxWidget(QWidget):
     """ 内容垂直居中小部件 """
     def __init__(self, parent=None):

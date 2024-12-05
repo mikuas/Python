@@ -4,7 +4,7 @@ from FluentWidgets import VerticalScrollWidget, SwitchButtonCard, CustomColorCar
 from PySide6.QtWidgets import QSystemTrayIcon
 from qfluentwidgets import FluentWindow, SettingCardGroup, FluentIcon, OptionsSettingCard, qconfig
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import ComboBoxCard, PrimaryButtonCard
+from FluentWidgets import ComboBoxCard, PrimaryButtonCard
 
 
 class SettingWidget(VerticalScrollWidget):

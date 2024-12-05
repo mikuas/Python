@@ -9,37 +9,30 @@ class Window(QWidget):
     def __init__(self):
         super().__init__()
         self.resize(800, 500)
-
         commandBar = CommandBar(self)
         commandBar.setMinimumWidth(500)
-        commandBar.addActions([
-            Action(FluentIcon.COPY, 'Copy', self),
-            Action(FluentIcon.SAVE, 'Save', self),
-            Action(FluentIcon.SAVE, 'Save', self),
-            Action(FluentIcon.SAVE, 'Save', self),
-        ]),
-        commandBar.addSeparator()
-        commandBar.addAction(
-            Action(FluentIcon.PAUSE, 'Pause', self, checkable=True)
-        )
-        commandBar.addHiddenAction(
-            Action(FluentIcon.SEND, 'Send', self)
-        )
 
-        button = TransparentDropDownPushButton(FluentIcon.MENU, "Menu")
+        button = TransparentDropDownPushButton("文件")
+        button2 = TransparentDropDownPushButton("工具")
+        button3 = TransparentDropDownPushButton("更多")
         button.setFixedHeight(34)
         menu = RoundMenu(parent=self)
         menu.addActions([
-            Action(FluentIcon.COPY, 'Copy', self),
-            Action(FluentIcon.SAVE, 'Save', self),
-            Action(FluentIcon.SAVE, 'Save', self),
+            Action(FluentIcon.COPY, '文件', self),
+            Action(FluentIcon.SAVE, '设置', self),
+            Action(FluentIcon.SAVE, '工具', self),
         ])
         button.setMenu(menu)
+        button2.setMenu(menu)
+        button3.setMenu(menu)
+
         commandBar.addWidget(button)
+        commandBar.addSeparator()
+        commandBar.addWidget(button2)
+        commandBar.addWidget(button3)
 
     def contextMenuEvent(self, event):
         super().contextMenuEvent(event)
-
 
 
 if __name__ == '__main__':

@@ -1,11 +1,12 @@
-from FluentWidgets import VerticalScrollWidget
+from FluentWidgets import SmoothScrollWidget
 from qfluentwidgets import ImageLabel
 
 
-class HomeWidget(VerticalScrollWidget):
+class HomeWidget(SmoothScrollWidget):
     def __init__(self, text: str, parent=None):
         super().__init__(parent)
         self.setObjectName(text.replace(" ", "_"))
+        self.vLayout = self.createVBoxLayout()
         self.__initWindow()
 
     def __initWindow(self):

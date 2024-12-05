@@ -5,7 +5,7 @@ from qfluentwidgets import PlainTextEdit, RoundMenu, Action, PrimarySplitPushBut
     PushButton, ColorDialog
 from qfluentwidgets.components.material import AcrylicEditableComboBox, AcrylicComboBox
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import setFonts, setTextColors
+from FluentWidgets import setFonts, setTextColors
 
 
 class MorseWidget(QWidget):

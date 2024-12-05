@@ -9,8 +9,9 @@ from qfluentwidgets import SmoothScrollArea, VBoxLayout, MessageDialog, PrimaryP
     InfoBarIcon, InfoBar, InfoBarPosition, ProgressBar, IndeterminateProgressRing, IndeterminateProgressBar, BodyLabel, \
     TitleLabel, ProgressRing, ToolTip, ToolTipFilter, ToolTipPosition
 
+from FluentWidgets import VerticalScrollWidget
 
-class StatusInfoWidget(SmoothScrollArea):
+class StatusInfoWidget(VerticalScrollWidget):
     def __init__(self, text, parent=None):
         super().__init__(parent)
 
@@ -21,11 +22,6 @@ class StatusInfoWidget(SmoothScrollArea):
         self.setObjectName(text.replace(' ', '_'))
 
     def initWindow(self):
-        self.scrollWidget = QWidget()
-        self.vLayout = VBoxLayout(self.scrollWidget)
-        self.vLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
-
-        self.setWidget(self.scrollWidget)
         self.setWidgetResizable(True)
 
     def initWidgets(self):

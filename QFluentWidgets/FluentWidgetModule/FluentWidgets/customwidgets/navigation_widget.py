@@ -1,41 +1,51 @@
+import sys
 from typing import Union
 
+from FluentWidgets import HBoxLayout, ButtonCard
+from PySide6.QtCore import QSize, QRect
 from PySide6.QtGui import Qt, QIcon
-from PySide6.QtWidgets import QWidget, QStackedWidget, QHBoxLayout, QVBoxLayout, QApplication, QFrame
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QApplication
 from qfluentwidgets import Pivot, SegmentedWidget, SegmentedToolWidget, SegmentedToggleToolWidget, FluentIconBase, \
-    TabBar, TabCloseButtonDisplayMode, NavigationInterface, qconfig, Theme, NavigationItemPosition, NavigationBar, \
-    qrouter, NavigationPanel
+    TabBar, TabCloseButtonDisplayMode, PopUpAniStackedWidget, TitleLabel, FluentIcon, Theme, setTheme, VBoxLayout, \
+    FluentTitleBar, SwitchSettingCard, ScrollArea
+from qfluentwidgets.components.widgets.frameless_window import FramelessWindow
+from qfluentwidgets.window.fluent_window import FluentWindowBase
+from qframelesswindow import AcrylicWindow
 
-from .layout import VBoxLayout, HBoxLayout
 
-
-class PivotNav(QWidget):
-    """ 导航栏 """
-
-    def __init__(self, text: str, parent: QWidget = None, nav: type[Pivot] = Pivot):
+class NavigationBase(FluentWindowBase):
+    """ 导航组件基类 """
+    def __init__(self, parent=None):
         super().__init__(parent)
-        self.stackedWidget = QStackedWidget(self)
-        self.__initNavigation(nav)
-        self.setObjectName(text)
+        self.setContentsMargins(0, 50, 0, 0)
+        self.stackedWidget = PopUpAniStackedWidget(self)
+        self.navigation = None
 
-    def __initNavigation(self, nav: type[Pivot]):
-        self.navigation = nav(self)
-        mainLayout = QVBoxLayout(self)
-        hLayout = QHBoxLayout()
-        mainLayout.addLayout(hLayout)
+    def _initLayout(self):
+        self.vLayout = VBoxLayout(self)
+        self.hLayout = HBoxLayout()
+        self.hBoxLayout.addLayout(self.vLayout)
+        self.vLayout.addWidget(self.navigation, alignment=Qt.AlignmentFlag.AlignVCenter)
+        self.vLayout.addLayout(self.hLayout)
+        self.hLayout.addWidget(self.stackedWidget)
 
-        hLayout.addWidget(self.navigation, alignment=Qt.AlignmentFlag.AlignVCenter)
-        mainLayout.addWidget(self.stackedWidget)
+    def switchTo(self, widget: QWidget):
+        self.stackedWidget.setCurrentWidget(widget)
 
-    def addItem(self, routeKey: str, text: str, widget: QWidget, icon: Union[QIcon, str, FluentIconBase] = None):
+    def addSubInterface(self, routeKey: str, text: str, widget: QWidget, icon: Union[QIcon, str, FluentIconBase] = None):
         self.stackedWidget.addWidget(widget)
-        self.navigation.addItem(routeKey, text, lambda: self.stackedWidget.setCurrentWidget(widget), icon)
+        self.navigation.addItem(routeKey, text, lambda: self.switchTo(widget), icon)
         return self
 
-    def addItems(self, routeKeys: list[str], texts: list[str], widgets: list[QWidget],
-                 icons: list[Union[QIcon, str, FluentIconBase]] = None):
+    def addSubInterfaces(
+            self,
+            routeKeys: list[str],
+            texts: list[str],
+            widgets: list[QWidget],
+            icons: list[Union[QIcon, str, FluentIconBase]] = None
+    ):
         for key, text, widget in zip(routeKeys, texts, widgets):
-            self.addItem(key, text, widget, icons[texts.index(text)] if icons else None)
+            self.addSubInterface(key, text, widget, icons[texts.index(text)] if icons else None)
         return self
 
     def setCurrentItem(self, routeKey: str):
@@ -51,19 +61,30 @@ class PivotNav(QWidget):
         return self
 
 
+class PivotNav(NavigationBase):
+    """ 导航栏 """
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setTitleBar(FluentTitleBar(self))
+        self.setWindowTitle("Navigation")
+        self.navigation = Pivot(self)
+        super()._initLayout()
+
+
 class SegmentedNav(PivotNav):
     """ 分段导航 """
-
-    def __init__(self, text, parent=None):
-        super().__init__(text, parent, SegmentedWidget)
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.navigation = SegmentedWidget(self)
 
 
 class SegmentedToolNav(PivotNav):
     """ 工具导航 """
 
-    def __init__(self, text: str, parent=None, nav: type[Pivot] = SegmentedToolWidget):
-        super().__init__(text, parent, nav)
+    def __init__(self, parent=None):
+        super().__init__(parent)
         self.setNavWidth(0)
+        self.navigation = SegmentedToolWidget(self)
 
     def addToolItem(self, routeKey: str, icon: Union[QIcon, str, FluentIconBase], widget: QWidget):
         self.stackedWidget.addWidget(widget)
@@ -89,7 +110,7 @@ class LabelBarWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.titleBar = TabBar(self)
-        self.stackedWidget = QStackedWidget(self)
+        self.stackedWidget = PopUpAniStackedWidget(self)
         self.hLayout = QHBoxLayout(self)
         self.vLayout = QVBoxLayout()
         self.__initLayout_()
@@ -134,101 +155,39 @@ class LabelBarWidget(QWidget):
         return self
 
 
-class NavigationWidgetBase(QFrame):
-    def __init__(self, parent=None):
+class Widget(QWidget):
+    def __init__(self, text, parent=None):
         super().__init__(parent)
-        self.navigation = None
-        self.mainLayout = HBoxLayout(self)
-        self.navLayout = VBoxLayout()
-        self.widgetLayout = VBoxLayout()
-        self.stackedWidget = QStackedWidget(self)
-        self.setRadius(8)
-        self.__initWindow()
-        self.widgetLayout.addWidget(self.stackedWidget)
-        self.mainLayout.addLayouts_([self.navLayout, self.widgetLayout], [0, 1])
-        self.__themeChange(qconfig.theme)
-        qconfig.themeChanged.connect(lambda: self.__themeChange(qconfig.theme))
+        self.setObjectName(text)
+        self.vLayout = QVBoxLayout(self)
+        s = ScrollArea(self)
+        for i in range(10):
+            self.vLayout.addWidget(
+                ButtonCard(
+                    FluentIcon.HOME,
+                    'home',
+                    'content',
+                    'OK'
+                )
+            )
 
-    def __initWindow(self):
-        desktop = QApplication.primaryScreen().availableGeometry()
-        self.resize(1000, 650)
-        w, h = desktop.width(), desktop.height()
-        self.move(w // 2 - self.width() // 2, h // 2 - self.height() // 2)
+class Demo(PivotNav):
+    def __init__(self):
+        super().__init__()
+        self.resize(800, 520)
+        from QFluentWidgets.StatusInfoWidget import StatusInfoWidget
 
-    def setRadius(self, radius):
-        self.stackedWidget.setStyleSheet(f"{self.stackedWidget.styleSheet()} border-radius: {radius}px;")
-        return self
-
-    def addSubInterface(
-            self,
-            routeKey: str,
-            icon: Union[QIcon, str, FluentIconBase],
-            text: str,
-            widget: QWidget,
-            position: NavigationItemPosition = NavigationItemPosition.TOP,
-            selectable: bool = True,
-    ):
-        self.stackedWidget.addWidget(widget)
-        self.navigation.addItem(
-            routeKey, icon, text,
-            lambda: self.stackedWidget.setCurrentWidget(widget),
-            selectable, position, text
+        self.addSubInterfaces(
+            ['r1', 'r2'],
+            ['home', 'music'],
+            [StatusInfoWidget("home", self), Widget('music', self)],
+            # [FluentIcon.HOME, FluentIcon.MUSIC]
         )
-        return self
-
-    def __themeChange(self, value):
-        style = self.stackedWidget.styleSheet()
-        if value == Theme.LIGHT:
-            self.stackedWidget.setStyleSheet(f"{style} background-color: rgb(245, 245, 245);")
-            self.setStyleSheet('background-color: white; color: black;')
-        elif value == Theme.DARK:
-            self.stackedWidget.setStyleSheet(f"{style} background-color: rgb(44, 43, 43);")
-            self.setStyleSheet('background-color: black; color: white;')
 
 
-class NavigationWidget(NavigationWidgetBase):
-    """ 侧边展开导航栏 """
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.navigation = NavigationInterface(self)
-        self.__initNavigation()
-
-    def __initNavigation(self):
-        self.navigation.setAcrylicEnabled(True)
-        # self.navigation.setReturnButtonVisible(True)
-        self.navigation.setExpandWidth(250)
-        self.navigation.setMinimumExpandWidth(1500)
-        self.navLayout.addWidget(self.navigation)
-
-    def addSeparator(self):
-        self.navigation.addSeparator()
-        return self
-
-    def expandNavigation(self):
-        self.navigation.expand(False)
-
-
-class MSNavigationWidget(NavigationWidgetBase):
-    """ 微软商店风格侧边导航栏 """
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.navigation = NavigationBar(self)
-        self.navLayout.addWidget(self.navigation)
-
-    def addSubInterface(
-            self,
-            routeKey: str,
-            icon: Union[QIcon, str, FluentIconBase],
-            text: str,
-            widget: QWidget,
-            selectedIcon: Union[QIcon, str, FluentIconBase] = None,
-            position: NavigationItemPosition = NavigationItemPosition.TOP,
-            selectable: bool = True,
-    ):
-        self.stackedWidget.addWidget(widget)
-        self.navigation.addItem(
-            routeKey, icon, text,
-            lambda: self.stackedWidget.setCurrentWidget(widget),
-            selectable, selectedIcon, position
-        )
-        return self
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = Demo()
+    setTheme(Theme.AUTO)
+    window.show()
+    sys.exit(app.exec())

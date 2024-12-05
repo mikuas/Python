@@ -1,57 +1,101 @@
-import PySide6
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
+import sys
+from typing import Union
 
-# ################################### !!!!!!
-class CBoxWidget(QWidget):
-    """ 内容垂直居中小部件 """
+from FluentWidgets import VBoxLayout, HBoxLayout
+from PySide6.QtCore import QRect, QSize
+from PySide6.QtGui import QColor, QIcon, QPainter, Qt
+from PySide6.QtWidgets import QWidget, QApplication
+from qfluentwidgets import FluentStyleSheet, qconfig, FluentIconBase, NavigationItemPosition, qrouter, isDarkTheme
+from qfluentwidgets.common.animation import BackgroundAnimationWidget
+from qfluentwidgets.components.widgets.frameless_window import FramelessWindow
+from qfluentwidgets.window.stacked_widget import StackedWidget
+from qframelesswindow import TitleBarBase
+
+
+class FluentWidget(BackgroundAnimationWidget, FramelessWindow):
+    """ Fluent window base class """
+
     def __init__(self, parent=None):
-        super().__init__(parent)
-        self.hLayout = QHBoxLayout(self)
-        self.vLayout = QVBoxLayout()
-        self.hLayout.addLayout(self.vLayout)
+        self._isMicaEnabled = False
+        self._lightBackgroundColor = QColor(240, 244, 249)
+        self._darkBackgroundColor = QColor(32, 32, 32)
+        super().__init__(parent=parent)
+        self.setCustomBackgroundColor(self._lightBackgroundColor, self._darkBackgroundColor)
 
-    def addWidget(self, widget: QWidget, alignment: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter):
-        self.vLayout.addWidget(widget, alignment=alignment)
-        return self
+        self.vBoxLayout = VBoxLayout(self)
+        self.hBoxLayout = HBoxLayout()
+        self.vBoxLayout.addLayout(self.hBoxLayout)
+        self.stackedWidget = StackedWidget(self)
+        self.navigationInterface = None
 
-    def addWidgets(self, widgets: list[QWidget]):
-        for widget in widgets:
-            self.addWidget(widget)
-        return self
+        # initialize layout
+        self.hBoxLayout.setSpacing(0)
+        self.hBoxLayout.setContentsMargins(0, 0, 0, 0)
 
-    def addLayout(self, layout: PySide6.QtWidgets.QBoxLayout):
-        self.vLayout.addLayout(layout)
-        return self
+        FluentStyleSheet.FLUENT_WINDOW.apply(self.stackedWidget)
 
-    def addItem(self, item: PySide6.QtWidgets.QLayoutItem):
-        self.vLayout.addItem(item)
-        return self
+        # enable mica effect on win11
+        self.setMicaEffectEnabled(True)
 
-    def addChildLayout(self, l: PySide6.QtWidgets.QLayout):
-        self.vLayout.addChildLayout(l)
-        return self
+        # show system title bar buttons on macOS
+        if sys.platform == "darwin":
+            self.setSystemTitleBarButtonVisible(True)
 
-    def addChildWidget(self, w: PySide6.QtWidgets.QWidget):
-        self.hLayout.addChildWidget(w)
-        return self
+        qconfig.themeChangedFinished.connect(self._onThemeChangedFinished)
 
-    def addStrut(self, strut: int):
-        self.vLayout.addStrut(strut)
-        return self
+    def setCustomBackgroundColor(self, light, dark):
+        """ set custom background color """
+        self._lightBackgroundColor = QColor(light)
+        self._darkBackgroundColor = QColor(dark)
+        self._updateBackgroundColor()
 
-    def addSpacerItem(self, spacerItem: PySide6.QtWidgets.QSpacerItem):
-        self.vLayout.addSpacerItem(spacerItem)
-        return self
+    def _normalBackgroundColor(self):
+        if not self.isMicaEffectEnabled():
+            return self._darkBackgroundColor if isDarkTheme() else self._lightBackgroundColor
 
-    def addSpacing(self, size: int):
-        self.vLayout.addSpacing(size)
-        return self
+        return QColor(0, 0, 0, 0)
 
-    def addStretch(self, stretch: int):
-        self.hLayout.addStretch(stretch)
-        return self
+    def _onThemeChangedFinished(self):
+        if self.isMicaEffectEnabled():
+            self.windowEffect.setMicaEffect(self.winId(), isDarkTheme())
 
+    def paintEvent(self, e):
+        super().paintEvent(e)
+        painter = QPainter(self)
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(self.backgroundColor)
+        painter.drawRect(self.rect())
 
+    def setMicaEffectEnabled(self, isEnabled: bool):
+        """ set whether the mica effect is enabled, only available on Win11 """
+        if sys.platform != 'win32' or sys.getwindowsversion().build < 22000:
+            return
 
+        self._isMicaEnabled = isEnabled
 
+        if isEnabled:
+            self.windowEffect.setMicaEffect(self.winId(), isDarkTheme())
+        else:
+            self.windowEffect.removeBackgroundEffect(self.winId())
+
+        self.setBackgroundColor(self._normalBackgroundColor())
+
+    def isMicaEffectEnabled(self):
+        return self._isMicaEnabled
+
+    def systemTitleBarRect(self, size: QSize) -> QRect:
+        """ Returns the system title bar rect, only works for macOS """
+        return QRect(size.width() - 75, 0 if self.isFullScreen() else 9, 75, size.height())
+
+    def setTitleBar(self, titleBar):
+        super().setTitleBar(titleBar)
+
+        # hide title bar buttons on macOS
+        if sys.platform == "darwin" and self.isSystemButtonVisible() and isinstance(titleBar, TitleBarBase):
+            titleBar.minBtn.hide()
+            titleBar.maxBtn.hide()
+            titleBar.closeBtn.hide()
+
+    def resizeEvent(self, e):
+        self.titleBar.move(46, 0)
+        self.titleBar.resize(self.width()-46, self.titleBar.height())

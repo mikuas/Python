@@ -107,7 +107,7 @@ class Window(FramelessWindow):
         fcfg = ConfigItem(
             "文件夹",
             '路径',
-            [],
+            r"C:\Program Files (x86)",
             FolderListValidator()
         )
         fcd = FolderListSettingCard(

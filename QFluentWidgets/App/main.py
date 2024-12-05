@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QApplication
 
 from qfluentwidgets import Theme, setTheme
 
-from QFluentWidgets.FluentWidgetModule.App.app import Window
+from QFluentWidgets.App.app import Window
 
 
 if __name__ == '__main__':

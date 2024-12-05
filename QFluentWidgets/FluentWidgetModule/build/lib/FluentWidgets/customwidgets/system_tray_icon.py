@@ -1,6 +1,7 @@
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import QSystemTrayIcon
 from qfluentwidgets import SystemTrayMenu, Action, FluentIconBase
+from .window_fluent_icon import Icon
 
 
 class SystemTrayIcon(QSystemTrayIcon):
@@ -10,8 +11,8 @@ class SystemTrayIcon(QSystemTrayIcon):
         self.menu = SystemTrayMenu(parent=parent)
         self.setContextMenu(self.menu)
 
-    def setIcon(self, icon: str | QIcon | FluentIconBase) -> "SystemTrayIcon":
-        super().setIcon(icon)
+    def setIcon(self, icon: str | QIcon | FluentIconBase):
+        super().setIcon(Icon(icon))
         return self
 
     def addMenu(self, action: QAction | Action):

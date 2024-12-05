@@ -1,13 +1,10 @@
-import sys
-
 # from FluentWidgets import SystemTrayIcon
 from QFluentWidgets.FluentWidgetModule.FluentWidgets import SystemTrayIcon
-from PySide6.QtWidgets import QApplication, QSystemTrayIcon
+from PySide6.QtWidgets import QApplication
 from qfluentwidgets import FluentWindow, FluentIcon, Action, NavigationItemPosition
 
-from .morse_interface import MorseWidget
-from .home_interface import HomeWidget
-from .setting_interface import SettingWidget
+from . import MorseWidget, HomeWidget, SettingWidget
+
 
 class Window(FluentWindow):
     def __init__(self, parent: str = None):

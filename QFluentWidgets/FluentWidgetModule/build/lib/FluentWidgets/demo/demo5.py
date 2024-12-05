@@ -1,59 +1,100 @@
-from PySide6.QtWidgets import QApplication, QWidget, QMenuBar, QVBoxLayout, QMessageBox, QMenu
-from PySide6.QtGui import QAction, QColor
-from numpy.ma.core import arccos
-from pyautogui import shortcut
-from qfluentwidgets import RoundMenu, Action, FluentIcon, PushButton, setTheme, Theme, Icon
+# coding:utf-8
+import sys
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import MenuBar, Menu
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QFont
+from PySide6.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout
+
+from qfluentwidgets import (PushButton, Flyout, InfoBarIcon, setTheme, Theme, FlyoutView, FlyoutViewBase,
+                            BodyLabel, setFont, PrimaryPushButton, FlyoutAnimationType)
+from qfluentwidgets.components.material import AcrylicFlyoutView, AcrylicFlyoutViewBase, AcrylicFlyout
 
 
-class MyWidget(QWidget):
+class CustomFlyoutView(AcrylicFlyoutViewBase):
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.vBoxLayout = QVBoxLayout(self)
+        self.label = BodyLabel(
+            '这是一场「试炼」，我认为这就是一场为了战胜过去的「试炼」，\n只有战胜了那些幼稚的过去，人才能有所成长。')
+        self.button = PrimaryPushButton('Action')
+
+        self.button.setFixedWidth(140)
+        self.vBoxLayout.setSpacing(12)
+        self.vBoxLayout.setContentsMargins(20, 16, 20, 16)
+        self.vBoxLayout.addWidget(self.label)
+        self.vBoxLayout.addWidget(self.button)
+
+
+class Demo(QWidget):
+
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("QWidget 顶部菜单栏示例")
-        self.setGeometry(100, 100, 400, 300)
-        # 创建布局
-        layout = QVBoxLayout(self)
-        # 创建菜单栏
-        self.menuBar = MenuBar(self)
-        self.menuBar.addAction(
-            Action(FluentIcon.COPY, "File", self)
+        # setTheme(Theme.DARK)
+        # self.setStyleSheet("Demo{background: rgb(32, 32, 32)}")
+
+        self.vBoxLayout = QHBoxLayout(self)
+        self.button1 = PushButton('Click Me', self)
+        self.button2 = PushButton('Click Me', self)
+        self.button3 = PushButton('Click Me', self)
+
+        self.resize(750, 550)
+        self.button1.setFixedWidth(150)
+        self.button2.setFixedWidth(150)
+        self.button3.setFixedWidth(150)
+        self.vBoxLayout.addWidget(self.button1, 0, Qt.AlignBottom)
+        self.vBoxLayout.addWidget(self.button2, 0, Qt.AlignBottom)
+        self.vBoxLayout.addWidget(self.button3, 0, Qt.AlignBottom)
+        self.vBoxLayout.setContentsMargins(30, 50, 30, 50)
+
+        self.button1.clicked.connect(self.showFlyout1)
+        self.button2.clicked.connect(self.showFlyout2)
+        self.button3.clicked.connect(self.showFlyout3)
+
+    def showFlyout1(self):
+        AcrylicFlyout.create(
+            icon=InfoBarIcon.SUCCESS,
+            title='Lesson 4',
+            content="表达敬意吧，表达出敬意，然后迈向回旋的另一个全新阶段！",
+            target=self.button1,
+            parent=self,
+            isClosable=True
         )
-        layout.setMenuBar(self.menuBar)
-        RoundMenu()
-        m1 = Menu(self)
-        action = self.menuBar.addItem(
-            "文件",
-            # FluentIcon.MENU,
-            self
+
+    def showFlyout2(self):
+        view = AcrylicFlyoutView(
+            title='杰洛·齐贝林',
+            content="触网而起的网球会落到哪一侧，谁也无法知晓。\n如果那种时刻到来，我希望「女神」是存在的。\n这样的话，不管网球落到哪一边，我都会坦然接受的吧。",
+            image='resource/SBR.jpg',
+            isClosable=True
+            # image='resource/yiku.gif',
         )
-        action.setMenu(m1)
-        m1.addActions([
-            QAction(Icon(FluentIcon.COPY), "Copy", self, shortcut="Ctrl+c"),
-            QAction(Icon(FluentIcon.COPY), "Copy", self),
-            QAction(Icon(FluentIcon.COPY), "Copy", self),
-        ])
-        self.menuBar.setMinimumWidth(160)
 
-        m1.setStyleSheet("""
-            QMenu::item {
-                min-height: 20px;          /* 设置 QAction 高度 */
-                padding: 5px 10px;        /* 设置内边距 */
-                background-color: white;  /* 背景色 */
-                border-radius: 5px 5px;
-                box-shadow: none;
-            }
-            QMenu::item:selected {       /* 鼠标悬停样式 */
-                background-color: #f0f0f0;
-                box-shadow: none;
-            }
-        """)
-        m1.setMinimumWidth(100)
+        # add button to view
+        button = PushButton('Action')
+        button.setFixedWidth(120)
+        view.addWidget(button, align=Qt.AlignRight)
+
+        # adjust layout (optional)
+        view.widgetLayout.insertSpacing(1, 5)
+        view.widgetLayout.addSpacing(5)
+
+        # show view
+        w = AcrylicFlyout.make(view, self.button2, self)
+        view.closed.connect(w.close)
+
+    def showFlyout3(self):
+        AcrylicFlyout.make(CustomFlyoutView(), self.button3, self, aniType=FlyoutAnimationType.DROP_DOWN)
 
 
-if __name__ == "__main__":
-    app = QApplication([])
-    widget = MyWidget()
-    setTheme(Theme.AUTO)
-    widget.show()
-    app.exec()
+if __name__ == '__main__':
+    # enable dpi scale
+    QApplication.setHighDpiScaleFactorRoundingPolicy(
+        Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+    QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
+
+    app = QApplication(sys.argv)
+    w = Demo()
+    w.show()
+    app.exec_()

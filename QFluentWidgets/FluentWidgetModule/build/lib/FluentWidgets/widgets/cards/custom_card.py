@@ -10,7 +10,7 @@ class CustomCard(CustomCardParent):
     # noinspection PyUnusedLocal
     def __init__(self, icon=None, title=None, content=None, parent=None):
         super().__init__(parent=parent)
-        self.setFixedHeight(80)
+        self.setFixedHeight(70)
 
     def initLayout(self):
         self.hBoxLayout = QHBoxLayout(self)

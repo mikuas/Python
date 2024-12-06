@@ -61,13 +61,14 @@ class ListWidget(List):
         super().__init__(parent)
         self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
-    def addIconItem(
+    def addIconItems(
             self,
             icons: list[Union[QIcon, str, FluentIconBase, FluentIcon]],
             items: list[str],
             itemHeight: int = 45,
             alignFlag: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignVertical_Mask
     ):
+        listItem = []
         for icon, item in zip(icons, items):
             item = QListWidgetItem(item)
             # if isinstance(icon, FluentIcon) or isinstance(icon, FluentLabelBase):
@@ -78,12 +79,15 @@ class ListWidget(List):
             item.setTextAlignment(alignFlag)
             item.setSizeHint(QSize(self.width(), itemHeight))
             self.addItem(item)
-        return self
+            listItem.append(item)
+        return listItem
 
     def addItems(self, items: list[str], itemHeight: int = 45, alignFlag: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignVertical_Mask):
+        listItem = []
         for item in items:
             item = QListWidgetItem(item)
             item.setTextAlignment(alignFlag)
             item.setSizeHint(QSize(self.width(), itemHeight))
             self.addItem(item)
-        return self
+            listItem.append(item)
+        return listItem

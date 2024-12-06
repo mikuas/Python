@@ -1,36 +1,32 @@
-import sys
 from typing import Union
 
-from FluentWidgets import HBoxLayout, ButtonCard
-from PySide6.QtCore import QSize, QRect
 from PySide6.QtGui import Qt, QIcon
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QApplication
-from qfluentwidgets import Pivot, SegmentedWidget, SegmentedToolWidget, SegmentedToggleToolWidget, FluentIconBase, \
-    TabBar, TabCloseButtonDisplayMode, PopUpAniStackedWidget, TitleLabel, FluentIcon, Theme, setTheme, VBoxLayout, \
-    FluentTitleBar, SwitchSettingCard, ScrollArea
-from qfluentwidgets.components.widgets.frameless_window import FramelessWindow
+from PySide6.QtWidgets import QWidget
+from qfluentwidgets import (
+    Pivot, SegmentedWidget, SegmentedToolWidget, SegmentedToggleToolWidget, FluentIconBase, TabBar,
+    TabCloseButtonDisplayMode, PopUpAniStackedWidget, FluentTitleBar
+)
 from qfluentwidgets.window.fluent_window import FluentWindowBase
-from qframelesswindow import AcrylicWindow
+
+from .layout import HBoxLayout, VBoxLayout
 
 
 class NavigationBase(FluentWindowBase):
     """ 导航组件基类 """
-    def __init__(self, parent=None):
+    def __init__(self, parent: QWidget = None):
         super().__init__(parent)
+        self.setTitleBar(FluentTitleBar(self))
+        self.setWindowTitle("NavigationWindow")
         self.setContentsMargins(0, 50, 0, 0)
-        self.stackedWidget = PopUpAniStackedWidget(self)
         self.navigation = None
 
     def _initLayout(self):
         self.vLayout = VBoxLayout(self)
         self.hLayout = HBoxLayout()
         self.hBoxLayout.addLayout(self.vLayout)
-        self.vLayout.addWidget(self.navigation, alignment=Qt.AlignmentFlag.AlignVCenter)
+        self.vLayout.addWidget(self.navigation, alignment=Qt.AlignmentFlag.AlignTop)
         self.vLayout.addLayout(self.hLayout)
         self.hLayout.addWidget(self.stackedWidget)
-
-    def switchTo(self, widget: QWidget):
-        self.stackedWidget.setCurrentWidget(widget)
 
     def addSubInterface(self, routeKey: str, text: str, widget: QWidget, icon: Union[QIcon, str, FluentIconBase] = None):
         self.stackedWidget.addWidget(widget)
@@ -44,31 +40,26 @@ class NavigationBase(FluentWindowBase):
             widgets: list[QWidget],
             icons: list[Union[QIcon, str, FluentIconBase]] = None
     ):
-        for key, text, widget in zip(routeKeys, texts, widgets):
-            self.addSubInterface(key, text, widget, icons[texts.index(text)] if icons else None)
+        icons = icons if icons is not None else [None for _ in range(len(routeKeys))]
+        for key, text, widget, icon in zip(routeKeys, texts, widgets, icons):
+            self.addSubInterface(key, text, widget, icon)
         return self
 
     def setCurrentItem(self, routeKey: str):
         self.navigation.setCurrentItem(routeKey)
         return self
 
-    def setNavHeight(self, height: int):
-        self.navigation.setFixedHeight(height)
-        return self
-
-    def setNavWidth(self, width: int):
-        self.navigation.setFixedWidth(width)
-        return self
+    def enableNavCenter(self):
+        self.vLayout.removeWidget(self.navigation)
+        self.vLayout.insertWidget(0, self.navigation, alignment=Qt.AlignmentFlag.AlignHCenter)
 
 
 class PivotNav(NavigationBase):
     """ 导航栏 """
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setTitleBar(FluentTitleBar(self))
-        self.setWindowTitle("Navigation")
         self.navigation = Pivot(self)
-        super()._initLayout()
+        self._initLayout()
 
 
 class SegmentedNav(PivotNav):
@@ -76,32 +67,41 @@ class SegmentedNav(PivotNav):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.navigation = SegmentedWidget(self)
+        self._initLayout()
 
 
 class SegmentedToolNav(PivotNav):
     """ 工具导航 """
-
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setNavWidth(0)
         self.navigation = SegmentedToolWidget(self)
+        self._initLayout()
+        self.enableNavCenter()
 
-    def addToolItem(self, routeKey: str, icon: Union[QIcon, str, FluentIconBase], widget: QWidget):
+    def addSubInterface(self, routeKey: str, widget: QWidget, icon: Union[QIcon, str, FluentIconBase] = None, *args):
         self.stackedWidget.addWidget(widget)
-        self.navigation.addItem(routeKey, icon, lambda: self.stackedWidget.setCurrentWidget(widget))
+        self.navigation.addItem(routeKey, icon, lambda: self.switchTo(widget))
         return self
 
-    def addToolItems(self, routeKeys: list[str], icons: list[Union[QIcon, str, FluentIconBase]],
-                     widgets: list[QWidget]):
+    def addSubInterfaces(
+            self,
+            routeKeys: list[str],
+            icons: list[Union[QIcon, str, FluentIconBase]],
+            widgets: list[QWidget],
+            *args
+    ):
         for key, icon, widget in zip(routeKeys, icons, widgets):
-            self.addToolItem(key, icon, widget)
+            self.addSubInterface(key, widget, icon)
         return self
 
 
 class SegmentedToggleToolNav(SegmentedToolNav):
-    def __init__(self, text: str, parent=None):
+    def __init__(self, parent=None):
         """ 主题色选中导航 """
-        super().__init__(text, parent, SegmentedToggleToolWidget)
+        super().__init__(parent)
+        self.navigation = SegmentedToggleToolWidget(self)
+        self._initLayout()
+        self.enableNavCenter()
 
 
 class LabelBarWidget(QWidget):
@@ -109,85 +109,46 @@ class LabelBarWidget(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.titleBar = TabBar(self)
+        self.tabBar = TabBar(self)
         self.stackedWidget = PopUpAniStackedWidget(self)
-        self.hLayout = QHBoxLayout(self)
-        self.vLayout = QVBoxLayout()
-        self.__initLayout_()
+        self.hLayout = HBoxLayout(self)
+        self.vLayout = VBoxLayout()
+        self.__initLayout()
         self.__initTitleBar()
 
-    def __initLayout_(self):
+    def __initLayout(self):
         self.hLayout.addLayout(self.vLayout)
-        self.vLayout.addWidget(self.titleBar)
-        self.vLayout.addWidget(self.stackedWidget)
+        self.vLayout.addWidgets([self.tabBar, self.stackedWidget])
 
     def __initTitleBar(self):
-        self.titleBar.setTabShadowEnabled(True)
-        self.titleBar.setMovable(True)
-        self.titleBar.setScrollable(True)
-        self.titleBar.setCloseButtonDisplayMode(TabCloseButtonDisplayMode.ON_HOVER)
+        self.tabBar.setTabShadowEnabled(True)
+        self.tabBar.setMovable(True)
+        self.tabBar.setScrollable(True)
+        self.tabBar.setCloseButtonDisplayMode(TabCloseButtonDisplayMode.ON_HOVER)
 
     def hideAddButton(self):
-        self.titleBar.addButton.hide()
+        self.tabBar.addButton.hide()
         return self
 
     def hideCloseButton(self):
-        self.titleBar.setCloseButtonDisplayMode(TabCloseButtonDisplayMode.NEVER)
+        self.tabBar.setCloseButtonDisplayMode(TabCloseButtonDisplayMode.NEVER)
         return self
 
-    def addTabWidget(self, routeKey, text, icon=None, widget: QWidget = None):
-        self.__addWidget(widget)
-        self.titleBar.addTab(routeKey, text, icon, lambda: self.stackedWidget.setCurrentWidget(widget))
-        return self
+    def switchTo(self, widget: QWidget):
+        self.stackedWidget.setCurrentWidget(widget)
 
-    def __addWidget(self, widget: QWidget):
+    def addSubTab(self, routeKey, text, icon=None, widget: QWidget = None):
         self.stackedWidget.addWidget(widget)
+        self.tabBar.addTab(routeKey, text, icon, lambda: self.switchTo(widget))
+        return self
 
-    def addTabWidgets(
+    def addSubTabs(
             self, routeKeys: list[str],
             texts: list[str],
-            icons: list[Union[QIcon, str, FluentIconBase]] = None,
-            widgets: list[QWidget] = None
+            widgets: list[QWidget] = None,
+            icons: list[Union[QIcon, str, FluentIconBase]] = None
     ):
-        if icons is None: icons = [None for _ in range(len(routeKeys))]
+        icons = icons if icons is not None else [None for _ in range(len(routeKeys))]
         for key, text, icon, widget in zip(routeKeys, texts, icons, widgets):
-            self.addTabWidget(key, text, icon, widget)
+            self.addSubTab(key, text, icon, widget)
         return self
-
-
-class Widget(QWidget):
-    def __init__(self, text, parent=None):
-        super().__init__(parent)
-        self.setObjectName(text)
-        self.vLayout = QVBoxLayout(self)
-        s = ScrollArea(self)
-        for i in range(10):
-            self.vLayout.addWidget(
-                ButtonCard(
-                    FluentIcon.HOME,
-                    'home',
-                    'content',
-                    'OK'
-                )
-            )
-
-class Demo(PivotNav):
-    def __init__(self):
-        super().__init__()
-        self.resize(800, 520)
-        from QFluentWidgets.StatusInfoWidget import StatusInfoWidget
-
-        self.addSubInterfaces(
-            ['r1', 'r2'],
-            ['home', 'music'],
-            [StatusInfoWidget("home", self), Widget('music', self)],
-            # [FluentIcon.HOME, FluentIcon.MUSIC]
-        )
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = Demo()
-    setTheme(Theme.AUTO)
-    window.show()
-    sys.exit(app.exec())

@@ -7,7 +7,7 @@ from PySide6.QtCore import Qt, QSize, QRect
 from PySide6.QtGui import QIcon, QPainter, QColor
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QApplication
 from qfluentwidgets import FluentStyleSheet, qconfig, FluentIconBase, NavigationItemPosition, qrouter, isDarkTheme, \
-    NavigationInterface, NavigationTreeWidget
+    NavigationInterface, NavigationTreeWidget, SplitTitleBar
 from qfluentwidgets.common.animation import BackgroundAnimationWidget
 from qfluentwidgets.components.widgets.frameless_window import FramelessWindow
 from qfluentwidgets.window.stacked_widget import StackedWidget
@@ -45,8 +45,13 @@ class FluentWindowBase(BackgroundAnimationWidget, FramelessWindow):
 
         qconfig.themeChangedFinished.connect(self._onThemeChangedFinished)
 
-    def addSubInterface(self, interface: QWidget, icon: Union[FluentIconBase, QIcon, str], text: str,
-                        position=NavigationItemPosition.TOP):
+    def addSubInterface(
+            self,
+            interface: QWidget,
+            icon: Union[FluentIconBase, QIcon, str],
+            text: str,
+            position=NavigationItemPosition.TOP
+    ):
         """ add sub interface """
         raise NotImplementedError
 
@@ -172,6 +177,8 @@ class FluentWindow(FluentWindowBase):
         self.setTitleBar(FluentTitleBar(self))
         self.navigationInterface = NavigationInterface(self, showReturnButton=True)
         self.navigationInterface.setAcrylicEnabled(True)
+        self.navigationInterface.setExpandWidth(250)
+        self.navigationInterface.setMinimumExpandWidth(1500)
         self.widgetLayout = HBoxLayout()
 
         # initialize layout
@@ -224,6 +231,22 @@ class FluentWindow(FluentWindowBase):
         self._updateStackedBackground()
         return item
 
-    def resizeEvent(self, e):
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
         self.titleBar.move(46, 0)
-        self.titleBar.resize(self.width()-46, self.titleBar.height())
+        self.titleBar.resize(self.width() - 46, self.titleBar.height())
+
+
+class SplitFluentWindow(FluentWindow):
+    """ 拆分流畅窗口 """
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setTitleBar(SplitTitleBar(self))
+
+        if sys.platform == "darwin":
+            self.titleBar.setFixedHeight(48)
+
+        self.widgetLayout.setContentsMargins(0, 0, 0, 0)
+
+        self.titleBar.raise_()
+        self.navigationInterface.displayModeChanged.connect(self.titleBar.raise_)

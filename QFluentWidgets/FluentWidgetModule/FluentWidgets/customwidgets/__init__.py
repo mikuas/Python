@@ -11,4 +11,3 @@ from .font import *
 from .layout import *
 from .tool_info import *
 from .page_widget import *
-from .widget import *

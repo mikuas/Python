@@ -5,35 +5,36 @@ from qfluentwidgets import SingleDirectionScrollArea, SmoothScrollArea, ScrollAr
 from .layout import VBoxLayout, HBoxLayout
 
 
-class VerticalScrollWidget(SingleDirectionScrollArea):
+class SingleScrollWidgetBase(SingleDirectionScrollArea):
+    """ 滚动组件基类 """
+    def __init__(self, parent=None, orient: Qt.Orientation = None):
+        super().__init__(parent, orient)
+        self.__widget = QWidget()
+        self.vBoxLayout = VBoxLayout(self.__widget)
+        self.setWidget(self.__widget)
+        self.vBoxLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.setWidgetResizable(True)
+        self.enableTransparentBackground()
+
+
+class VerticalScrollWidget(SingleScrollWidgetBase):
     """ 平滑垂直滚动小部件 """
     def __init__(self, parent: QWidget = None):
-        super().__init__(parent)
-        self.__widget = QWidget()
-        self.vLayout = VBoxLayout(self.__widget)
-        self.setWidget(self.__widget)
-        self.vLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        self.setWidgetResizable(True)
+        super().__init__(parent, Qt.Orientation.Vertical)
 
 
-class HorizontalScrollWidget(SingleDirectionScrollArea):
+class HorizontalScrollWidget(SingleScrollWidgetBase):
     """ 平滑水平滚动小部件 """
     def __int__(self, parent: QWidget = None):
         super().__init__(parent, Qt.Orientation.Horizontal)
-        self.__widget = QWidget()
-        self.hLayout = VBoxLayout(self.__widget)
-        self.setWidget(self.__widget)
-        self.hLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        self.setWidgetResizable(True)
+        self.vBoxLayout = HBoxLayout(self.__widget)
 
 
 class ScrollWidget(ScrollArea):
     """ 平滑双向滚动小部件 """
     def __init__(self, parent=None):
         super().__init__(parent)
-        self._initWidget()
-
-    def _initWidget(self):
+        self.enableTransparentBackground()
         self.__widget = QWidget()
         self.setWidget(self.__widget)
         self.setWidgetResizable(True)
@@ -49,4 +50,3 @@ class SmoothScrollWidget(SmoothScrollArea, ScrollWidget):
     """ 靠动画实现的平滑双向滚动小部件 """
     def __init__(self, parent=None):
         super().__init__(parent)
-        self._initWidget()

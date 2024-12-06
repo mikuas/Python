@@ -21,8 +21,8 @@ class SettingWidget(VerticalScrollWidget):
         self.__connectSignalSlot()
 
     def __initLayout(self):
-        self.vLayout.addWidget(self.styleCardGroup)
-        self.vLayout.addWidget(self.sysCardGroup)
+        self.vBoxLayout.addWidget(self.styleCardGroup)
+        self.vBoxLayout.addWidget(self.sysCardGroup)
 
     def __initCard(self):
         self.micaEffectCard = SwitchButtonCard(

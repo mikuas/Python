@@ -7,7 +7,10 @@ from ..cards import CustomCard
 
 class SliderCard(SliderCardParent, CustomCard):
     """ 滑动条卡片 """
-    def __init__(self, icon, title, content, ranges, defaultValue=0, orientation=Qt.Orientation.Horizontal, parent=None):
+    def __init__(
+            self, icon, title, content, ranges, defaultValue=0,
+            orientation=Qt.Orientation.Horizontal, parent=None
+    ):
         CustomCard.__init__(self, parent=parent)
         self.initIcon(icon).initTitle(title).initContent(content).initLayout()
         self.initSliderLabel(defaultValue).initSlider(ranges, defaultValue, orientation)

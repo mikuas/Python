@@ -1,1 +1,0 @@
-from .acrylic_card import *

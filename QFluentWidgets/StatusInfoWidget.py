@@ -188,27 +188,27 @@ class StatusInfoWidget(VerticalScrollWidget):
 
 
     def initLayout(self):
-        self.vLayout.addWidget(self.infoButton, 0, Qt.AlignCenter)
-        self.vLayout.addWidget(self.dotInfoButton, 0, Qt.AlignCenter)
-        self.vLayout.addWidget(self.iconInfoButton, 0, Qt.AlignCenter)
-        self.vLayout.addWidget(self.infoButton, 0, Qt.AlignCenter)
-        self.vLayout.addWidget(self.successButton, 0, Qt.AlignCenter)
-        self.vLayout.addWidget(self.errorButton, 0, Qt.AlignCenter)
-        self.vLayout.addWidget(self.warningButton, 0, Qt.AlignCenter)
-        self.vLayout.addWidget(self.newBarButton, 0, Qt.AlignCenter)
+        self.vBoxLayout.addWidget(self.infoButton, 0, Qt.AlignCenter)
+        self.vBoxLayout.addWidget(self.dotInfoButton, 0, Qt.AlignCenter)
+        self.vBoxLayout.addWidget(self.iconInfoButton, 0, Qt.AlignCenter)
+        self.vBoxLayout.addWidget(self.infoButton, 0, Qt.AlignCenter)
+        self.vBoxLayout.addWidget(self.successButton, 0, Qt.AlignCenter)
+        self.vBoxLayout.addWidget(self.errorButton, 0, Qt.AlignCenter)
+        self.vBoxLayout.addWidget(self.warningButton, 0, Qt.AlignCenter)
+        self.vBoxLayout.addWidget(self.newBarButton, 0, Qt.AlignCenter)
 
-        self.vLayout.addWidget(self.pbl, 0, Qt.AlignCenter)
-        self.vLayout.addWidget(self.progressBar)
-        self.vLayout.addLayout(self.pbhLayout)
-        self.vLayout.addWidget(self.ibl, 0, Qt.AlignCenter)
-        self.vLayout.addWidget(self.indeterminateBar)
+        self.vBoxLayout.addWidget(self.pbl, 0, Qt.AlignCenter)
+        self.vBoxLayout.addWidget(self.progressBar)
+        self.vBoxLayout.addLayout(self.pbhLayout)
+        self.vBoxLayout.addWidget(self.ibl, 0, Qt.AlignCenter)
+        self.vBoxLayout.addWidget(self.indeterminateBar)
 
-        self.vLayout.addWidget(self.pr, 0, Qt.AlignCenter)
-        self.vLayout.addWidget(self.progressRing, 0, Qt.AlignCenter)
-        self.vLayout.addWidget(self.ipr, 0, Qt.AlignCenter)
-        self.vLayout.addWidget(self.indeterminateProgressRing, 0, Qt.AlignCenter)
+        self.vBoxLayout.addWidget(self.pr, 0, Qt.AlignCenter)
+        self.vBoxLayout.addWidget(self.progressRing, 0, Qt.AlignCenter)
+        self.vBoxLayout.addWidget(self.ipr, 0, Qt.AlignCenter)
+        self.vBoxLayout.addWidget(self.indeterminateProgressRing, 0, Qt.AlignCenter)
 
-        self.vLayout.addWidget(self.tipButton, 0, Qt.AlignCenter)
+        self.vBoxLayout.addWidget(self.tipButton, 0, Qt.AlignCenter)
 
     def startProgress(self, progress):
         self.time = QTimer(self)

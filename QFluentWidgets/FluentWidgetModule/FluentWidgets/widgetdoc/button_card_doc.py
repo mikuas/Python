@@ -61,8 +61,7 @@ class CustomSwitchButtonCard:
             isChecked: bool = False,
             parent: QWidget = None
     ):
-        self.switchButton = None
-
+        pass
 
 class CustomCheckBoxCard:
     # noinspection PyUnusedLocal

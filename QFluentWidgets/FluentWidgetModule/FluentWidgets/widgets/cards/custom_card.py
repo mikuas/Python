@@ -31,7 +31,7 @@ class CustomCard(CustomCardParent):
     def initIcon(self, icon):
         # set card icon
         self.iconWidget = IconWidget(icon)
-        self.iconWidget.setFixedSize(32, 32)
+        self.iconWidget.setFixedSize(24, 24)
         return self
 
     def initTitle(self, title):
@@ -44,12 +44,15 @@ class CustomCard(CustomCardParent):
         self.contentLabel = CaptionLabel(content, self)
         # self.contentLabel.setTextColor("#606060", "#d2d2d2")
         return self
-    
+
 
 class CustomColorCard(CustomColorSettingCard):
     """ 自定义颜色选择卡 """
     def __init__(self, title, content, parent=None, icon=FluentIcon.PALETTE, enableAlpha=False):
-        super().__init__(ColorConfigItem("Color", "select", themeColor()), icon, title, content, parent, enableAlpha)
+        super().__init__(
+            ColorConfigItem("Color", "select", themeColor()),
+            icon, title, content, parent, enableAlpha
+        )
         self.__initCard()
 
     def __initCard(self):

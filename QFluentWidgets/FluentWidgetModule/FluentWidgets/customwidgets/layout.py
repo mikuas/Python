@@ -7,7 +7,7 @@ class HBoxLayout(QHBoxLayout):
     def __init__(self, parent: QWidget = None):
         super().__init__(parent)
 
-    def addWidgets(self, widgets: list[QWidget], stretch=0, alignment=Qt.AlignmentFlag.AlignCenter):
+    def addWidgets(self, widgets: list[QWidget], stretch=0, alignment=Qt.AlignmentFlag(0)):
         for widget in widgets:
             self.addWidget(widget, stretch=stretch, alignment=alignment)
         return self
@@ -17,7 +17,7 @@ class HBoxLayout(QHBoxLayout):
             self.addLayout(layout, stretch)
         return self
 
-    def addWidgets_(self, widgets: list[QWidget], stretch: list[int] | int = 1, alignment: list[Qt.AlignmentFlag] | Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter):
+    def addWidgets_(self, widgets: list[QWidget], stretch: list[int] | int = 1, alignment: list[Qt.AlignmentFlag] | Qt.AlignmentFlag = Qt.AlignmentFlag(0)):
         stretch = [stretch for _ in range(len(widgets))] if type(stretch) is not list else stretch
         alignment = [alignment for _ in range(len(widgets))] if type(alignment) is not list else alignment
         for w, s, a in zip(widgets, stretch, alignment):

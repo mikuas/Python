@@ -57,7 +57,7 @@ class MenuBase(QWidget):
     def exec(self, position: QPoint):
         self.menu.exec(position)
 
-    def execWidget(self, widget: QWidget):
+    def execCenter(self, widget: QWidget):
         """ 在指定组件中心执行 """
         self.menu.exec(widget.mapToGlobal(widget.rect().center()))
 

@@ -6,7 +6,6 @@ from qfluentwidgets.window.fluent_window import FluentWindowBase, FluentWindow
 from qframelesswindow import AcrylicWindow
 from qframelesswindow.windows import WindowsWindowEffect, WindowsFramelessMainWindow
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import FluentWidget
 
 
 class Demo(FluentWindow):

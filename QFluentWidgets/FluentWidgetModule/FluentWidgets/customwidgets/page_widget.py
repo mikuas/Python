@@ -1,6 +1,6 @@
 from PySide6.QtGui import Qt
-from PySide6.QtWidgets import QWidget, QStackedWidget
-from qfluentwidgets import PipsPager, PipsScrollButtonDisplayMode
+from PySide6.QtWidgets import QWidget
+from qfluentwidgets import PipsPager, PipsScrollButtonDisplayMode, PopUpAniStackedWidget
 
 from .layout import VBoxLayout, HBoxLayout
 
@@ -14,7 +14,7 @@ class HorizontalPager(PipsPager):
         self.__widgets = [] # type: [QWidget]
 
     def __initStaticWidget(self):
-        self.stackedWidget = QStackedWidget(self)
+        self.stackedWidget = PopUpAniStackedWidget(self)
 
     def addWidget(self, widget: QWidget):
         self.stackedWidget.addWidget(widget)

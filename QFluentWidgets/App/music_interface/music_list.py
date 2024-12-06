@@ -2,7 +2,6 @@ import json
 import os
 import random
 
-from FluentWidgets import ListWidget
 from PySide6.QtCore import QSize, QUrl
 from PySide6.QtGui import Qt, QColor
 from PySide6.QtMultimedia import QMediaPlayer
@@ -10,10 +9,10 @@ from PySide6.QtWidgets import QWidget
 from qfluentwidgets import TitleLabel, TransparentToolButton, FluentIcon, BodyLabel, TransparentToggleToolButton
 from qfluentwidgets.multimedia import StandardMediaPlayBar
 
-from FluentWidgets import VBoxLayout, setToolTipInfos
+from FluentWidgets import VBoxLayout, setToolTipInfos, ListWidget, AcrylicMenu
 
 
-class MusicListWidget(QWidget):
+class MusicListInterface(QWidget):
     def __init__(self, text: str, parent=None):
         super().__init__(parent)
         self.label = TitleLabel('音乐列表', self)
@@ -21,18 +20,22 @@ class MusicListWidget(QWidget):
         self.vLayout = VBoxLayout(self)
         self.list = ListWidget()
         self.media = StandardMediaPlayBar(self)
+        self.menu = AcrylicMenu(self)
+        self.menu.addItems(
+            [FluentIcon.COPY, FluentIcon.ADD_TO],
+            ['复制歌曲名称', '添加到']
+        )
+
         with open('./config/path.json', 'r', encoding='utf-8') as f:
-            jsonData = json.load(f)
-        self.path = jsonData['folderPath']
+            self.path = json.load(f)['folderPath']
         music, img = self.getMusicData(self.path)
-        self.items = self.list.addIconItem(
+        self.items = self.list.addIconItems(
             img,
             [m.split('\\')[-1].split('.')[0] for m in music],
             64
         )
         self.list.setIconSize(QSize(40, 40))
         self.list.setSelectRightClickedRow(True)
-        self.list.setCurrentItem(self.items[0])
 
         self.initLayout()
         self.initMedia()
@@ -85,7 +88,7 @@ class MusicListWidget(QWidget):
             self.list.setCurrentItem(self.items[random.randint(0, len(self.items) - 1)])
         try:
             self.list.setCurrentItem(self.items[self.findIndex(self.list.currentItem(), self.items) + index])
-        except IndexError:
+        except Exception:
             self.list.setCurrentItem(self.items[0])
         item = self.list.currentItem()
         self.play(f"{self.path}\\{item.text()}\\{item.text()}")
@@ -117,3 +120,7 @@ class MusicListWidget(QWidget):
                 continue
         return musicPath, imagePath
 
+
+    def contextMenuEvent(self, event):
+        super().contextMenuEvent(event)
+        self.menu.exec(event.globalPos())

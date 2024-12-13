@@ -7,13 +7,7 @@ from qfluentwidgets import CardWidget, FluentIconBase
 
 class CustomCardParent(CardWidget):
     # noinspection PyUnusedLocal
-    def __init__(
-            self,
-            icon: Union[QIcon, str, FluentIconBase, None] = None,
-            title: str = None,
-            content: str = None,
-            parent: QWidget = None
-    ):
+    def __init__(self, parent: QWidget):
         super().__init__(parent)
         self.hBoxLayout = None
         self.VBoxLayout = None

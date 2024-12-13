@@ -1,2 +1,2 @@
-from .customwidgets import *
-from .widgets import *
+from .common import *
+from .components import *

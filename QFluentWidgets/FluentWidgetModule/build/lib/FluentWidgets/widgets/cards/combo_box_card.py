@@ -56,7 +56,7 @@ class OptionsCard(CustomOptionsCard, OptionsSettingCard):
             self, self.__initOptItems(defaultValue, items),
             icon, title, content, items, parent
         )
-        self.setOptionsFixedHeight(80, self).setIconSize(32, 32)
+        self.setOptionsFixedHeight(80, self).setIconSize(24, 24)
 
     def setIconSize(self, width, height):
         self.card.setIconSize(width, height)
@@ -76,7 +76,7 @@ class FolderListCard(CustomOptionsCard, FolderListSettingCard):
             self, self.__initConfItems(defaultValue),
             title, content, parent=parent, icon=icon, btIcon=btIcon
         )
-        self.setOptionsFixedHeight(80, self).setIconSize(32, 32)
+        self.setOptionsFixedHeight(80, self).setIconSize(24, 24)
 
     def setIconSize(self, width, height):
         self.card.setIconSize(width, height)

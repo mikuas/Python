@@ -2,40 +2,36 @@ import json
 import os
 import random
 
-from PySide6.QtCore import QSize, QUrl
-from PySide6.QtGui import Qt, QColor
+from PySide6.QtCore import QUrl
+from PySide6.QtGui import QColor
 from PySide6.QtMultimedia import QMediaPlayer
-from PySide6.QtWidgets import QWidget
-from qfluentwidgets import TitleLabel, TransparentToolButton, FluentIcon, BodyLabel, TransparentToggleToolButton
+from qfluentwidgets import TransparentToolButton, FluentIcon, BodyLabel, TransparentToggleToolButton
 from qfluentwidgets.multimedia import StandardMediaPlayBar
 
-from FluentWidgets import VBoxLayout, setToolTipInfos, ListWidget, AcrylicMenu
+from FluentWidgets import VBoxLayout, setToolTipInfos, TableWidget
+
+from QFluentWidgets.demo.demo15 import MusicListWidget, MusicWidget
 
 
-class MusicListInterface(QWidget):
+class MusicListInterface(MusicListWidget):
     def __init__(self, text: str, parent=None):
         super().__init__(parent)
-        self.label = TitleLabel('音乐列表', self)
         self.setObjectName(text.replace(" ", "_"))
         self.vLayout = VBoxLayout(self)
-        self.list = ListWidget()
         self.media = StandardMediaPlayBar(self)
-        self.menu = AcrylicMenu(self)
-        self.menu.addItems(
-            [FluentIcon.COPY, FluentIcon.ADD_TO],
-            ['复制歌曲名称', '添加到']
-        )
 
         with open('./config/path.json', 'r', encoding='utf-8') as f:
             self.path = json.load(f)['folderPath']
         music, img = self.getMusicData(self.path)
-        self.items = self.list.addIconItems(
-            img,
-            [m.split('\\')[-1].split('.')[0] for m in music],
-            64
-        )
-        self.list.setIconSize(QSize(40, 40))
-        self.list.setSelectRightClickedRow(True)
+        music = [temp.split('\\')[-1].split('.')[0] for temp in music]
+
+        self.table = TableWidget(self)
+        self.table.verticalHeader().hide()
+        self.table.horizontalHeader().hide()
+        self.table.setItemMinHeight(58)
+
+        self.items = [[MusicWidget(i, t)] for t, i in zip(music, img)]
+        self.table.addTabWidget(self.items)
 
         self.initLayout()
         self.initMedia()
@@ -62,20 +58,31 @@ class MusicListInterface(QWidget):
         )
 
     def initLayout(self):
-        self.vLayout.addWidgets_(
-            [self.label, self.list, self.media],
-            alignment=[Qt.AlignmentFlag.AlignTop, Qt.AlignmentFlag.AlignVCenter, Qt.AlignmentFlag.AlignBottom]
-        )
+        # self.vLayout.addWidget(self.media)
+        self.vBoxLayout.addWidget(self.table)
 
     def connectSignals(self):
-        self.list.itemClicked.connect(lambda value: self.play(f"{self.path}\\{value.text()}\\{value.text()}"))
+        # self.list.itemClicked.connect(lambda value: self.play(f"{self.path}\\{value.text()}\\{value.text()}"))
         self.media.player.mediaStatusChanged.connect(lambda status: self.endPlay(status))
         self.previousButton.clicked.connect(lambda: self.updatePlay(-1))
         self.nextButton.clicked.connect(lambda: self.updatePlay(1))
 
+        self.table.cellClicked.connect(
+            lambda c, r: print(self.getText(self.table.cellWidget(c, r)))
+        )
+
+        for item, row in zip(self.items, [i for i in range(len(self.items))]):
+            for i in item:
+                i.playButton.clicked.connect(
+                    lambda: (
+                        print(i),
+                        self.table.selectRow(row)
+                    )
+                )
+
     def play(self, path: str):
         path = f"{path}.flac" if os.path.exists(f"{path}.flac") else f"{path}.mp3"
-        self.titleLabel.setText(self.list.currentItem().text())
+        # self.titleLabel.setText(self.list.currentItem().text())
         self.media.player.setSource(QUrl.fromLocalFile(path))
         self.media.player.play()
 
@@ -120,6 +127,9 @@ class MusicListInterface(QWidget):
                 continue
         return musicPath, imagePath
 
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.table.setItemMinWidth(self.table.width() - 5)
 
     def contextMenuEvent(self, event):
         super().contextMenuEvent(event)

@@ -1,14 +1,14 @@
 QToolButton {
     border: none;
     background-color: transparent;
-    color: #6F6F6F;
+    color: #2d2d2d;
     font-size: 12px;
     border-radius: 10px;  /* 圆角 */
     padding-top: 5px;
     padding-bottom: 5px;
 }
 QToolButton:hover {
-    background-color: #E0E0E0;  /* 悬停时的背景色 */
+    background-color: #d3d3d3;  /* 悬停时的背景色 */
     color: teal;  /* 悬停时的文字颜色 */
 }
 QToolButton:checked {

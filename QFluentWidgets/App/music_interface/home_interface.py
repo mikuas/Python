@@ -1,5 +1,3 @@
-
-
 from FluentWidgets import VerticalScrollWidget
 from qfluentwidgets import TitleLabel
 

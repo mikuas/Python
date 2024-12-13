@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
 from qfluentwidgets import IconWidget, BodyLabel, CaptionLabel, CustomColorSettingCard, ColorConfigItem, themeColor, \
     FluentIcon, setThemeColor
 
-from ...widgetdoc import CustomCardParent
+from QFluentWidgets.FluentWidgetModule.FluentWidgets.widgetdoc import CustomCardParent
 
 
 class CustomCard(CustomCardParent):

@@ -2,7 +2,7 @@ from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QWidget
 from qfluentwidgets import SingleDirectionScrollArea, SmoothScrollArea, ScrollArea
 
-from .layout import VBoxLayout, HBoxLayout
+from ..layout import VBoxLayout, HBoxLayout
 
 
 class SingleScrollWidgetBase(SingleDirectionScrollArea):

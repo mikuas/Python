@@ -20,7 +20,7 @@ class CustomButtonCardParent:
     ):
         pass
 
-    def initButton(self, btType: Union[type[PushButton], type[ToolButton], type[HyperlinkButton], type[QWidget], type[SwitchButton], type[SplitWidgetBase]]):
+    def initButton(self):
         pass
 
     def insertWidget(self, index: int, widget: QWidget, stretch: int, alignment: Qt.AlignmentFlag):
@@ -48,19 +48,6 @@ class CustomButtonCardParent:
         pass
 
     def setUrl(self, url: QUrl | str):
-        pass
-
-
-class CustomSwitchButtonCard:
-    # noinspection PyUnusedLocal
-    def __init__(
-            self,
-            icon: Union[QIcon, str, FluentIconBase] = None,
-            title: str = None,
-            content: str = None,
-            isChecked: bool = False,
-            parent: QWidget = None
-    ):
         pass
 
 class CustomCheckBoxCard:

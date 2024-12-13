@@ -22,13 +22,13 @@ class MusicInterface(SplitFluentWindow):
 
         self.stackedWidget.setMinimumSize(500, 420)
         self.hBoxLayout.setContentsMargins(0, 30, 0, 0)
-        self.musicList = self.musicListInterface.list
+        self.musicList = self.musicListInterface.table
         self.vBoxLayout.addWidget(self.musicListInterface.media)
 
         self.initNavigation()
         self.initTrayIcon()
 
-        self.musicListInterface.list.currentItemChanged.connect(self.updateMusicPath)
+        self.musicListInterface.table.currentItemChanged.connect(self.updateMusicPath)
 
     def initTrayIcon(self):
         self.systemTrayIcon.addMenus([
@@ -80,7 +80,6 @@ class MusicInterface(SplitFluentWindow):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self.musicListInterface.list.setFixedHeight(self.height() - 200)
 
     def closeEvent(self, event):
         super().closeEvent(event)

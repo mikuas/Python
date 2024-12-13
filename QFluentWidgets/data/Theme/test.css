@@ -1,0 +1,7 @@
+ListWidget::item:nth-child(2n) {
+    font-size: 24px;
+    background-color: rgb(231, 230, 230);
+    border-radius: 5px 5px;
+    border-bottom: 1px solid lightskyblue;
+    background-size: 21px;
+}

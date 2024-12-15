@@ -1,121 +1,109 @@
+# coding:utf-8
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QWidget
-from qfluentwidgets import PipsPager, PipsScrollButtonDisplayMode, PopUpAniStackedWidget
+from qfluentwidgets import PipsScrollButtonDisplayMode, PopUpAniStackedWidget, Theme, setTheme
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets.components.layout import VBoxLayout, HBoxLayout
+from ..layout import VBoxLayout
+from .pips_pager import PipsPager
 
 
-class HorizontalPager(PipsPager):
-    """ 水平分页器 """
+class PagerWidgetBase(QWidget):
+    """ pager widget base class """
     def __init__(self, parent=None, orientation=Qt.Orientation.Horizontal):
-        super().__init__(orientation, parent)
-        self.__initStaticWidget()
-        self.currentIndexChanged.connect(lambda index: self.stackedWidget.setCurrentIndex(index))
+        super().__init__(parent)
+        self._pager = PipsPager(orientation, self)
+        self._stackedWidget = PopUpAniStackedWidget(self)
+        self._pager.currentIndexChanged.connect(lambda index: self._stackedWidget.setCurrentIndex(index))
         self.__widgets = [] # type: [QWidget]
-
-    def __initStaticWidget(self):
-        self.stackedWidget = PopUpAniStackedWidget(self)
+        self.__initLayout()
+        setTheme(Theme.AUTO)
 
     def addWidget(self, widget: QWidget):
-        self.stackedWidget.addWidget(widget)
-        self.addToWidgets(widget)
-        self.setPageNumber(len(self.__widgets))
+        """ add widget to stacked widget"""
+        self._stackedWidget.addWidget(widget)
+        self.__addToWidgets(widget)
+        self._pager.setPageNumber(len(self.__widgets))
         return self
 
     def addWidgets(self, widgets: list[QWidget]):
+        """ add widgets to stacked widget"""
         for widget in widgets:
             self.addWidget(widget)
         return self
 
     def setCurrentIndex(self, index: int):
-        super().setCurrentIndex(index)
-        self.stackedWidget.setCurrentIndex(index)
+        """ set stacked widget current index"""
+        self._stackedWidget.setCurrentIndex(index)
         return self
 
     def removeWidget(self, index: int):
+        """ remove widget from stacked widget"""
         if index < len(self.__widgets):
-            self.stackedWidget.removeWidget(self.__widgets.pop(index))
-            self.setPageNumber(len(self.__widgets))
+            self._stackedWidget.removeWidget(self.__widgets.pop(index))
+            self._pager.setPageNumber(len(self.__widgets))
         return self
 
-    def addToWidgets(self, widget: QWidget):
+    def __addToWidgets(self, widget: QWidget):
         self.__widgets.append(widget)
-        return self
 
     def displayNextButton(self):
-        self.setNextButtonDisplayMode(PipsScrollButtonDisplayMode.ALWAYS)
+        """ set next page button display"""
+        self._pager.setNextButtonDisplayMode(PipsScrollButtonDisplayMode.ALWAYS)
         return self
 
     def displayPrevButton(self):
-        self.setPreviousButtonDisplayMode(PipsScrollButtonDisplayMode.ALWAYS)
+        """ set previous page button display"""
+        self._pager.setPreviousButtonDisplayMode(PipsScrollButtonDisplayMode.ALWAYS)
         return self
 
     def hoverDisplayPrevButton(self):
-        self.setPreviousButtonDisplayMode(PipsScrollButtonDisplayMode.ON_HOVER)
+        """ set previous page button hover display"""
+        self._pager.setPreviousButtonDisplayMode(PipsScrollButtonDisplayMode.ON_HOVER)
         return self
 
     def hoverDisplayNextButton(self):
-        self.setNextButtonDisplayMode(PipsScrollButtonDisplayMode.ON_HOVER)
+        """ set next page button hover display"""
+        self._pager.setNextButtonDisplayMode(PipsScrollButtonDisplayMode.ON_HOVER)
         return self
 
-    def setStackedFixedWidth(self, width: int):
-        self.stackedWidget.setFixedWidth(width)
+    def setPageVisible(self, visible: bool):
+        """ set page visible flag"""
+        self._pager.setVisible(visible)
         return self
 
-    def setStackedFixedHeight(self, height: int):
-        self.stackedWidget.setFixedHeight(height)
+    def setVisibleNumber(self, number: int):
+        """ set page visible flag"""
+        self._pager.setVisibleNumber(number)
         return self
 
     def setStackedFixedSize(self, width: int, height: int):
-        self.stackedWidget.setFixedSize(width, height)
-        return self
-
-    def setStackedMinWidth(self, width: int):
-        self.stackedWidget.setMinimumWidth(width)
-        return self
-
-    def setStackedMinHeight(self, height: int):
-        self.stackedWidget.setMinimumHeight(height)
+        self._stackedWidget.setFixedSize(width, height)
         return self
 
     def setStackedMinSize(self, width: int, height: int):
-        self.stackedWidget.setMinimumSize(width, height)
+        self._stackedWidget.setMinimumSize(width, height)
         return self
 
+    def getPageNumber(self):
+        return self._pager.getPageNumber()
 
-class VerticalPager(HorizontalPager):
-    """ 垂直分页器 """
-    def __init__(self, parent=None):
-        super().__init__(parent, Qt.Orientation.Vertical)
-
-
-class HorizontalPagerWidget(QWidget):
-    """ 水平分页器组件 """
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.pager = HorizontalPager(self)
-        self.__initLayout()
+    def getAllWidget(self):
+        """ get stacked all widget"""
+        return self.__widgets
 
     def __initLayout(self):
         self.__vLayout = VBoxLayout(self)
-        self.__vLayout.addWidgets_(
-            [self.pager.stackedWidget, self.pager],
-            [1, 0],
-            [Qt.AlignmentFlag.AlignTop, Qt.AlignmentFlag.AlignCenter]
-        )
+        self.__vLayout.addWidget(self._stackedWidget)
+        self.__vLayout.addWidget(self._pager, alignment=Qt.AlignmentFlag.AlignHCenter)
 
 
-class VerticalPagerWidget(QWidget):
-    """ 垂直分页器组件 """
+class HorizontalPagerWidget(PagerWidgetBase):
+    """ 水平分页器 """
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.pager = VerticalPager(self)
-        self.__initLayout()
 
-    def __initLayout(self):
-        self.__hLayout = HBoxLayout(self)
-        self.__hLayout.addWidgets_(
-            [self.pager.stackedWidget, self.pager],
-            [1, 0],
-            [Qt.AlignmentFlag.AlignTop, Qt.AlignmentFlag.AlignHCenter]
-        )
+
+class VerticalPagerWidget(PagerWidgetBase):
+    """ 垂直分页器 """
+    def __init__(self, parent=None):
+        super().__init__(parent, Qt.Orientation.Vertical)

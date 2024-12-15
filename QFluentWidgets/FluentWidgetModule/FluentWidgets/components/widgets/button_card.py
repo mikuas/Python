@@ -1,4 +1,5 @@
-from typing import Union, List
+# coding:utf-8
+from typing import Union
 
 from PySide6.QtCore import QSize, QUrl
 from PySide6.QtGui import Qt, QIcon
@@ -7,57 +8,11 @@ from qfluentwidgets import (
     PushButton, PrimaryPushButton, TransparentPushButton, ToolButton, PrimaryToolButton, TransparentToolButton,
     DropDownPushButton, PrimaryDropDownPushButton, FluentIconBase, TransparentDropDownPushButton, DropDownToolButton,
     PrimaryDropDownToolButton, TransparentDropDownToolButton, SplitPushButton, PrimarySplitPushButton, HyperlinkButton,
-    CheckBox, Action, SwitchButton, CardWidget, IconWidget, BodyLabel, CaptionLabel
+    CheckBox, Action, SwitchButton
 )
 from qfluentwidgets.components.material import AcrylicMenu
 
-from ..layout import HBoxLayout, VBoxLayout
-
-
-class CardBase(CardWidget):
-    # noinspection PyUnusedLocal
-    def __init__(
-            self,
-            icon: Union[QIcon, str, FluentIconBase, None] = None,
-            title: str = None,
-            content: str = None,
-            parent: QWidget = None
-    ):
-        super().__init__(parent)
-        self.setFixedHeight(70)
-
-    def initLayout(self):
-        self.hBoxLayout = HBoxLayout(self)
-        self.vBoxLayout = VBoxLayout()
-
-        self.hBoxLayout.setContentsMargins(20, 11, 48, 11) # left top right bottom
-        self.hBoxLayout.setSpacing(15)
-        self.hBoxLayout.addWidget(self.iconWidget)
-        self.vBoxLayout.setContentsMargins(0, 0, 0, 0)
-        self.vBoxLayout.setSpacing(0)
-        self.vBoxLayout.addWidget(self.titleLabel, 0, Qt.AlignmentFlag.AlignVCenter)
-        self.vBoxLayout.addWidget(self.contentLabel, 0, Qt.AlignmentFlag.AlignVCenter)
-        self.vBoxLayout.setAlignment(Qt.AlignmentFlag.AlignVCenter)
-        self.hBoxLayout.addLayout(self.vBoxLayout)
-        self.hBoxLayout.addStretch(1)
-        return self
-
-    def initIcon(self, icon):
-        # set card icon
-        self.iconWidget = IconWidget(icon)
-        self.iconWidget.setFixedSize(24, 24)
-        return self
-
-    def initTitle(self, title):
-        # set card title
-        self.titleLabel = BodyLabel(title, self)
-        return self
-
-    def initContent(self, content):
-        # set card content
-        self.contentLabel = CaptionLabel(content, self)
-        # self.contentLabel.setTextColor("#606060", "#d2d2d2")
-        return self
+from .custom_card import CardBase
 
 
 class ButtonCardBase(CardBase):
@@ -202,8 +157,8 @@ class DropDownCardBase(ButtonCardBase):
     # noinspection PyUnusedLocal
     def __init__(
             self, icon=None, title=None, content=None, btText=None,
-            btIcon=None, parent=None, menuTexts: List[str] = None,
-            menuIcons: List[Union[QIcon, str, FluentIconBase]] = None, triggered: list = None
+            btIcon=None, parent=None, menuTexts: list[str] = None,
+            menuIcons: list[Union[QIcon, str, FluentIconBase]] = None, triggered: list = None
     ):
         super().__init__(icon, title, content, parent)
         self.menu = AcrylicMenu('', self)

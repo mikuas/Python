@@ -1,34 +1,40 @@
-from PySide6.QtGui import Qt
+# coding:utf-8
+from typing import Union
+
+from PySide6.QtGui import Qt, QIcon
 from PySide6.QtWidgets import QWidget, QHBoxLayout
-from qfluentwidgets import TitleLabel, PushButton, PrimaryPushButton, TransparentPushButton, Slider, CaptionLabel
+from qfluentwidgets import TitleLabel, PushButton, PrimaryPushButton, TransparentPushButton, Slider, CaptionLabel, \
+    FluentIconBase, ExpandGroupSettingCard, ToolButton
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets.widgetdoc import CustomExpandGroupCard
 
-
-class ExpandGroupCard(CustomExpandGroupCard):
+class ExpandGroupCard(ExpandGroupSettingCard):
     """ 展开按钮卡片 """
     def __init__(self, icon, title, content, parent=None):
         super().__init__(icon, title, content, parent)
         self.card.setContentsMargins(0, 0, 20, 0)
         self.viewLayout.setSpacing(0)
-        self.setExpandFixedHeight(70).setIconSize(32, 32)
+        self.setExpandFixedHeight(70).setIconSize(24, 24)
 
-    def setExpandFixedHeight(self, height):
+    def setExpandFixedHeight(self, height: int):
+        """ set expandCard fixed height"""
         self.card.setFixedHeight(height)
         self.setFixedHeight(self.card.height())
         self.setViewportMargins(0, self.card.height(), 0, 0)
         return self
 
-    def addGroupWidgets(self, widgets):
+    def addGroupWidgets(self, widgets: list[QWidget]):
         for widget in widgets:
             self.addGroupWidget(widget)
         return self
 
-    def setIconSize(self, width, height):
+    def setIconSize(self, width: int, height: int):
         self.card.setIconSize(width, height)
         return self
 
-    def __initButton(self, title, icon, text, parent=None, btType=None):
+    def __initButton(
+            self, title: str, icon: Union[QIcon, str, FluentIconBase], text: str,
+            parent: QWidget = None, btType: Union[type[PushButton], type[ToolButton]] = None
+    ):
         hLayout = self._initWidget()
         hLayout.addWidget(TitleLabel(title, parent))
         button = btType(icon, text, parent)
@@ -37,18 +43,18 @@ class ExpandGroupCard(CustomExpandGroupCard):
         hLayout.addWidget(button, 0, Qt.AlignmentFlag.AlignRight)
         return button
 
-    def addButtonCard(self, title, icon, text, parent=None):
+    def addButtonCard(self, title: str, icon: Union[QIcon, str, FluentIconBase], text: str, parent: QWidget= None):
         return self.__initButton(title, icon, text, parent, PushButton)
 
-    def addPrimaryButtonCard(self, title, icon, text, parent=None):
+    def addPrimaryButtonCard(self, title: str, icon: Union[QIcon, str, FluentIconBase], text: str, parent: QWidget = None):
         return self.__initButton(title, icon, text, parent, PrimaryPushButton)
 
-    def addTransparentButtonCard(self, title, icon, text, parent=None):
+    def addTransparentButtonCard(self, title: str, icon: Union[QIcon, str, FluentIconBase], text: str, parent: QWidget = None):
         return self.__initButton(title, icon, text, parent, TransparentPushButton)
 
-    def addSliderCard(self, title, ranges, defaultValue, orientation=Qt.Orientation.Horizontal, parent=None):
+    def addSliderCard(self, title: str, minValue: int, maxValue: int, defaultValue: int, orientation=Qt.Orientation.Horizontal, parent: QWidget = None):
         slider = Slider(orientation, parent)
-        slider.setRange(ranges[0], ranges[1])
+        slider.setRange(minValue, maxValue)
         slider.setValue(defaultValue)
         slider.setFixedWidth(250)
         label = CaptionLabel(str(slider.value()), parent)
@@ -58,24 +64,18 @@ class ExpandGroupCard(CustomExpandGroupCard):
         hLayout.addStretch(1)
         hLayout.addWidget(label, 0, Qt.AlignmentFlag.AlignRight)
         hLayout.addWidget(slider, 0, Qt.AlignmentFlag.AlignRight)
-
-        slider.valueChanged.connect(
-            lambda: label.setText(str(slider.value()))
-        )
-
+        slider.valueChanged.connect(lambda: label.setText(str(slider.value())))
         return slider
 
-    def addCustomCard(self, title, parent):
+    def addCustomWidget(self, widget: QWidget, stretch: int = 0, alignment: Qt.AlignmentFlag = Qt.AlignmentFlag(0)):
         hLayout = self._initWidget()
-        hLayout.addWidget(TitleLabel(title, parent))
-        hLayout.addStretch(1)
+        hLayout.addWidget(widget, stretch, alignment)
         return hLayout
 
     def _initWidget(self):
         window = QWidget()
-        window.setFixedHeight(65)
+        window.setFixedHeight(50)
         hLayout = QHBoxLayout(window)
-        hLayout.setContentsMargins(48, 12, 48, 12)
+        hLayout.setContentsMargins(48, 0, 48, 0)
         self.addGroupWidget(window)
-
         return hLayout

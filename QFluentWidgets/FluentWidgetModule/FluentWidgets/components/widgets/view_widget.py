@@ -1,25 +1,26 @@
+# coding:utf-8
 from PySide6.QtCore import QEasingCurve, QModelIndex, QRect, QTimer
 from PySide6.QtGui import Qt, QPainter, QColor, QFont
 from PySide6.QtWidgets import QWidget, QStyleOptionViewItem
 from qfluentwidgets import (
-    Dialog as View, MessageBoxBase, SubtitleLabel, LineEdit, MessageBox as MsbBox, ColorDialog as ColorD, FlowLayout,
+    Dialog as View, MessageBoxBase, SubtitleLabel, LineEdit, MessageBox as MsbBox, ColorDialog as Color, FlowLayout,
     FlipImageDelegate, getFont, HorizontalFlipView
 )
-from QFluentWidgets.FluentWidgetModule.FluentWidgets.components.widgets.scroll_widget import SmoothScrollWidget
+from .scroll_widget import SmoothScrollWidget
 
 
 class Dialog(View):
     """ 无边框对话框 """
     def __init__(self, title, content, parent):
         super().__init__(title, content, parent)
-        setButtonText(self.yesButton, self.cancelButton)
+        setButtonText(self)
 
 
 class MessageBox(MsbBox):
     """ 带遮罩的对话框 """
     def __init__(self, title, content, parent=None):
         super().__init__(title, content, parent)
-        setButtonText(self.yesButton, self.cancelButton)
+        setButtonText(self)
 
 
 class UrlDialog(MessageBoxBase):
@@ -39,14 +40,14 @@ class UrlDialog(MessageBoxBase):
         # set min width
         self.widget.setMinimumWidth(350)
 
-        setButtonText(self.yesButton, self.cancelButton)
+        setButtonText(self)
 
 
-class ColorDialog(ColorD):
+class ColorDialog(Color):
     """ 颜色选择器对话框 """
     def __init__(self, color, title, parent=None, enableAlpha=False):
         super().__init__(color, title, parent, enableAlpha)
-        setButtonText(self.yesButton, self.cancelButton)
+        setButtonText(self)
 
     def getColor(self):
         self.exec()
@@ -58,7 +59,7 @@ class CustomDialog(MessageBoxBase):
         super().__init__(parent)
         self.hide()
         self.widget.setMinimumSize(400, 250)
-        setButtonText(self.yesButton, self.cancelButton)
+        setButtonText(self)
 
     def addWidget(self, widget: QWidget,  stretch: int = 0, alignment: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter):
         self.viewLayout.addWidget(widget, stretch, alignment)
@@ -108,47 +109,42 @@ class FlowLayoutWidget(SmoothScrollWidget):
 
 class FlipViewWidget(HorizontalFlipView):
     """ 翻转视图组件 """
-    def __init__(self, parent, aspectRation: Qt.AspectRatioMode = Qt.AspectRatioMode.KeepAspectRatio):
+    def __init__(self, parent=None, aspectRation: Qt.AspectRatioMode = Qt.AspectRatioMode.KeepAspectRatio):
         super().__init__(parent)
-        self.parent = parent
         self.__index = 0
-        self.num = 1
+        self.__num = 1
         self.setAspectRatioMode(aspectRation)
         self.setBorderRadius(24)
-        self.resize(parent.width(), parent.height())
+        # self.setFixedSize(parent.size())
 
     def setDelegate(self, color: QColor, fontSize: int, fontColor: QColor, text: str, width: int = None, height: int = None):
         self.setItemDelegate(FlipItemDelegate(color, fontSize, fontColor, text, width, height, self))
         return self
 
     def setAutoPlay(self, interval: int = 1500):
+        """ set image autoPlay"""
         self.currentIndexChanged.connect(lambda index: self.__setIndex(index))
         self.__initTimer(interval)
         return self
 
-    def addImages(self, images, targetSize=None):
-        super().addImages(images, targetSize)
-        return self
-
-    def addImage(self, image):
-        super().addImage(image)
-        return self
-
     def __initTimer(self, interval: int = 1500):
         self.timer = QTimer(self)
-        self.timer.timeout.connect(lambda: (self.__updateIndex(), self.__setIndex(self.__index + self.num)))
+        self.timer.timeout.connect(lambda: (self.__updateIndex(), self.__setIndex(self.__index + self.__num)))
         self.timer.start(interval)
 
     def __updateIndex(self):
         if self.__index == 0:
-            self.num = 1
+            self.__num = 1
         if self.__index == self.count() - 1:
-            self.num = -1
+            self.__num = -1
         self.setCurrentIndex(self.__index)
 
     def __setIndex(self, index: int):
         self.__index = index
 
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.setItemSize(self.size())
 
 class FlipItemDelegate(FlipImageDelegate):
     def __init__(self, color: QColor, fontSize: int, fontColor: QColor, text: str, width: int = None, height: int = None, parent=None):
@@ -177,6 +173,7 @@ class FlipItemDelegate(FlipImageDelegate):
         painter.restore()
 
 
-def setButtonText(yesBt, cancelBt):
-    yesBt.setText('确定')
-    cancelBt.setText('取消')
+def setButtonText(parent):
+    parent.yesButton.setText('确定')
+    parent.cancelButton.setText('取消')
+    parent.hide()

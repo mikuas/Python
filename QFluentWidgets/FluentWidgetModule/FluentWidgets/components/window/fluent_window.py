@@ -7,7 +7,7 @@ from PySide6.QtCore import Qt, QSize, QRect
 from PySide6.QtGui import QIcon, QPainter, QColor
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QApplication
 from qfluentwidgets import FluentStyleSheet, qconfig, FluentIconBase, NavigationItemPosition, qrouter, isDarkTheme, \
-    NavigationInterface, NavigationTreeWidget, SplitTitleBar
+    NavigationInterface, NavigationTreeWidget, SplitTitleBar, Theme, setTheme
 from qfluentwidgets.common.animation import BackgroundAnimationWidget
 from qfluentwidgets.components.widgets.frameless_window import FramelessWindow
 from qfluentwidgets.window.stacked_widget import StackedWidget
@@ -23,6 +23,7 @@ class FluentWindowBase(BackgroundAnimationWidget, FramelessWindow):
         self._lightBackgroundColor = QColor(240, 244, 249)
         self._darkBackgroundColor = QColor(32, 32, 32)
         super().__init__(parent=parent)
+        setTheme(Theme.AUTO)
 
         self.vBoxLayout = VBoxLayout(self)
         self.hBoxLayout = HBoxLayout()
@@ -126,6 +127,12 @@ class FluentWindowBase(BackgroundAnimationWidget, FramelessWindow):
             titleBar.maxBtn.hide()
             titleBar.closeBtn.hide()
 
+    def show(self):
+        super().show()
+        desktop = QApplication.primaryScreen().availableGeometry()
+        w, h = desktop.width(), desktop.height()
+        self.move(w // 2 - self.width() // 2, h // 2 - self.height() // 2)
+
 
 class FluentTitleBar(TitleBar):
     """ Fluent title bar"""
@@ -187,7 +194,7 @@ class FluentWindow(FluentWindowBase):
         self.hBoxLayout.setStretchFactor(self.widgetLayout, 1)
 
         self.widgetLayout.addWidget(self.stackedWidget)
-        self.widgetLayout.setContentsMargins(0, 48, 0, 0)
+        self.widgetLayout.setContentsMargins(0, 20, 0, 0)
 
         self.navigationInterface.displayModeChanged.connect(self.titleBar.raise_)
         self.titleBar.raise_()
@@ -242,6 +249,7 @@ class SplitFluentWindow(FluentWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setTitleBar(SplitTitleBar(self))
+        self.setContentsMargins(0, 20, 0, 0)
 
         if sys.platform == "darwin":
             self.titleBar.setFixedHeight(48)

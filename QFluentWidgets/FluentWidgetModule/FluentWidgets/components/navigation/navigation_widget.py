@@ -1,34 +1,44 @@
+# coding:utf-8
 from typing import Union
 
 from PySide6.QtGui import Qt, QIcon
 from PySide6.QtWidgets import QWidget
 from qfluentwidgets import (
     Pivot, SegmentedWidget, SegmentedToolWidget, SegmentedToggleToolWidget, FluentIconBase, TabBar,
-    TabCloseButtonDisplayMode, PopUpAniStackedWidget, FluentTitleBar
+    TabCloseButtonDisplayMode, PopUpAniStackedWidget, setTheme, Theme, HorizontalSeparator
 )
-from qfluentwidgets.window.fluent_window import FluentWindowBase
-
-from .. import VBoxLayout, HBoxLayout
+from ..layout import VBoxLayout, HBoxLayout
 
 
-class NavigationBase(FluentWindowBase):
+class NavigationBase(QWidget):
     """ 导航组件基类 """
     def __init__(self, parent: QWidget = None):
         super().__init__(parent)
-        self.setTitleBar(FluentTitleBar(self))
-        self.setWindowTitle("NavigationWindow")
-        self.setContentsMargins(0, 50, 0, 0)
+        setTheme(Theme.AUTO)
+        self.hBoxLayout = HBoxLayout(self)
         self.navigation = None
+        self._key = '0'
+        self.stackedWidget = PopUpAniStackedWidget(self)
 
     def _initLayout(self):
         self.vLayout = VBoxLayout(self)
         self.hLayout = HBoxLayout()
         self.hBoxLayout.addLayout(self.vLayout)
-        self.vLayout.addWidget(self.navigation, alignment=Qt.AlignmentFlag.AlignTop)
+        self.vLayout.addWidgets([self.navigation, self.stackedWidget])
         self.vLayout.addLayout(self.hLayout)
-        self.hLayout.addWidget(self.stackedWidget)
+
+    def addSeparator(self, index=1):
+        separator = HorizontalSeparator(self)
+        self.vLayout.insertWidget(index, separator)
+        return self
+
+    def addNavigationSeparator(self, index: int):
+        self.navigation.insertItem(index, self._key, '|').setFixedWidth(1)
+        self._key = str(int(self._key) + 1)
+        return self
 
     def addSubInterface(self, routeKey: str, text: str, widget: QWidget, icon: Union[QIcon, str, FluentIconBase] = None):
+        """ add sub interface, rotKey isUnique"""
         self.stackedWidget.addWidget(widget)
         self.navigation.addItem(routeKey, text, lambda: self.switchTo(widget), icon)
         return self
@@ -45,6 +55,9 @@ class NavigationBase(FluentWindowBase):
             self.addSubInterface(key, text, widget, icon)
         return self
 
+    def switchTo(self, widget: QWidget):
+        self.stackedWidget.setCurrentWidget(widget)
+
     def setCurrentItem(self, routeKey: str):
         self.navigation.setCurrentItem(routeKey)
         return self
@@ -52,6 +65,7 @@ class NavigationBase(FluentWindowBase):
     def enableNavCenter(self):
         self.vLayout.removeWidget(self.navigation)
         self.vLayout.insertWidget(0, self.navigation, alignment=Qt.AlignmentFlag.AlignHCenter)
+        return self
 
 
 class PivotNav(NavigationBase):
@@ -138,6 +152,7 @@ class LabelBarWidget(QWidget):
         self.stackedWidget.setCurrentWidget(widget)
 
     def addSubTab(self, routeKey, text, icon=None, widget: QWidget = None):
+        """ add sub tab, roteKey isUnique """
         self.stackedWidget.addWidget(widget)
         self.tabBar.addTab(routeKey, text, icon, lambda: self.switchTo(widget))
         return self

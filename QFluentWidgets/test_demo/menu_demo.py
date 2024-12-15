@@ -3,7 +3,8 @@ import sys
 from FluentWidgets import VBoxLayout, AcrylicProfileCardMenu
 from PySide6.QtWidgets import QWidget, QApplication
 
-from qfluentwidgets import Theme, setTheme, FluentIcon, PrimaryPushButton
+from qfluentwidgets import Theme, setTheme, FluentIcon, PrimaryPushButton, Action, RoundMenu
+from qfluentwidgets.components.material import AcrylicMenu
 
 from QFluentWidgets.FluentWidgetModule.FluentWidgets import (
     Menu, AcrylicRoundMenu,
@@ -20,15 +21,41 @@ class Demo(QWidget):
         self.vBoxLayout.setContentsMargins(300, 0, 300, 0)
 
         self.menu = Menu(self)
+        # add items
         self.menu.addItems(
             [FluentIcon.COPY, FluentIcon.CUT, FluentIcon.PASTE],
             ["复制", "剪切", "粘贴"]
+        )
+        # add action
+        self.menu.addAction(
+            Action(FluentIcon.MORE, "More", self)
+        )
+        # add subItems
+        self.menu.addSubItems(
+            '更多',
+            FluentIcon.CARE_RIGHT_SOLID,
+            ['升序', '降序'],
+            [FluentIcon.UP, FluentIcon.DOWN]
+        )
+
+        self.menu.addSubItem(
+            'Sub Sub Item',
+            FluentIcon.WIFI,
+            'Sub Item 1',
+            FluentIcon.PAUSE,
+            self.menu.getSubMenu()
         )
 
         self.acrylicMenu = AcrylicRoundMenu(self)
         self.acrylicMenu.addItems(
             [FluentIcon.COPY, FluentIcon.CUT, FluentIcon.PASTE],
             ["复制", "剪切", "粘贴"]
+        )
+        self.acrylicMenu.addSubItems(
+            'Sub Item',
+            FluentIcon.MORE,
+            ['Item 1', 'Item 2'],
+            [FluentIcon.UP, FluentIcon.DOWN]
         )
 
         self.profileCardMenu = ProfileCardMenu(

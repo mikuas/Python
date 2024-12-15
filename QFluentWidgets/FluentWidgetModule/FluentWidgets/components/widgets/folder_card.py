@@ -1,3 +1,4 @@
+# coding:utf-8
 from pathlib import Path
 from typing import Union
 
@@ -8,6 +9,7 @@ from qfluentwidgets import ExpandSettingCard, ConfigItem, FluentIcon, PushButton
 from qfluentwidgets.components.settings.folder_list_setting_card import FolderItem
 
 from .view_widget import Dialog
+
 
 class FolderListSettingCard(ExpandSettingCard):
     """ Folder list setting card """

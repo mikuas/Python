@@ -115,6 +115,7 @@ class FlipViewWidget(HorizontalFlipView):
         self.__num = 1
         self.setAspectRatioMode(aspectRation)
         self.setBorderRadius(24)
+        # self.setFixedSize(parent.size())
 
     def setDelegate(self, color: QColor, fontSize: int, fontColor: QColor, text: str, width: int = None, height: int = None):
         self.setItemDelegate(FlipItemDelegate(color, fontSize, fontColor, text, width, height, self))
@@ -124,10 +125,6 @@ class FlipViewWidget(HorizontalFlipView):
         """ set image autoPlay"""
         self.currentIndexChanged.connect(lambda index: self.__setIndex(index))
         self.__initTimer(interval)
-        return self
-
-    def setAutoPlayInterval(self, interval: int):
-        self.timer.setInterval(interval)
         return self
 
     def __initTimer(self, interval: int = 1500):
@@ -148,7 +145,6 @@ class FlipViewWidget(HorizontalFlipView):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.setItemSize(self.size())
-
 
 class FlipItemDelegate(FlipImageDelegate):
     def __init__(self, color: QColor, fontSize: int, fontColor: QColor, text: str, width: int = None, height: int = None, parent=None):

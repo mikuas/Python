@@ -1,21 +1,18 @@
 # coding:utf-8
-import sys
 from typing import Union
+import sys
 
+from QFluentWidgets.FluentWidgetModule.FluentWidgets.components.layout import HBoxLayout, VBoxLayout
 from PySide6.QtCore import Qt, QSize, QRect
 from PySide6.QtGui import QIcon, QPainter, QColor
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QApplication
-
-from qfluentwidgets import (
-    FluentStyleSheet, qconfig, FluentIconBase, NavigationItemPosition, qrouter, isDarkTheme,
+from qfluentwidgets import FluentStyleSheet, qconfig, FluentIconBase, NavigationItemPosition, qrouter, isDarkTheme, \
     NavigationInterface, NavigationTreeWidget, SplitTitleBar, Theme, setTheme
-)
 from qfluentwidgets.common.animation import BackgroundAnimationWidget
 from qfluentwidgets.components.widgets.frameless_window import FramelessWindow
 from qfluentwidgets.window.stacked_widget import StackedWidget
-from qframelesswindow import TitleBar, TitleBarBase
 
-from ..layout import HBoxLayout, VBoxLayout
+from qframelesswindow import TitleBar, TitleBarBase
 
 
 class FluentWindowBase(BackgroundAnimationWidget, FramelessWindow):

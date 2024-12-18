@@ -6,7 +6,7 @@ from PySide6.QtWidgets import QWidget, QApplication
 from qfluentwidgets import Theme, setTheme, FluentIcon, PrimaryPushButton, Action, RoundMenu
 from qfluentwidgets.components.material import AcrylicMenu
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import (
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import (
     Menu, AcrylicRoundMenu,
     ProfileCardMenu, AcrylicProfileCardMenu,
     CheckedMenu, AcrylicCheckedMenu, Shortcut

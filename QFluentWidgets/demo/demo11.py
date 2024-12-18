@@ -5,7 +5,7 @@ import sys
 
 from qfluentwidgets import FluentIcon, TitleLabel, setTheme, Theme, MSFluentWindow
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import NavigationWidget, MSNavigationWidget
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import NavigationWidget, MSNavigationWidget
 
 
 class Window(MSFluentWindow):

@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QApplication, QWidget
 from qfluentwidgets import TitleLabel, FluentIcon, FolderListSettingCard, ConfigItem, FolderListValidator, \
     ExpandSettingCard, PushButton
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import FluentWindow, VBoxLayout
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import FluentWindow, VBoxLayout
 
 
 class Demo(FluentWindow):

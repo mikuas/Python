@@ -25,3 +25,4 @@ from .two_button_card import MoreButtonCardBase, MoreButtonCard, MorePrimaryButt
 from .view_widget import (
     Dialog, MessageBox, UrlDialog, ColorDialog, CustomDialog, FlowLayoutWidget, FlipViewWidget, FlipItemDelegate
 )
+from .drag_widget import DragFileWidget, DragFolderWidget

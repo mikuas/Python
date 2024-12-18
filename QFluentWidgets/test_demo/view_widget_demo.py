@@ -4,7 +4,7 @@ from PySide6.QtGui import QColor, Qt
 from PySide6.QtWidgets import QApplication, QWidget
 from qfluentwidgets import PrimaryPushButton, TitleLabel
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import (
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import (
     VerticalScrollWidget,
     Dialog, MessageBox, UrlDialog, ColorDialog, CustomDialog,
     FlowLayoutWidget, FlipViewWidget,

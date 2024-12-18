@@ -4,7 +4,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget, QApplication, QGridLayout
 from qfluentwidgets import TitleLabel, Theme, setTheme
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import VBoxLayout, HBoxLayout
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import VBoxLayout, HBoxLayout
 
 
 class Demo(QWidget):

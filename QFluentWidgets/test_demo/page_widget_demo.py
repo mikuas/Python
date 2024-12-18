@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QWidget, QApplication
 
 from qfluentwidgets import TitleLabel, PrimaryPushButton, ComboBox
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import HorizontalPagerWidget, VBoxLayout
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import HorizontalPagerWidget, VBoxLayout
 
 
 class Demo(QWidget):

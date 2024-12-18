@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QApplication
 from qfluentwidgets import FluentIcon, SettingCardGroup, setTheme, Theme, TitleLabel
 
 from FluentWidgets import VerticalScrollWidget
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import (
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import (
     ComboBoxCard, EditComboBoxCard,
     AcrylicComboBoxCard, AcrylicEditComboBoxCard,
     ColorSelectCard,

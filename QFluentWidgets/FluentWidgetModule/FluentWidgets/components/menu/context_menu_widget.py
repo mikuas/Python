@@ -14,11 +14,12 @@ from qfluentwidgets.components.material import AcrylicMenu, AcrylicCheckableMenu
 class MenuBase:
     # noinspection PyUnusedLocal
     def __init__(self, parent: QWidget = None):
-        self.menu = None
-        self.subMenu = None
+        self._menu = None
+        self._subMenu = None
+
 
     def addAction(self, action: Action):
-        self.menu.addAction(action)
+        self._menu.addAction(action)
         return self
 
     def addActions(self, actions: list[Action]):
@@ -27,13 +28,13 @@ class MenuBase:
         return self
 
     def addItem(self, icon: Union[QIcon, str, FluentIconBase], text: str):
-        """ add item to menu"""
+        """ add item to _menu"""
         action = Action(icon, text)
-        self.menu.addAction(action)
+        self._menu.addAction(action)
         return action
 
     def addItems(self, icon: list[Union[QIcon, str, FluentIconBase]], text: list[str]):
-        """ add items to menu"""
+        """ add items to _menu"""
         actions = []
         for icon, text in zip(icon, text):
             actions.append(self.addItem(icon, text))
@@ -47,10 +48,10 @@ class MenuBase:
             subIcon: Union[QIcon, str, FluentIconBase],
             parentMenu: RoundMenu = None
     ) -> Action:
-        """ parentMenu is None, default = self.menu """
+        """ parentMenu is None, default = self._menu """
         action = Action(icon, text)
-        self._createSubMenu(subIcon, text, parentMenu).addMenu(self.subMenu)
-        self.subMenu.addAction(action)
+        self._createSubMenu(subIcon, text, parentMenu).addMenu(self._subMenu)
+        self._subMenu.addAction(action)
         return action
 
     def addSubItems(
@@ -61,62 +62,62 @@ class MenuBase:
             subIcon: list[Union[QIcon, str, FluentIconBase]],
             parentMenu: RoundMenu = None,
     ) -> list[Action]:
-        """ parentMenu is None, default = self.menu """
+        """ parentMenu is None, default = self._menu """
         actions = []
-        self._createSubMenu(icon, title, parentMenu).addMenu(self.subMenu)
+        self._createSubMenu(icon, title, parentMenu).addMenu(self._subMenu)
         for t, i in zip(text, subIcon):
             action = Action(i, t, checkable=True)
-            self.subMenu.addAction(action)
+            self._subMenu.addAction(action)
             actions.append(action)
         return actions
 
     def _createSubMenu(self, icon: Union[QIcon, str, FluentIconBase], title: str, parentMenu: RoundMenu = None):
-        parentMenu = parentMenu or self.menu
-        self.subMenu = RoundMenu(title, parentMenu)
-        self.subMenu.setIcon(icon)
+        parentMenu = parentMenu or self._menu
+        self._subMenu = RoundMenu(title, parentMenu)
+        self._subMenu.setIcon(icon)
         self.setSubMenuMinWidth(160)
         return parentMenu
 
     def addSubAction(self, icon: Union[QIcon, str, FluentIconBase], title: str, action: Action, parentMenu: RoundMenu = None):
-        """ parentMenu is None, default = self.menu """
-        self._createSubMenu(icon, title, parentMenu).addMenu(self.subMenu)
-        self.subMenu.addAction(action)
+        """ parentMenu is None, default = self._menu """
+        self._createSubMenu(icon, title, parentMenu).addMenu(self._subMenu)
+        self._subMenu.addAction(action)
         return self
 
     def addSubActions(self, icon: Union[QIcon, str, FluentIconBase], title: str, actions: list[Action], parentMenu: RoundMenu = None):
-        """ parentMenu is None, default = self.menu """
-        self._createSubMenu(icon, title, parentMenu).addMenu(self.subMenu)
-        self.subMenu.addActions(actions)
+        """ parentMenu is None, default = self._menu """
+        self._createSubMenu(icon, title, parentMenu).addMenu(self._subMenu)
+        self._subMenu.addActions(actions)
         return self
 
     def exec(self, position: QPoint):
-        self.menu.exec(position)
+        self._menu.exec(position)
 
     def execWidgetCenter(self, widget: QWidget):
         """ 在指定组件中心执行 """
-        self.menu.exec(widget.mapToGlobal(widget.rect().center()))
+        self._menu.exec(widget.mapToGlobal(widget.rect().center()))
 
     def getSubMenu(self):
-        return self.subMenu
+        return self._subMenu
 
     def addSeparator(self):
-        self.menu.addSeparator()
+        self._menu.addSeparator()
         return self
 
     def addSubSeparator(self, subMenu: RoundMenu = None):
-        """ subMenu is None, default = self.subMenu """
-        subMenu = subMenu or self.subMenu
+        """ subMenu is None, default = self._subMenu """
+        subMenu = subMenu or self._subMenu
         subMenu.addSeparator()
         return self
 
     def setMenuMinWidth(self, width: int):
-        self.menu.setMinimumWidth(width)
-        self.menu.view.setMinimumWidth(width - 20)
+        self._menu.setMinimumWidth(width)
+        self._menu.view.setMinimumWidth(width - 20)
         return self
 
     def setSubMenuMinWidth(self, width: int, menu: RoundMenu = None):
-        """ menu is None, default = self.subMenu """
-        menu = menu or self.subMenu
+        """ menu is None, default = self._subMenu """
+        menu = menu or self._subMenu
         menu.setMinimumWidth(width)
         menu.view.setMinimumWidth(width - 20)
         return self
@@ -144,11 +145,11 @@ class MenuBase:
         return self
 
     def removeMenu(self):
-        self.menu.removeMenu()
+        self._menu.removeMenu()
         return self
 
     def removeAction(self):
-        self.menu.removeAction()
+        self._menu.removeAction()
         return self
 
 

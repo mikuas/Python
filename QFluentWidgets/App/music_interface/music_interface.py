@@ -4,8 +4,8 @@ from PySide6.QtWidgets import QApplication
 from qfluentwidgets import FluentIcon, setTheme, Theme, NavigationItemPosition, Action
 
 from FluentWidgets import SplitFluentWindow, SystemTrayIcon
-from QFluentWidgets.App.music_interface import MusicListInterface, SettingInterface, LyricsInterface, HomeInterface
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import WinFluentIcon
+from QtFluentWidgets.App.music_interface import MusicListInterface, SettingInterface, LyricsInterface, HomeInterface
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import WinFluentIcon
 
 
 class MusicInterface(SplitFluentWindow):

@@ -1,7 +1,7 @@
 import sys
 
 from PySide6.QtWidgets import QWidget, QApplication
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import FolderListCard
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import FolderListCard
 
 
 class Demo(QWidget):

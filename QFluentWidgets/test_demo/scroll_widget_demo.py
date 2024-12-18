@@ -3,7 +3,7 @@ import sys
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets import ImageLabel
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import (
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import (
     VerticalScrollWidget, HorizontalScrollWidget,
     ScrollWidget, SmoothScrollWidget,
     PrimaryButtonCard, WinFluentIcon, VBoxLayout

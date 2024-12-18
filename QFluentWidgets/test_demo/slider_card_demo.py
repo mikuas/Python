@@ -3,7 +3,7 @@ import sys
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets import FluentIcon
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import SliderCard, VerticalScrollWidget
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import SliderCard, VerticalScrollWidget
 
 
 class Demo(VerticalScrollWidget):

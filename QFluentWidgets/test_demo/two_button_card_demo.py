@@ -3,7 +3,7 @@ import sys
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets import FluentIcon
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import MoreButtonCard, VBoxLayout, MorePrimaryButtonCard, \
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import MoreButtonCard, VBoxLayout, MorePrimaryButtonCard, \
     MoreTransparentButtonCard, VerticalScrollWidget
 
 

@@ -4,7 +4,7 @@ import sys
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets import SettingCardGroup, FluentIcon, setTheme, Theme, Action
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import (
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import (
     VerticalScrollWidget, WinFluentIcon, ButtonCard, PrimaryButtonCard, TransparentButtonCard, ToolButtonCard,
     PrimaryToolButtonCard, TransparentToolButtonCard, SwitchButtonCard, CheckBoxCard, HyperLinkCard, DropDownCard,
     PrimaryDropDownCard, TransparentDropDownCard, DropDownToolCard, PrimaryDropDownToolCard,
@@ -13,7 +13,7 @@ from QFluentWidgets.FluentWidgetModule.FluentWidgets import (
     MoreButtonCard, CustomColorCard
 )
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets.widgets.acrylic_cards import AcrylicComboBoxCard, AcrylicEditComboBoxCard
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets.widgets.acrylic_cards import AcrylicComboBoxCard, AcrylicEditComboBoxCard
 
 
 class CardWidget(VerticalScrollWidget):

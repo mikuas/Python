@@ -1,7 +1,7 @@
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import QSystemTrayIcon
 from qfluentwidgets import SystemTrayMenu, Action, FluentIconBase
-from .window_fluent_icon import Icon
+from .fluent_icon import Icon
 
 
 class SystemTrayIcon(QSystemTrayIcon):

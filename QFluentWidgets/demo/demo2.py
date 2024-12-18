@@ -3,8 +3,8 @@ import sys
 from PySide6.QtWidgets import QApplication, QWidget
 from qfluentwidgets import setTheme, Theme, FluentIcon, TitleLabel, FluentWindow, Action
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import WinFluentIcon
-from QFluentWidgets.FluentWidgetModule.FluentWidgets.components import (
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import WinFluentIcon
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets.components import (
     PivotNav, SegmentedNav, SegmentedToolNav, SegmentedToggleToolNav, SystemTrayIcon, LabelBarWidget, Icon
 )
 

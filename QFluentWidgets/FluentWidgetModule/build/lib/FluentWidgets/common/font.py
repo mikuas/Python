@@ -7,6 +7,10 @@ def setFonts(widgets: list[QWidget], fontSize: int, weight: QFont.Weight = QFont
     for widget in widgets:
         widget.setFont(getFont(fontSize, weight))
 
+def setFonts_(widgets: list[QWidget], fontSize: list[int], weight: QFont.Weight = QFont.Weight.Normal):
+    for widget, size in zip(widgets, fontSize):
+        widget.setFont(getFont(size, weight))
+
 def getFont(fontSize: int, weight: QFont.Weight = QFont.Weight.Normal):
     """ get font size"""
     font = QFont()

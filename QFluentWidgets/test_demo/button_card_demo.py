@@ -3,7 +3,7 @@ import sys
 from PySide6.QtWidgets import QWidget, QApplication
 from qfluentwidgets import SettingCardGroup, FluentIcon, setTheme, Theme
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import (
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import (
     VerticalScrollWidget,
     ButtonCard, PrimaryButtonCard, TransparentButtonCard,
     ToolButtonCard, PrimaryToolButtonCard, TransparentToolButtonCard,

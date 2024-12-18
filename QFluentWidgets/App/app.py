@@ -1,5 +1,5 @@
 # from FluentWidgets import SystemTrayIcon
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import SystemTrayIcon
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import SystemTrayIcon
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets import FluentWindow, FluentIcon, Action, NavigationItemPosition
 

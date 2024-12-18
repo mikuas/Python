@@ -3,7 +3,7 @@ import sys
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets import TitleLabel, FluentIcon
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import FluentWindow, SplitFluentWindow
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import FluentWindow, SplitFluentWindow
 
 
 class Demo(FluentWindow):

@@ -3,7 +3,7 @@ import sys
 from PySide6.QtWidgets import QApplication, QTableWidget
 from qfluentwidgets import FluentIcon
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import VerticalScrollWidget, TableWidget, ListWidget
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import VerticalScrollWidget, TableWidget, ListWidget
 
 
 class Demo(VerticalScrollWidget):

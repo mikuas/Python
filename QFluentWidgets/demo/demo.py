@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QWidget
 from qfluentwidgets import FluentWindow, NavigationInterface, FluentIcon, setTheme, Theme, PopUpAniStackedWidget, \
     TitleLabel
 
-from QFluentWidgets.FluentWidgetModule.FluentWidgets import FluentWindow
+from QtFluentWidgets.FluentWidgetModule.FluentWidgets import FluentWindow
 
 
 class MicaEffect(FluentWindow):

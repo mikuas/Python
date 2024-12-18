@@ -1,5 +1,5 @@
 # from FluentWidgets import SystemTrayIcon
-from QtFluentWidgets.FluentWidgetModule.FluentWidgets import SystemTrayIcon
+from FluentWidgets import SystemTrayIcon
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets import FluentWindow, FluentIcon, Action, NavigationItemPosition
 
@@ -48,7 +48,7 @@ class Window(FluentWindow):
     def __initTrayIcon(self):
         self.systemTrayIcon = SystemTrayIcon(self)
         self.systemTrayIcon.setIcon(FluentIcon.APPLICATION)
-        self.systemTrayIcon.addMenus([
+        self.systemTrayIcon.addActions([
             Action(FluentIcon.HOME, "显示应用界面", self, triggered=lambda: (self.raise_(), self.show(), self.activateWindow())),
             Action(FluentIcon.EMBED, "退出", self, triggered=QApplication.quit)
         ])

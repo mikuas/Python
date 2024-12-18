@@ -5,10 +5,9 @@ import comtypes
 import pyperclip
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
-from ..doc import SystemCtl
 
 
-class SystemCtl(SystemCtl):
+class SystemCtl:
 
     def getStrToPaste(self, string):
         pyperclip.copy(string)
@@ -72,15 +71,7 @@ class SystemCtl(SystemCtl):
 
         return self
 
-    def disableUser(self, userName):
-        os.system(f'net user {userName} /active:no')
 
-        return self
-
-    def enableUser(self, userName):
-        os.system(f'net user {userName} /active:yes')
-
-        return self
 
     def setPassword(self, password, **kwargs):
         os.system('echo %username% > userName')
@@ -151,3 +142,8 @@ class SystemCtl(SystemCtl):
         volume_interface.SetMasterVolumeLevelScalar(audio, None)
 
         return self
+
+if __name__ == '__main__':
+    s = SystemCtl()
+    s.getStrToPaste('string')
+    print(s.getPasteContent())

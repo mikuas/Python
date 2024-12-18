@@ -1,6 +1,6 @@
 import os
 
-from FluentWidgets import VerticalScrollWidget, SwitchButtonCard, CustomColorCard
+from FluentWidgets import VerticalScrollWidget, SwitchButtonCard
 from PySide6.QtWidgets import QSystemTrayIcon
 from qfluentwidgets import FluentWindow, SettingCardGroup, FluentIcon, OptionsSettingCard, qconfig
 
@@ -32,12 +32,6 @@ class SettingWidget(VerticalScrollWidget):
             True,
             self
         )
-        self.colorCard = CustomColorCard(
-            "主题色",
-            '设置主题颜色',
-            self,
-            FluentIcon.PALETTE
-        )
 
         self.sysTrayCard = ComboBoxCard(
             FluentIcon.DEVELOPER_TOOLS,
@@ -65,7 +59,6 @@ class SettingWidget(VerticalScrollWidget):
     def __initCardGroup(self):
         self.styleCardGroup.addSettingCards([
             self.micaEffectCard,
-            self.colorCard,
             self.themeCard
         ])
         self.sysCardGroup.addSettingCards([
@@ -75,7 +68,7 @@ class SettingWidget(VerticalScrollWidget):
 
     def __connectSignalSlot(self):
         self.micaEffectCard.button.checkedChanged.connect(lambda b: self.parent.setMicaEffectEnabled(b))
-        self.sysTrayCard.comboBox.currentIndexChanged.connect(lambda index: self.setTray(index))
+        self.sysTrayCard.comboBoxButton.currentIndexChanged.connect(lambda index: self.setTray(index))
         self.bt.button.clicked.connect(
             lambda: os.system(r"start D:\DownloadMusic\小汪音乐.exe")
         )

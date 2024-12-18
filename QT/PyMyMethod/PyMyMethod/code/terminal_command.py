@@ -1,8 +1,8 @@
 import argparse
+import subprocess
 
-from ..doc import TerminalControl
 
-class TerminalControl(TerminalControl):
+class TerminalControl:
 
     def createTerminalArgs(
             self,
@@ -29,7 +29,6 @@ class TerminalControl(TerminalControl):
         return parser.parse_args()
 
     def runTerminalArgs(self, element, asynchronous=False):
-        import subprocess
         if asynchronous:
             processes = []
             proc = subprocess.Popen(element)
@@ -40,3 +39,9 @@ class TerminalControl(TerminalControl):
         else:
             subprocess.run(element)
         return self
+
+if __name__ == '__main__':
+    t = TerminalControl()
+    t.createTerminalArgs(
+
+    )

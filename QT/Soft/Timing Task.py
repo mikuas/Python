@@ -8,6 +8,7 @@ from Image.MainWindow import ImageMainWindow
 from regedit.MainWindow import RegeditMainWindow
 from SubWindow import SubWindow
 
+
 from PySide6.QtWidgets import (
     QApplication,
     QWidget,

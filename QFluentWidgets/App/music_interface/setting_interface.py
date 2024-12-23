@@ -1,11 +1,8 @@
 import json
 
-from FluentWidgets import VerticalScrollWidget, FolderListCard, CustomColorCard, SwitchButtonCard
+from FluentWidgets import VerticalScrollWidget, FolderListCard, ColorSelectCard, SwitchButtonCard, ComboBoxCard
 from PySide6.QtGui import Qt
-from PySide6.QtWidgets import QSystemTrayIcon
 from qfluentwidgets import SettingCardGroup, FluentIcon, InfoBar, InfoBarPosition
-
-from FluentWidgets import ComboBoxCard
 
 
 class SettingInterface(VerticalScrollWidget):
@@ -70,7 +67,7 @@ class SettingInterface(VerticalScrollWidget):
             True,
             self
         )
-        self.themeColorCard = CustomColorCard(
+        self.themeColorCard = ColorSelectCard(
             "主题色",
             '设置主题颜色',
             self,
@@ -95,11 +92,11 @@ class SettingInterface(VerticalScrollWidget):
     def connectSignalSlots(self):
         self.folder.folderChanged.connect(
             lambda folder: (
-                self.pathCard.comboBox.clear(),
-                self.pathCard.comboBox.addItems([self.path] + folder)
+                self.pathCard.comboBoxButton.clear(),
+                self.pathCard.comboBoxButton.addItems([self.path] + folder)
             )
         )
-        self.pathCard.comboBox.currentTextChanged.connect(
+        self.pathCard.comboBoxButton.currentTextChanged.connect(
             lambda path: (
                 self.updatePath(path),
                 InfoBar.success(
@@ -115,8 +112,8 @@ class SettingInterface(VerticalScrollWidget):
         self.micaEffectCard.button.checkedChanged.connect(
             lambda b: self.parent.setMicaEffectEnabled(b)
         )
-        self.sysTrayCard.comboBox.currentTextChanged.connect(
-            lambda: self.setTray(self.sysTrayCard.comboBox.currentIndex())
+        self.sysTrayCard.comboBoxButton.currentTextChanged.connect(
+            lambda: self.setTray(self.sysTrayCard.comboBoxButton.currentIndex())
         )
 
     def setTray(self, index):

@@ -3,9 +3,12 @@ import sys
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets import FluentIcon, setTheme, Theme, NavigationItemPosition, Action
 
-from FluentWidgets import SplitFluentWindow, SystemTrayIcon
-from QtFluentWidgets.App.music_interface import MusicListInterface, SettingInterface, LyricsInterface, HomeInterface
-from QtFluentWidgets.FluentWidgetModule.FluentWidgets import WinFluentIcon
+from FluentWidgets import SplitFluentWindow, SystemTrayIcon, WinFluentIcon
+
+from .home_interface import HomeInterface
+from .setting_interface import SettingInterface
+from .music_list import MusicListInterface
+from .lyrics_interface import LyricsInterface
 
 
 class MusicInterface(SplitFluentWindow):
@@ -31,7 +34,7 @@ class MusicInterface(SplitFluentWindow):
         self.musicListInterface.table.currentItemChanged.connect(self.updateMusicPath)
 
     def initTrayIcon(self):
-        self.systemTrayIcon.addMenus([
+        self.systemTrayIcon.addActions([
             Action(FluentIcon.HOME, "打开主界面", self, triggered=lambda: (
                 self.raise_(), self.activateWindow(), self.show()
             )),

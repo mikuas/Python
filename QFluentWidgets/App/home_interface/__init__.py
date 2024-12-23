@@ -1,1 +1,1 @@
-from .home_interface import *
+from .home_interface import HomeWidget

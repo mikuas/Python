@@ -10,7 +10,7 @@ from qfluentwidgets.multimedia import StandardMediaPlayBar
 
 from FluentWidgets import VBoxLayout, setToolTipInfos, TableWidget
 
-from QtFluentWidgets.demo.demo15 import MusicListWidget, MusicWidget
+from QFluentWidgets.demo.demo15 import MusicListWidget, MusicWidget
 
 
 class MusicListInterface(MusicListWidget):

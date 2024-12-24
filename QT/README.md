@@ -1,4 +1,4 @@
-## QT
+## PySide6
 
 ~~~python
 from PySide6.QtWidgets import QLabel, QMenuBar, QWidget, QComboBox, QVBoxLayout, QPushButton, QLineEdit, QMessageBox, QMainWindow, QPlainTextEdit

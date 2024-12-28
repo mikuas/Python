@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QWidget, QApplication
 from FluentWidgets import AcrylicRoundMenu
 from qfluentwidgets.components.material import AcrylicMenu
 
-from QtFluentWidgets.FluentWidgetModule.FluentWidgets import WinFluentIcon
+from FluentWidgets import WinFluentIcon
 
 
 class Demo(QWidget):

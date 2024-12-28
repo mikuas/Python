@@ -129,6 +129,10 @@ class DragWidget(QWidget):
     def wheelEvent(self, event):
         super().wheelEvent(event)
         print("Mouse Wheel")
+        if event.angleDelta().y() > 0:
+            print('up wheel')
+        else:
+            print('down wheel')
 
     """ 拖动事件 """
     def dragEnterEvent(self, event):
@@ -156,6 +160,29 @@ class DragWidget(QWidget):
             print(f"文件路径: {filePath[0]}")
         event.acceptProposedAction()
 
+
+class MouseWidget(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+    """ 鼠标点击事件 """
+    def mousePressEvent(self, event):
+        super().mousePressEvent(event)
+        if event.button() == Qt.MouseButton.LeftButton:
+            print("鼠标左键按下")
+        elif event.button() == Qt.MouseButton.RightButton:
+            print("鼠标右键按下")
+
+        # 阻止事件传递给父类控件
+        event.accept()
+
+    """ 鼠标释放事件 """
+    def mouseReleaseEvent(self, event):
+        super().mouseReleaseEvent(event)
+
+    """ 鼠标双击事件 """
+    def mouseDoubleClickEvent(self, event):
+        super().mouseDoubleClickEvent(event)
 
 class Demo(VerticalScrollWidget):
     def __init__(self):

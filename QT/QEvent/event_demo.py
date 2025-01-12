@@ -1,8 +1,7 @@
 import sys
-from urllib.parse import urlsplit
 
-from PySide6.QtCore import Qt, QObject, QEvent, QTimer
-from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QMainWindow, QLayout
+from PySide6.QtCore import Qt, QObject, QEvent
+from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLayout
 from qfluentwidgets import LineEdit, PrimaryPushButton
 from FluentWidgets import VerticalScrollWidget
 
@@ -183,6 +182,7 @@ class MouseWidget(QWidget):
     """ 鼠标双击事件 """
     def mouseDoubleClickEvent(self, event):
         super().mouseDoubleClickEvent(event)
+
 
 class Demo(VerticalScrollWidget):
     def __init__(self):

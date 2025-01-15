@@ -1,22 +1,17 @@
-import argparse
+from pmutils import TerminalUtils
 
-if __name__ == "__main__":
-    # 创建解析器对象
-    parser = argparse.ArgumentParser(description="Write")
 
-    # 添加参数 空格换行
-    parser.add_argument('-c', '--contentList', type=str, nargs='+', help='Content', required=True)
-    parser.add_argument('-p', '--fileName__Path', type=str, help='Save Path', required=True)
-    parser.add_argument('-m', '--writeMode', type=str, help='Write Mode', required=False)
+result = TerminalUtils.createTerminalArgs(
+    ['content', 'path', 'mode'],
+    [list, str, str],
+    isRequired=[True, True, False],
+    defaultValue=[None, None, 'w'],
+    description="Use Python Write To UTF-8 Encoding Files"
+)
 
-    # 解析参数
-    args = parser.parse_args()
-
-    # utf8_writer.py
-    with open(args.fileName__Path, args.writeMode or 'w', encoding='utf-8') as file:
-        for line in args.contentList:
-            file.writelines(line + '\n')
-    print(True)
-
+with open(result.path, result.mode, encoding='utf-8') as file:
+    for line in result.content:
+        file.writelines(line + '\n')
+print(True)
 
 

@@ -1,29 +1,42 @@
-from PySide6.QtWidgets import QApplication, QPushButton, QWidget
-from PySide6.QtCore import QPropertyAnimation, Property, Qt
-from PySide6.QtGui import QPainter, QTransform
+from PySide6.QtCore import QPropertyAnimation, QRectF, Qt
+from PySide6.QtWidgets import QApplication, QWidget, QPushButton, QGraphicsScene, QGraphicsView, QGraphicsRectItem
+import sys
 
-
-class RotatingButton(QWidget):
+class RotateAnimationExample(QWidget):
     def __init__(self):
         super().__init__()
-        self.button = QPushButton("Rotation", self)
 
-        # 初始化旋转角度
-        self._rotation = 0
+        self.setWindowTitle("旋转动画示例")
+        self.setGeometry(100, 100, 300, 200)
 
-        # 创建动画对象，绑定到 rotation 属性
-        self.animation = QPropertyAnimation(self.button, b"rotation", self)
-        self.animation.setDuration(2000)  # 动画持续时间（毫秒）
-        self.animation.setStartValue(0)  # 起始角度
-        self.animation.setEndValue(360)  # 结束角度
-        self.animation.setLoopCount(-1)  # 无限循环
+        # 创建视图和场景
+        self.view = QGraphicsView(self)
+        self.view.setGeometry(50, 50, 200, 150)
 
-        # 点击按钮启动动画
-        self.button.clicked.connect(self.animation.start)
+        # 创建场景
+        self.scene = QGraphicsScene(self)
+        self.view.setScene(self.scene)
 
+        # 创建一个矩形
+        self.rect_item = QGraphicsRectItem(QRectF(50, 50, 100, 50))
+        self.rect_item.setBrush(Qt.blue)
+        self.scene.addItem(self.rect_item)
 
-if __name__ == "__main__":
-    app = QApplication([])
-    button = RotatingButton()
-    button.show()
-    app.exec()
+        # 创建一个按钮来启动旋转动画
+        self.button = QPushButton("点击旋转", self)
+        self.button.setGeometry(100, 180, 100, 30)
+        self.button.clicked.connect(self.animate_rotation)
+
+    def animate_rotation(self):
+        # 创建旋转动画
+        animation_rotation = QPropertyAnimation(self.rect_item, b"rotation")
+        animation_rotation.setDuration(2000)  # 动画时长2秒
+        animation_rotation.setStartValue(0)   # 初始旋转角度为0
+        animation_rotation.setEndValue(360)   # 目标旋转角度为360度
+        animation_rotation.start()
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = RotateAnimationExample()
+    window.show()
+    sys.exit(app.exec())

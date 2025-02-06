@@ -14,7 +14,6 @@ from qfluentwidgets import FluentIcon, CardWidget, IconWidget, BodyLabel, Captio
     PushSettingCard, PlainTextEdit, MessageBox, IndeterminateProgressRing, ProgressRing, FluentIconBase, SettingCard, \
     IndeterminateProgressBar
 
-from PyMyMethod import FileControl, Regedit
 # from PyMyMethod.ScreenControl import ScreenControl
 
 
@@ -33,8 +32,6 @@ class CardsWidget(SmoothScrollArea):
         # self.expandLayout = None
         # self.filePath = None
         # self.message = None
-        self.fc = FileControl()
-        self.Regedit = Regedit()
         # self.ScreenControl = ScreenControl()
         self.lpData = [
             '绫地宁宁', '因幡爱瑠', '椎叶䌷', '亚托莉', ' 朝武芳乃', '丛雨', '常陆茉子', '上坂茅羽耶', '矢来美羽', '在原七海',

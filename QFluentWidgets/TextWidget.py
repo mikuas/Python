@@ -3,7 +3,6 @@ import sys
 from PySide6.QtCore import QUrl, QTime, QDate
 from PySide6.QtWidgets import QWidget, QApplication, QHBoxLayout, QCompleter, QLineEdit
 from PySide6.QtGui import Qt, QColor, QAction
-from docutils.nodes import title
 
 from qfluentwidgets import SmoothScrollArea, VBoxLayout, FluentLabelBase, CaptionLabel, BodyLabel, StrongBodyLabel, \
     SubtitleLabel, TitleLabel, LargeTitleLabel, DisplayLabel, ImageLabel, AvatarWidget, HyperlinkLabel, LineEdit, \

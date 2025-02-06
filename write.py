@@ -13,5 +13,3 @@ with open(result.path, result.mode, encoding='utf-8') as file:
     for line in result.content:
         file.writelines(line + '\n')
 print(True)
-
-

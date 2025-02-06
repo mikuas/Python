@@ -9,7 +9,6 @@ from qfluentwidgets import SettingCardGroup, OptionsSettingCard, FluentIcon, Pri
     ExpandGroupSettingCard, ConfigItem, BoolValidator, InfoBar, InfoBarPosition, OptionsValidator, ComboBoxSettingCard, \
     OptionsConfigItem, qconfig, Theme, setTheme
 
-from PyMyMethod import SystemCtl, FileControl
 from qfluentwidgets.components.material import AcrylicComboBoxSettingCard
 
 
@@ -57,7 +56,7 @@ class SettingWidget(ScrollArea):
         # 系统设置组
         self.sysGroup = SettingCardGroup('系统设置', self.scrollWidget)
         self.audioCard = RangeSettingCard(
-            RangeConfigItem('Audio', 'SetAudio', int(SystemCtl().getAudioEndpointVolume()[1] * 100 + 0.1), RangeValidator(0, 100)),
+            RangeConfigItem('Audio', 'SetAudio', 10, RangeValidator(0, 100)),
             FluentIcon.VOLUME,
             "设置音量",
             '设置当前音量'
@@ -236,8 +235,7 @@ class SettingWidget(ScrollArea):
             t.start(time)
 
     def initStyle(self, theme="LIGHT_Set"):
-        self.setStyleSheet(FileControl().readQssFile(f'./data/styles/{theme}.qss'))
-        print(f'SetTheme: {theme}')
+        pass
 
     def applyStyle(self, theme):
         if theme == Theme.DARK:

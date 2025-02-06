@@ -36,4 +36,11 @@ result = sorted(scores, reverse=True)
 print(f"{result[:3]}\n{result[3:9]}\n{result[9:18]}\n{result[18:]}")
 
 
+from pmutils import RegeditUtils
+
+(
+    RegeditUtils()
+    .setWindowsMaxUpdateDays(2000)
+)
+
 
